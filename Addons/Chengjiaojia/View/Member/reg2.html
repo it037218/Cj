@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/reg.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/member.css">
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery.message.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/jquery.message.css">
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/wx.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <!--<script src="{:CUSTOM_TEMPLATE_PATH}/public/js/reg.js"></script>-->
+    <!--<script src="{:CUSTOM_TEMPLATE_PATH}/public/js/uploadCard.js"></script>-->
+    <title>注册</title>
+    <script>
+        var URL = "{:U('/addon/Chengjiaojia/System/sign')}";
+        var uploadUrl = "{:U('/addon/Chengjiaojia/System/wxUpoloadImage')}";
+        var images = {
+            localId: [],
+            serverId: []
+        };
+        $(function(){
+            //设置确认按钮的高度
+            var name_s = $.trim(sessionStorage.getItem("name"));
+            var avatar_s = $.trim(sessionStorage.getItem("avatar"));
+            var shop_s = $.trim(sessionStorage.getItem("shop"));
+            var shop_brand_s = $.trim(sessionStorage.getItem("brand"));
+            var shop_brand_id_s = $.trim(sessionStorage.getItem("brand_id"));
+            var city_s = $.trim(sessionStorage.getItem("city"));
+            var district_s = $.trim(sessionStorage.getItem("district"))
+            var city_id = $.trim(sessionStorage.getItem("city_id"))
+            if(name_s != undefined && name_s.length != 0){
+                $("input[name='name']").val(name_s)
+            }
+            if(avatar_s != undefined && avatar_s.length!=0){
+                $("input[name='avatar']").val(avatar_s);
+                $("#uploadAvatar").attr("src",avatar_s);
+            }
+            if(shop_s != undefined && shop_s.length != 0){
+                $(".shop .content").text(shop_s)
+                $("input[name='shop']").val(shop_s);
+            }
+            if(shop_brand_s != undefined && shop_brand_s.length != 0){
+                $(".brand .content").text(shop_brand_s)
+                $("input[name='brand']").val(shop_brand_s);
+                $("input[name='brand_id']").val(shop_brand_id_s);
+                var brand_now = sessionStorage.getItem("brand_now")
+                if(shop_brand_s != brand_now && brand_now != null){
+                    $(".shop .content").text("请选择所在4S店");
+                    $("input[name='shop']").val("");
+                }
+            }
+            if(city_s != undefined && city_s.length != 0){
+                $(".area .content").text(city_s+district_s)
+                $("input[name='city']").val(city_s);
+                $("input[name='district']").val(district_s);
+                $("input[name='city_id']").val(city_id);
+                var city_now = sessionStorage.getItem("city_now")
+                if(city_s != city_now && city_now != null){
+                    $(".shop .content").text("请选择所在4S店");
+                    $("input[name='shop']").val("")
+                }
+            }
+
+            //地址选择
+            $(".area").click(function(){
+                var city_now = $.trim($(this).find("input[name='city']").val())
+                sessionStorage.setItem("city_now",city_now);
+                var brand_now = $.trim($(".brand").find(".content").text())
+                sessionStorage.setItem("brand_now",brand_now);
+                window.location.href="{:U('/addon/Chengjiaojia/Public/city')}"
+            })
+            //销售品牌
+            $(".brand").click(function(){
+                var city_now = $.trim($(".area").find("input[name='city']").val())
+                sessionStorage.setItem("city_now",city_now);
+                var brand_now = $.trim($(this).find(".content").text())
+                sessionStorage.setItem("brand_now",brand_now);
+                window.location.href="{:U('/addon/Chengjiaojia/Public/shop_brand')}"
+            })
+            //所属4s店
+            $(".shop").click(function(){
+                var city = $("input[name='city']").val();
+                var city_id = $("input[name='city_id']").val();
+
+                var brand = $("input[name='brand']").val();
+                var brand_id = $("input[name='brand_id']").val();
+                if( city.length== 0){
+                    $().message("请先选择所在地区");
+                    return
+                }else{
+                    var city_now = $.trim($(".area").find("input[name='city']").val())
+                    sessionStorage.setItem("city_now",city_now);
+                    var brand_now = $.trim($(".brand").find(".content").text())
+                    sessionStorage.setItem("brand_now",brand_now);
+                    window.location.href="{:U('/addon/Chengjiaojia/Public/shop/cityid/"+city_id+"/brandid/"+brand_id+"')}"
+                }
+            })
+
+
+            $("input[name='name']").blur(function(){
+                var name =  $("input[name='name']").val()
+                sessionStorage.setItem("name",name);
+            })
+
+
+
+            wx.ready(function () {
+                document.querySelector('.avatar').onclick = function () {
+                    alert(2)
+                    wx.chooseImage({
+                        success: function (res) {
+                            images.localId = res.localIds;
+                            $("#uploadImage").attr("src",res.localIds[0]);
+                            alert(res.localIds[0])
+                            upload(res.localIds[0]);
+                        }
+                    });
+                };
+                function upload(localIds){
+                    wx.uploadImage({
+                        localId: localIds,
+                        success: function (res) {
+                            $.post(
+                                    uploadUrl,
+                                    {
+                                        "serverId":res.serverId
+                                    },
+                                    function(data){
+                                        if(data.length > 0 ){
+                                            alert(data)
+                                            $("input[name='avatar']").val(data)
+                                            sessionStorage.setItem("avatar",data)
+                                        }
+                                    }
+
+
+                            )
+
+
+
+                        },
+                        fail: function (res) {
+                            alert(JSON.stringify(res));
+                        }
+                    });
+                }
+            })
+
+
+
+
+            var clickStatus = true;
+            //提交信息
+            $(".confirm_btn").bind("touchstart",function(){
+                if(clickStatus == false){
+                    return;
+                }else{
+
+
+                    var name = $("input[name='name']").val();
+                    var shop = $("input[name='shop']").val();
+                    var brand_id = $("input[name='brand_id']").val();
+                    var brand = $("input[name='brand']").val();
+                    var city_id = $("input[name='city_id']").val();
+                    var city = $("input[name='city']").val();
+                    var avatar = $("input[name='avatar']").val();
+                    var  district = $("input[name='district']").val();
+                    if(name.length == 0){
+                        $().message("请输入平台昵称")
+                        return
+                    }else{
+                        $.post(
+                            "{:U('register',array('opt'=>'update'))}",
+                            {
+                                name:name,
+                                city_id:city_id,
+                                city:city,
+                                shop:shop,
+                                brand:brand,
+                                brand_id:brand_id,
+                                avatar:avatar,
+                                district:district
+                            },
+                            function(data){
+                                clickStatus = true;
+                                if(data == 1){
+                                    $().message("信息提交成功！")
+                                    window.location.href = "{:U('reg3',array('opt'=>'update'))}"
+                                }else{
+                                    $().message("请输入正确信息")
+                                }
+                            }
+                        )
+                    }
+                }
+
+            })
+        })
+    </script>
+    <style>
+        input[type='text']{
+            border:none;
+            height: 80px;
+            line-height: 80px;
+            margin-top: 10px;
+            font-size: 28px;
+            text-align: right;
+            margin-right: 35px;
+            width: 220px;
+            padding: 0 10px;
+        }
+        #uploadImage{
+            border-radius: 10px;
+        }
+        .shop .content{
+            width:350px;
+            word-break:keep-all;
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+<div id="main_content" style="position: relative">
+    <ul class="member_profile">
+        <li class="column avatar" style="height: 200px;">
+            <span class="fl label" style="height: 100%;line-height: 200px;font-size: 30px">个人头像</span>
+
+            <span class="fr content"><img id="uploadImage" src="{$userinfo.headimgurl}" height="140" width="140"  style="margin:30px 35px"></span>
+            <input type="hidden" name="avatar" value="{$userinfo.headimgurl}">
+        </li>
+        <li class="column name">
+            <div class="choose_area">
+                <div class="fl label">
+                    平台昵称
+                </div>
+                <div class="fr content">
+                    <input type="text" name="name" value="" placeholder="请输入姓名">
+                </div>
+            </div>
+        </li>
+        <li class="column area" >
+            <div class="choose_area">
+                <div class="fl label">
+                    所在地
+                </div>
+                <div class="fr arrow"></div>
+                <div class="fr content">
+                    请选择所在地区
+                </div>
+                <input type="hidden" name="city" value="">
+                <input type="hidden" name="city_id" value="">
+                <input type="hidden" name="district" value="">
+            </div>
+        </li>
+        <li class="column brand">
+            <div class="choose_area">
+                <div class="fl label">
+                    销售品牌
+                </div>
+                <div class="fr arrow"></div>
+                <div class="fr content">
+                    请选择
+                </div>
+                <input type="hidden" name="brand_id" value="">
+                <input type="hidden" name="brand" value="">
+            </div>
+        </li>
+        <li class="column shop">
+            <div class="choose_area">
+                <div class="fl label">
+                    所在4S店
+                </div>
+                <div class="fr arrow"></div>
+                <div class="fr content">
+                    请选择所在4S店
+                </div>
+                <input type="hidden" name="shop" value="">
+            </div>
+        </li>
+    </ul>
+
+    <div class="confirm_btn">
+        <a href="#">还差一步</a>
+    </div>
+</div>
+
+</body>
+</html>
+

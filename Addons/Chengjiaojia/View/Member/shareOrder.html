@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="viewport" content="width=720">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/index.css?v=0.04">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/member.css">
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery.message.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/jquery.message.css">
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/wx.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <title>晒单</title>
+    <style>
+        .manage_title .text{
+            font-weight: bold;
+        }
+        .item span{
+            display: inline-block;
+            height: 100%;
+            font-size: 30px;
+            line-height: 100px;
+            margin-right: 10px;
+        }
+        .carInfo{
+            height: 100%;
+            line-height: 100px;
+            margin-right: 75px;
+            font-size: 30px;
+            color: #666666;
+        }
+        .carInfoList .carInfo{
+            margin-right: 40px;
+        }
+        .item_title{
+            margin-left: 35px;
+            font-weight: bold;
+        }
+        input[type='text']{
+            border:none;
+            height: 60px;
+            font-size: 30px;
+            text-align: right;
+            margin-right: 15px;
+            width: 300px;
+        }
+        .desc{
+            font-size: 28px;
+            color: #ffaa00;
+        }
+        .remark{
+            font-size: 28px;
+            padding: 10px 35px;
+        }
+        .finishCarType{
+            display: block;
+            width:350px;
+            word-break:keep-all;
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            text-align: right;
+            height: 100%;
+        }
+    </style>
+    <script>
+        var URL = "{:U('/addon/Chengjiaojia/System/sign')}";
+        var uploadUrl = "{:U('/addon/Chengjiaojia/System/wxUpoloadImage')}";
+        $(function(){
+            var brand= $.trim(sessionStorage.getItem("brand"));
+            var series = $.trim(sessionStorage.getItem("series"));
+            var key_id = $.trim(sessionStorage.getItem("key_id"));
+
+            //实际成交车型
+            var shareSeries = $.trim(sessionStorage.getItem("shareSeries"))
+            var shareSeries_id = $.trim(sessionStorage.getItem("shareSeries_id"))
+
+            var type_id = sessionStorage.getItem("type_id");
+            var type = sessionStorage.getItem("type");
+
+            if(brand != undefined && series != undefined && key_id!= undefined){
+                $(".key_detail").text(brand + series);
+                $("input[name='key_id']").val(key_id)
+            }
+            if(shareSeries != undefined && shareSeries.length != 0 && shareSeries_id != undefined && shareSeries_id.length != 0){
+                $(".finishCarType").text(shareSeries+type)
+                $(".shareSeries_id").val(shareSeries_id);
+                $(".type_id").val(type_id);
+            }
+            $(".chooseCarType").click(function(){
+                if(key_id == undefined || key_id.length == 0){
+                    $().message("请先选择需要晒单的线索")
+                    return;
+                }else{
+                    var brand_id = sessionStorage.getItem("brand_id");
+                    window.location.href = "{:U('/addon/Chengjiaojia/Public/shareSeries/brand_id/"+brand_id+"')}";
+                }
+            })
+
+
+            prepareWx()
+            wx.ready(function () {
+                document.querySelector('.upload').onclick = function () {
+                    wx.chooseImage({
+                        success: function (res) {
+                            upload(res.localIds[0]);
+                        }
+                    });
+                };
+                function upload(localIds){
+                    wx.uploadImage({
+                        localId: localIds,
+                        success: function (res) {
+                            $.post(
+                                uploadUrl,
+                                {
+                                    "serverId":res.serverId
+                                },
+                                function(data){
+                                    if(data.length > 0 ){
+                                        $(".fapiao").val(data)
+                                        $(".upload").attr("src",data)
+                                        sessionStorage.setItem("fapiao",data)
+                                    }
+                                }
+                            )
+                        },
+                        fail: function (res) {
+                            alert(JSON.stringify(res));
+                        }
+                    });
+                }
+            })
+
+            //提交发票信息
+            $(".confirm_btn").bind("click",function(){
+                var key_id = $("input[name='key_id']").val();
+                var car_type = $.trim($(".finishCarType").text());
+                var luoche = $.trim($(".luoche").val())
+                var gouzhi = $.trim($(".gouzhi").val())
+                var shangye = $.trim($(".shangye").val())
+                var chechuan = $.trim($(".chechuan").val())
+                var jiaoqiang = $.trim($(".jiaoqiang").val())
+                var shangpai = $.trim($(".shangpai").val())
+                var pic_url = $(".fapiao").val();
+                var type_id = $(".type_id").val();
+                if(key_id == undefined || key_id.length == 0){
+                    $().message("请选择已成交线索")
+                    return
+                }else if(type_id == undefined || type_id.length == 0){
+                    $().message("请选择实际成交车型")
+                    return;
+                }else if(luoche == undefined || luoche.length == 0){
+                    $().message("请输入裸车价格")
+                    return;
+                }
+                else if(pic_url == undefined || pic_url.length == 0){
+                    $().message("请选择已成交发票图片")
+                    return
+                }
+                else{
+                    $.post(
+                            "{:U('/addon/Chengjiaojia/Member/createShare')}",
+                            {
+                                "key_id":key_id,
+                                "car_type":car_type,
+                                "luoche":luoche,
+                                "shangye":shangye,
+                                "gouzhi":gouzhi,
+                                "chechuan":chechuan,
+                                "jiaoqiang":jiaoqiang,
+                                "shangpai":shangpai,
+                                "pic_url":pic_url
+                            },
+                            function(data){
+                                if(data){
+                                    $().message("提交成功");
+                                    sessionStorage.clear()
+                                    window.location.href = "{:U('/addon/Chengjiaojia/Member/ucenter')}"
+                                }else{
+                                    $().message("提交失败")
+                                }
+                            }
+
+
+                    )
+                }
+
+            })
+        })
+    </script>
+</head>
+<body>
+<div id="main_content">
+    <div class="key_manage" style="margin-top: 40px;margin-bottom: 0;">
+        <div class="manage_title">
+            <span class="icon fl"></span>
+            <span class="text fl">价格信息</span>
+        </div>
+    </div>
+    <div>
+        <div class="item">
+            <a href="{:U('/addon/Chengjiaojia/Key/getFinishedKey')}" class="block">
+                <div class="fl item_title"><span style="color: red">*</span><span>历史线索选择</span></div>
+                <div class="fr carInfo key_detail">
+                    请选择
+
+                </div>
+                <input type="hidden" name="key_id" value="">
+                <div class="arrow"></div>
+            </a>
+        </div>
+        <div class="item chooseCarType">
+            <div class="fl item_title"><span style="color: red">*</span><span>最终成交车型</span></div>
+            <div class="fr carInfo">
+                <a href="#" class="block finishCarType">请选择</a>
+                <input type="hidden" class="shareSeries_id" value="">
+                <input type="hidden" class="type_id" value="">
+            </div>
+            <div class="arrow"></div>
+        </div>
+        <div class="item">
+            <div class="fl item_title"><span style="color: red">*</span><span>裸车价</span></div>
+            <div class="fr carInfo" style="margin-right: 40px">
+                <input type="text" name="luoprice" value="" class="luoche">万元
+            </div>
+        </div>
+    </div>
+    <div style="margin-top: 40px" class="carInfoList">
+        <div class="item">
+            <div class="fl item_title"><span>购置税</span></div>
+            <div class="fr carInfo">
+                <input type="text" name="gouzhi"  class="gouzhi">元
+            </div>
+        </div>
+        <div class="item">
+            <div class="fl item_title"> <span>商业保险</span></div>
+            <div class="fr carInfo">
+                <input type="text" name="shangye"  class="shangye">元
+            </div>
+        </div>
+        <div class="item">
+            <div class="fl item_title"> <span>车船使用税</span></div>
+            <div class="fr carInfo">
+                <input type="text" name="chechuan">元
+            </div>
+        </div>
+        <div class="item">
+            <div class="fl item_title"> <span>交强险</span></div>
+            <div class="fr carInfo">
+                <input type="text" name="jiaoqiang" class="jiaoqiang">元
+            </div>
+        </div>
+        <div class="item">
+            <div class="fl item_title"><span>上牌费</span></div>
+            <div class="fr carInfo">
+                <input type="text" name="shangpai"  class="shangpai">元
+            </div>
+        </div>
+        <!--<div class="item">-->
+            <!--<img src="{:CUSTOM_TEMPLATE_PATH}/public/images/addother.png">-->
+        <!--</div>-->
+    </div>
+    <div style="background-color: #fff;margin-top: 40px;padding-bottom: 30px;">
+        <div class="item" style="border:none">
+            <div class="fl item_title"><span style="color: #ffb600">*</span><span>发票</span></div>
+        </div>
+        <div  style="overflow: hidden;padding-left: 35px">
+            <div class="fl">
+                <img src="{:CUSTOM_TEMPLATE_PATH}/public/images/add.png" class="upload" width="240" height="180">
+                <input type="hidden" name="fapiao" value="" class="fapiao">
+            </div>
+            <div class="fl desc" style="width: 350px;padding: 20px 30px;line-height:1.8em">
+                发票只为验证价格，仅供工作人员核对价格，绝不外泄，请放心上传
+            </div>
+
+        </div>
+        <div class="remark">
+            （可上传一张，支持jpg，png，jpeg格式，大小不超过20m）
+
+        </div>
+
+    </div>
+</div>
+<div class="confirm_btn">
+    提交
+</div>
+</body>
+</html>

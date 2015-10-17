@@ -1,0 +1,301 @@
+<{include file="header.html"}>
+<script src="js/key_view.js?v=0.1"></script>
+<link href="css/detail.css" rel="stylesheet">
+<style>
+    .progress span{
+        /*position: absolute;*/
+        /*left: 50%;*/
+        /*top: 50%;*/
+    }
+    .progress-bar{
+        line-height: 50px;
+        font-size: 20px;
+    }
+    .num-content{
+        margin-bottom: 20px;
+    }
+    .num-content .num-column{
+        text-align: center;
+        border: 1px solid #CCCCCC;
+        margin-bottom: 20px;
+    }
+    #show_detail .row div{
+        border: 1px solid #CCCCCC;
+        margin-top: 20px;
+    }
+    #nav_select{
+
+    }
+    .legend span{
+        display: block;
+        width: 15px;
+        height: 15px;
+    }
+</style>
+<script>
+    $(function(){
+        $(".search").click(function(){
+
+            var startTime = $("#startTime").val()
+            var endTime = $("#endTime").val()
+
+        })
+        $("#nav_select li").click(function(){
+            $(this).addClass("active").siblings().removeClass("active");
+            var num = $(this).attr("data");
+            $("#chart"+num).show()
+            $("#chart"+num).siblings().hide();
+        })
+
+        $("#Key").attr("aria-expanded",true).addClass("in");
+        $("#Key").siblings("a").css("backgroundColor","#000");
+    })
+</script>
+<body>
+<div class="cover" style="width: 100%;height: 100%;opacity: 0.5;display: none;z-index: 100;position: absolute;background-color: #000"></div>
+
+<div id="wrapper">
+    <{include file="nav.html"}>
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <ol class="breadcrumb">
+                    <li>
+                        <i class="fa fa-dashboard"></i>  <a href="#">线索管理</a>
+                    </li>
+                    <li class="active">
+                        <i class="fa fa-table"></i> 当前线索情况
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="container" style="display: block">
+            <div class="row num-content">
+                <div class="col-xs-6 col-md-4 num-column">
+                    <h1><{$result.total}></h1>
+                    <p>当前线索总条数</p>
+                </div>
+                <div class="col-xs-6 col-md-4 num-column">
+                    <h1><{$result.unused}></h1>
+                    <p>当前闲置线索条数</p>
+                </div>
+                <div class="col-xs-6 col-md-4 num-column">
+                    <h1><{$result.used}></h1>
+                    <p>当前跟进中的线索数</p>
+                </div>
+                <div class="col-md-12">
+                    <div class="progress" style="height: 50px">
+                        <div class="progress-bar progress-bar-success progress-bar-striped" style="width: <{($result.unused/$result.total*100)|string_format:'%.2f'}>%">
+                            <span>闲置的线索<{($result.unused/$result.total*100)|string_format:'%.2f'}>%</span>
+                        </div>
+                        <div class="progress-bar progress-bar-danger progress-bar-striped" style="width: <{($result.used/$result.total*100)|string_format:'%.2f'}>%">
+                            <span>跟进中的线索<{($result.used/$result.total*100)|string_format:'%.2f'}>%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <form class="form-inline">
+                统计时间
+                <div class="form-group">
+                    <div class="input-group date form_date" data-date=""data-link-field="dtp_input2" >
+                        <input class="form-control" id="startTime" size="16" type="text" value="" readonly>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                    </div>
+                    <input type="hidden" id="dtp_input2" value="" />
+                </div>
+
+                到
+                <div class="form-group">
+                    <div class="input-group date form_date" data-date=""  data-link-field="dtp_input2">
+                        <input class="form-control" id="endTime" size="16" type="text" value="" readonly>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                    </div>
+                    <input type="hidden" id="dtp_input2" value="" />
+                </div>
+                <div class="btn btn-primary search">
+                    查找
+                </div>
+            </form>
+        </div>
+        <div class="container" id="show_detail">
+            <div class="row">
+                <div class="col-xs-6 col-md-3" style="text-align: center">
+                    <h1 id="total">1000</h1>
+                    <p>线索累计发布数</p>
+                </div>
+                <div class="col-xs-6 col-md-3" style="text-align: center">
+                    <h1>500</h1>
+                    <p>被购买的线索数</p>
+                </div>
+                <div class="col-xs-6 col-md-3" style="text-align: center">
+                    <h1>500</h1>
+                    <p>晒单数</p>
+                </div>
+                <div class="col-xs-6 col-md-3" style="text-align: center">
+                    <h1>500</h1>
+                    <p>未成交线索数</p>
+                </div>
+            </div>
+        </div>
+        <div class="" style="margin-top: 20px;position: relative;">
+            <div class="col-lg-12" id="nav_select">
+                <ul class="nav nav-tabs nav-justified">
+                    <li data="1" class="active"><a>日</a></li>
+                    <li data="2"><a>周</a></li>
+                    <li data="3"><a>月</a></li>
+                </ul>
+            </div>
+            <div class="legend" style="position: absolute;right: 35%;top: 20%;">
+                <table>
+                    <tr><td>线索购买率：被购买线索数/线索累计发布数</td><td><span style="background-color: rgba(151,187,205,1)"></span></td></tr>
+                    <tr><td>线索购买率：被购买线索数/被购买线索数</td><td><span style="background-color: rgba(220,220,220,0.2)"></span></td></tr>
+                </table>
+
+            </div>
+            <div id="chart">
+
+                <div style="width: 40%" id="chart1">
+                    <div>
+                        <canvas id="canvas1" height="450" width="600"></canvas>
+                    </div>
+                </div>
+
+
+                <div style="width:40%;" id="chart2">
+                    <div>
+                        <canvas id="canvas2" height="450" width="600"></canvas>
+                    </div>
+                </div>
+
+                <div style="width:40%;" id="chart3">
+                    <div>
+                        <canvas id="canvas3" height="450" width="600"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="js/Chart.min.js"></script>
+<script src="js/bootstrap-datetimepicker.js"></script>
+<script>
+    var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
+    var dateData = {
+        labels : <{$date}>,
+        datasets : [
+            {
+                label: "My First dataset",
+                fillColor : "rgba(220,220,220,0.2)",
+                strokeColor : "rgba(220,220,220,1)",
+                pointColor : "rgba(220,220,220,1)",
+                pointStrokeColor : "#fff",
+                pointHighlightFill : "#fff",
+                pointHighlightStroke : "rgba(220,220,220,1)",
+                data : <{$rate1}>
+            },
+            {
+                label: "My Second dataset",
+                fillColor : "rgba(151,187,205,0.2)",
+                strokeColor : "rgba(151,187,205,1)",
+                pointColor : "rgba(151,187,205,1)",
+                pointStrokeColor : "#fff",
+                pointHighlightFill : "#fff",
+                pointHighlightStroke : "rgba(151,187,205,1)",
+                data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+            }
+        ]
+
+    }
+    var weekData = {
+        labels : <{$week}>,
+        datasets : [
+            {
+                label: "My First dataset",
+                fillColor : "rgba(220,220,220,0.2)",
+                strokeColor : "rgba(220,220,220,1)",
+                pointColor : "rgba(220,220,220,1)",
+                pointStrokeColor : "#fff",
+                pointHighlightFill : "#fff",
+                pointHighlightStroke : "rgba(220,220,220,1)",
+                data : <{$rate2}>
+            },
+            {
+                label: "My Second dataset",
+                fillColor : "rgba(151,187,205,0.2)",
+                strokeColor : "rgba(151,187,205,1)",
+                pointColor : "rgba(151,187,205,1)",
+                pointStrokeColor : "#fff",
+                pointHighlightFill : "#fff",
+                pointHighlightStroke : "rgba(151,187,205,1)",
+                data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+            }
+        ]
+
+    }
+    var monthData = {
+        labels : <{$month}>,
+        datasets : [
+            {
+                label: "My First dataset",
+                fillColor : "rgba(220,220,220,0.2)",
+                strokeColor : "rgba(220,220,220,1)",
+                pointColor : "rgba(220,220,220,1)",
+                pointStrokeColor : "#fff",
+                pointHighlightFill : "#fff",
+                pointHighlightStroke : "rgba(220,220,220,1)",
+                data : <{$rate3}>
+            },
+            {
+                label: "My Second dataset",
+                fillColor : "rgba(151,187,205,0.2)",
+                strokeColor : "rgba(151,187,205,1)",
+                pointColor : "rgba(151,187,205,1)",
+                pointStrokeColor : "#fff",
+                pointHighlightFill : "#fff",
+                pointHighlightStroke : "rgba(151,187,205,1)",
+                data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+            }
+        ]
+
+    }
+    $('.form_date').datetimepicker({
+        language:  'cn',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: true,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        format: 'yyyy-mm-dd'
+    });
+    window.onload = function(){
+        var ctx1 = document.getElementById("canvas1").getContext("2d");
+        var ctx2 = document.getElementById("canvas2").getContext("2d");
+        var ctx3 = document.getElementById("canvas3").getContext("2d");
+        window.myLine = new Chart(ctx1).Line(dateData, {
+            responsive: true
+        });
+        window.myLine = new Chart(ctx2).Line(weekData, {
+            responsive: true
+        });
+        window.myLine = new Chart(ctx3).Line(monthData, {
+            responsive: true
+        });
+
+        $("#chart2").hide()
+        $("#chart3").hide()
+    }
+
+
+</script>
+
+</body>
+
+</html>

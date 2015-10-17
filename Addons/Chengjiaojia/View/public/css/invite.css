@@ -1,0 +1,146 @@
+#bg_img{
+    background: url("../images/invite-page.jpg") no-repeat 50% 50%;
+    background-size: cover;
+    position: relative;
+}
+#qr_pic{
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    left: 211px;
+    top: 57px;
+    display: none;
+}
+#count{
+
+    width: 12.22%;
+    height: 3.08%;
+    position: absolute;
+    left: 53%;
+    top:51.8%;
+    font-size: 35px;
+    color: #e84c3d;
+    z-index : 1001;
+}
+#name{
+    width: 79.17%;
+    height: 2.55%;
+    position: absolute;
+    left: 13.25%;
+    top: 40.32%;
+    text-align: center;
+    color: #ffffff;
+    font-size: 30px;
+    letter-spacing:8px;
+    z-index : 1001;
+}
+#yes{
+    width: 553px;
+    height: 300px;position: absolute;
+    display: none;
+    background: url("../images/reward_yes.png") no-repeat 100% 100%;
+    z-index: 1002;
+}
+#no{
+    width: 553px;
+    height: 330px;position: absolute;
+    display: none;
+    background: url("../images/reward_yes.png") no-repeat 100% 100%;
+    z-index: 1002;
+}
+area{
+    
+}
+.cover{
+    position: fixed;
+    background-color: #000000;
+    opacity: 0.5;
+    width: 100%;
+    height: 100%;
+    z-index: 99;
+}
+#item1{
+    position: absolute;
+    top: 256px;
+    width: 100%;
+    height: 77.46%;
+    background: url("../images/invite-page2.png") no-repeat center center;
+    z-index: 1000;
+}
+#item2{
+    position: absolute;
+    top: 256px;
+    width: 100%;
+    height: 77.46%;
+    background: url("../images/invite-page4.png") no-repeat center center;
+    z-index: 1000;
+}
+#code-item{
+    width: 580px;
+    height: 444px;
+    left: 9.7%;
+    top: 1.85%;
+    position: absolute;
+    display: none;
+    background: url("../images/code-item.png") no-repeat 100% 100%;
+    z-index: 110;
+}
+#qr-item{
+    width: 580px;
+    height: 444px;
+    position: absolute;
+    left: 9.7%;
+    top: 1.85%;
+    background: url("../images/qr-item.png") no-repeat 100% 100%;
+    z-index: 120;
+}
+#qr-item .content{
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+#code-item span{
+    display: block;
+    position: absolute;
+    width: 420px;
+    height: 60px;
+    left: 82px;
+    top: 157px;
+    text-align: center;
+    font-size: 60px;
+    letter-spacing: 10px;
+    line-height: 60px;
+}
+#qr-item img{
+    /*position: absolute;*/
+    width: 270px;
+    height: 270px;
+    padding-left: 155px;
+    padding-top: 45px;
+    z-index: auto;
+}
+.content label{
+    display: block;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 70px;
+    height: 70px;
+}
+.content i{
+    display: block;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 70px;
+    height: 70px;
+}
+.cover-page{
+    position: absolute;
+    background: url("../images/cover.png") no-repeat 100% 100%;
+    width: 100%;
+    background-size: cover;
+    height: 100%;
+    display: none;
+    z-index: 100000;
+}

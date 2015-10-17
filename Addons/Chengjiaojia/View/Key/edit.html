@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>编辑线索</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/index.css?v=0.04">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/detail.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/animate.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/common.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/jquery.message.css">
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery.message.min.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/menu.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery.raty.js"></script>
+
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <script>
+        $(function(){
+            var height = parseInt($(window).height());
+            var Dheight = parseInt($(".confirm_btn").height());
+            var topHeight = height-Dheight;
+            $(".confirm_btn").css("top",topHeight)
+
+            var brand = sessionStorage.getItem("brand")
+            var series = sessionStorage.getItem("series")
+            var brand_id = sessionStorage.getItem("brand_id");
+            var logo = sessionStorage.getItem("logo")
+            var city = sessionStorage.getItem("city")
+            var district = sessionStorage.getItem("district");
+            var level = sessionStorage.getItem("level")
+            var textarea = $("textarea").val();
+            var  length = textarea.length;
+            $("#total_intro_text").text(length)
+            //如果缓存中有值，则直接赋值
+            if(brand != undefined && brand.length !=0){
+                $("#brand").text(brand)
+            }
+            if(series != undefined && series.length !=0){
+                $("#series").text(series)
+            }
+
+            if(district != undefined){
+                $(".area .content .city").text(city)
+                $(".area .content .district").text(district)
+            }
+
+            $(".brand").click(function(){
+                window.location.href="{:U('/addon/Chengjiaojia/Public/brand')}";
+            })
+
+            $(".area").click(function(){
+                window.location.href="{:U('/addon/Chengjiaojia/Public/city')}";
+            })
+        })
+    </script>
+    <style>
+
+        input[type='text']{
+            border:none;
+            height: 80px;
+            line-height: 80px;
+            margin-top: 10px;
+            font-size: 28px;
+            text-align: right;
+            margin-right: 35px;
+            width: 220px;
+            padding: 0 10px;
+        }
+        .content select{
+            direction: rtl;
+            margin-top: 10px;
+            height:80px;
+            -webkit-appearance:none;
+            appearance:none;
+            border:none;
+            font-size:28px;
+            padding:0px 10px;
+            display:block;
+            width:310px;
+            -webkit-box-sizing:border-box;
+            box-sizing:border-box;
+            background-color: #FFFFFF;
+            color:#000;
+            border-radius:4px;
+            text-align: right;
+        }
+        option{
+            direction: rtl;
+        }
+        textarea{
+            font-size: 28px;
+        }
+        .levellimit .label{
+            width: 200px;
+        }
+        .levellimit .content{
+            padding-right: 35px;
+        }
+        .levellimit .content img{
+            margin-top: 25px;
+        }
+        #publish_confirm{
+            position: absolute;
+            bottom: 0px;
+        }
+    </style>
+    <script>
+        var clickStatus = true;
+        $(function(){
+            //确认发布线索
+            $("textarea").keyup(function(){
+                var textarea = $(this).val();
+                var  length = textarea.length;
+                $("#total_intro_text").text(length)
+
+            })
+
+            $(".confirm_btn").bind("touchstart",function(){
+                if(clickStatus == false){
+                    return false;
+                }
+                clickStatus = false;
+                var brand = $("#brand").text()
+                var logo = sessionStorage.getItem("logo")
+                var series = $("#series").text()
+                var area = $(".area .content").text()
+                var province = $(".area .content .province").text()
+                var city = $(".area .content .city").text()
+                var district = $.trim($(".area .content .district").text())
+                var time_limit = $("#time_limit").find("option:selected").text()
+                var name = $("input[name='name']").val()
+                var telephone = $("input[name='telephone']").val()
+                var credit = $("input[name='credit']").val();
+                var description = $("textarea[name='description']").val()
+                var url = "{:U('publish')}";
+                var isMobile = /^((13[0-9]{1})|(14[0-9]{1})|(15[0-9]{1})|(17[0-9]{1})|(18[0-9]{1}))+\d{8}$/;
+
+                if(brand.length == 0){
+                    $().message("请选择汽车品牌")
+                    return;
+                }else if( series.length ==0){
+                    $().message("请选择汽车型号")
+                    return;
+                }else if(district.length==0){
+                    $().message("请选择地区")
+                    return;
+                }else if(time_limit.length==0){
+                    $().message("请选择购车时间")
+                    return;
+                }else if(name.length==0){
+                    $().message("请选择客户姓名")
+                    return;
+                }else if(telephone.length==0){
+                    $().message("请选择客户联系方式")
+                    return;
+                }else if (!telephone.match(isMobile)){
+                    $().message("手机号输入有误");
+                    return;
+                }else if(credit.length==0){
+                    $().message("请选择积分值")
+                    return;
+                }else if(description.length==0){
+                    $().message("请输入线索详情")
+                    return;
+                }
+//                else if(description.length<15){
+//                    $().message("线索详情不得少于15字")
+//                    return
+//                }
+                else{
+                    $.post(
+                            url,
+                            {
+                                brand:brand,
+                                series:series,
+                                city:city,
+                                district:district,
+                                custom_name:name,
+                                custom_telephone:telephone,
+                                time_limit:time_limit,
+                                credit:credit,
+                                brand_logo:logo,
+                                description:description
+                            },
+                            function(data){
+                                clickStatus = true;
+                                if(data > 0){
+                                    window.location.href="{:U('index')}"
+                                    sessionStorage.clear();
+                                }else{
+                                    $().message("线索发布失败");
+                                }
+                            }
+                    )
+                }
+            })
+        })
+    </script>
+</head>
+<body>
+<div style="position: relative">
+    <ul>
+        <li class="column brand" >
+            <div class="choose_area">
+                <div class="fl label">
+                    品牌车系
+                </div>
+                <div class="fr arrow"></div>
+                <div class="fr content">
+                    <span id="brand">请选择</span><span id="series"></span>
+                </div>
+            </div>
+            <input type="hidden" name="brand" value="{$result.brand}">
+
+        </li>
+
+        <li class="column area">
+            <div class="choose_area">
+                <div class="fl label">
+                    购车城市
+                </div>
+                <div class="fr arrow"></div>
+                <div class="fr content">
+                    <!--<span class="province">{$result.province}</span>-->
+                    <span class="city">{$result.city}</span>
+                    <span class="district">{$result.district}</span>
+                </div>
+            </div>
+            <input type="hidden" name="city" value="{$result.city}">
+            <input type="hidden" name="district" value="{$result.district}">
+
+        </li>
+
+        <li class="column timeLimit">
+            <div class="choose_area">
+                <div class="fl label">
+                    购车时间
+                </div>
+                <div class="fr arrow"></div>
+                <div class="fr content">
+                    <select id="time_limit">
+                        <option value="0" selected="selected">不确定</option>
+                        <option value="1">一周以内</option>
+                        <option value="2">两周以内</option>
+                        <option value="3">三周以内</option>
+                        <option value="4">一个月以内</option>
+                    </select>
+                </div>
+            </div>
+
+            <input type="hidden" name="time_limit" value="">
+
+        </li>
+        <li class="column custom_name">
+            <div class="choose_area">
+                <div class="fl label">
+                    客户姓名
+                </div>
+                <div class="fr content">
+                    <input type="text" name="name" placeholder="请填写客户姓名">
+                </div>
+            </div>
+        </li>
+        <li class="column custom_telephone">
+            <div class="choose_area">
+                <div class="fl label">
+                    客户联系方式
+                </div>
+                <div class="fr content">
+                    <input type="text" name="telephone" placeholder="请输入手机号">
+                </div>
+            </div>
+        </li>
+        <li class="column credit">
+            <div class="choose_area">
+                <div class="fl label" style="position: relative">
+                    购车价值
+                </div>
+                <!--<div class="fr arrow"></div>-->
+                <div class="fr content" style="margin-right: 75px">
+                    10积分
+                    <input type="hidden" name="credit" value="10">
+                </div>
+            </div>
+        </li>
+    </ul>
+    <div class="key_desc" style="margin-top: 40px;overflow: hidden">
+        <div class="desc_title">
+            <span class="text">线索详情</span>
+        </div>
+        <div class="dec_content">
+            <textarea style="width: 620px;height: 300px;margin:0 auto;padding: 18px;border: 1px solid #ccc" name="description" placeholder="详情不能少于15字"></textarea>
+            <div style="margin: 2% 5% 4% 8%;text-align: right"><span class="applicant_hint"></span>&nbsp;&nbsp;<span id="total_intro_text">0</span>/1000</div>
+        </div>
+    </div>
+</div>
+<div class="confirm_btn">
+    确认发布
+</div>
+
+</body>
+</html>

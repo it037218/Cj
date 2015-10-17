@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/index.css?v=0.04">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/detail.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/animate.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/common.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/member.css">
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <title>任务详情</title>
+
+    <script>
+        $(function(){
+
+
+
+        })
+
+    </script>
+    <style>
+        .credit_manage_list{
+            margin: 40px auto;
+        }
+        .credit_detail{
+            position: relative;
+            border-bottom: 1px solid #EFEFEF!important;
+        }
+        .credit_detail .credit_desc{
+            position: absolute;
+            right: 80px;
+            width: 200px;
+            text-align: right;
+            /*height: 80%;*/
+            padding-top: 33px;
+            overflow: hidden;
+        }
+        .credit_detail .credit_desc p{
+            height: 30px;
+            font-size: 26px;
+            line-height: 30px;
+            color: #999999;
+        }
+        .credit_info{
+            color: #000000;
+            font-weight: bold;
+        }
+    </style>
+
+
+</head>
+<body>
+<div id="main_content" style="margin-bottom: 80px">
+
+    <div class="credit_manage_list">
+        <!--<div class="credit_list_title">-->
+            <!--<div class="credit_manage_title">-->
+                <!--<span class="icon fl"></span>-->
+                <!--<span class="text fl bold">每日任务</span>-->
+            <!--</div>-->
+        <!--</div>-->
+        <ul>
+            <li class="credit_detail">
+                <div class="fl credit_info">
+                    <p >每日签到</p>
+                </div>
+                <div <if condition='$data1 eq 1'>class="fr finish"<else/> class="fr arrow"</if>>
+
+                </div>
+                <div class="fr credit_desc">
+                    <p>积分+15</p>
+                </div>
+
+            </li>
+            <li class="credit_detail">
+                <div class="fl credit_info">
+                    <p>发布1条线索（每日一次）</p>
+                </div>
+                <div <if condition='$data2  eq 1'>class="fr finish"<else/> class="fr arrow"</if>>
+
+                </div>
+                <div class="fr credit_desc">
+                    <p>积分+20</p>
+                </div>
+
+            </li>
+            <li class="credit_detail">
+                <div class="fl credit_info">
+                    <p>线索被成交</p>
+                </div>
+                <div class="fr arrow">
+
+                </div>
+                <div class="fr credit_desc">
+                    <p>积分+200</p>
+                </div>
+
+            </li>
+            <li class="credit_detail">
+                <div class="fl credit_info">
+                    <p>购买的线索成交并晒单</p>
+                </div>
+                <div class="fr arrow">
+                </div>
+                <div class="fr credit_desc">
+                    <p>积分+200</p>
+                </div>
+
+            </li>
+            <li class="credit_detail">
+                <div class="fl credit_info">
+                    <p>意见反馈通过</p>
+                </div>
+                <div class="fr arrow">
+                </div>
+                <div class="fr credit_desc">
+                    <p>积分+50</p>
+                </div>
+
+            </li>
+        </ul>
+    </div>
+</div>
+<include file="./Addons/Chengjiaojia/View/public/footer.html" />
+</body>
+</html>

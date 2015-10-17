@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="viewport" content="width=720">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <title>注册结果</title>
+    <style>
+        #main_content{
+            margin-bottom: 0!important;
+            padding: 0!important;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    {$status}
+    <if condition="$status eq 3">
+        <div id="main_content">
+            <div>
+                <img src="{:CUSTOM_TEMPLATE_PATH}/public/images/veriy_or.jpg">
+            </div>
+        </div>
+    <elseif condition="$status eq 4" />
+        <div id="main_content">
+        <!--审核成功-->
+            <img src="{:CUSTOM_TEMPLATE_PATH}/public/images/verify_yes.jpg">
+            <script>
+                $(function(){
+                    $(".confirm_btn").bind("touchstart",function(){
+                        window.location.href = "{:U('ucenter')}"
+                    })
+                })
+
+            </script>
+        </div>
+        <div class="confirm_btn">
+            开工
+        </div>
+    <elseif condition="$status eq 5" />
+        <div id="main_content">
+            <!--审核失败-->
+            <img src="{:CUSTOM_TEMPLATE_PATH}/public/images/veriy_no.jpg">
+
+
+            <script>
+                $(function() {
+                    $(".confirm_btn").bind("touchstart", function () {
+                        window.location.href = "{:U('reg1')}"
+                    })
+                })
+            </script>
+        </div>
+        <div class="confirm_btn">
+            重新认证
+        </div>
+    </if>
+</div>
+</body>
+</html>

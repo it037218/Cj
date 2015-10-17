@@ -1,0 +1,101 @@
+<{include file="header.html"}>
+<script src="js/Member.js?v=0.1"></script>
+<script>
+    $(function(){
+        $("#Member").attr("aria-expanded",true).addClass("in");
+        $("#Member").siblings("a").css("backgroundColor","#000");
+    })
+
+</script>
+<body>
+<div class="cover" style="width: 100%;height: 100%;opacity: 0.5;display: none;z-index: 100;position: absolute;background-color: #000"></div>
+
+<div id="wrapper">
+    <{include file="nav.html"}>
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <div id="card_container" style="position:absolute;background-color: #ffffff;z-index: 10000;">
+                <div id="card_pic" >
+                    <img src="" id="card_pic1" style="float: left">
+                    <img src="" id="card_pic2" style="float: left">
+                </div>
+            </div>
+            <!-- Page Heading -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <ol class="breadcrumb">
+                        <li>
+                            <i class="fa fa-dashboard"></i>  <a href="#">用户管理</a>
+                        </li>
+                        <li class="active">
+                            <i class="fa fa-table"></i> 最近审核
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th>头像</th>
+                                <th>姓名</th>
+                                <th>昵称</th>
+                                <th>手机号</th>
+                                <th>所在地</th>
+                                <th>4s店</th>
+                                <th>品牌</th>
+                                <th>身份证号</th>
+                                <th>身份证</th>
+                                <th>名片</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="verify_content">
+                            <{foreach from=$result item=rows}>
+                            <tr>
+                                <td><img src="<{$rows.avatar}>" style="width: 50px;height: 50px"></td>
+                                <td><{$rows.realname}></td>
+                                <td><{$rows.nickname}></td>
+                                <td><{$rows.telephone}></td>
+                                <td><{$rows.city}><{$rows.district}></td>
+                                <td><{$rows.shop}></td>
+                                <td><{$rows.brand}></td>
+                                <td><{$rows.card_number}></td>
+                                <td><a href="#" onclick="check_card(this)"><img src="<{$rows.card_id1}>" style="width: 25px;height: 25px;float: left"><img src="<{$rows.card_id2}>" style="width: 25px;height: 25px;float: left
+                               "></a></td>
+                                <td><a href="#" onclick="check_card(this)"><img src="<{$rows.business_card}>" style="width: 50px;height: 50px"></a></td>
+                                <td><{if $rows.verify_result eq 0}>不通过<{else}>通过<{/if}></td>
+                            </tr>
+                            <{/foreach}>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- /.row -->
+
+        </div>
+        <!-- /.container-fluid -->
+
+    </div>
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h3 style="text-align: center">审核结果</h3>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default " style="width: 48%" data-dismiss="modal">不通过</button>
+                    <button type="button" class="btn btn-primary " style="width: 48%" data-dismiss="modal">通过</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+</body>
+
+</html>

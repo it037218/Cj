@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>线索列表</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/index.css?v=0.04">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/detail.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/animate.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/common.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/jquery.message.css">
+
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery.message.min.js"></script>
+
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/menu.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery.raty.js"></script>
+
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <script>
+        $(function(){
+            var DHeight = $(".jquery-message").height();
+            var WHeight = $(window).height();
+            $(".jquery-message").css("top",(parseInt(WHeight-DHeight)/2))
+
+
+//            var brand = sessionStorage.getItem("brand")
+            var series = sessionStorage.getItem("series")
+//            var province = sessionStorage.getItem("province")
+//            var city = sessionStorage.getItem("city")
+
+//            var level = sessionStorage.getItem("level")
+            //如果缓存中有值，则直接赋值
+//            if(brand != undefined && brand.length !=0){
+//                $("#brand").text(brand)
+//            }
+            if(series != undefined && series.length !=0){
+                $("#series").text(series)
+                $("input[name='series']").val(series)
+            }
+
+//            if(province != undefined && province.length !=0 && city != undefined && city.length !=0){
+//                $(".area .content .province").text(province)
+//                $(".area .content .city").text(city)
+//            }
+
+            $(".series").click(function(){
+                window.location.href="{:U('/addon/Chengjiaojia/Public/series')}"
+            })
+
+//            $(".area").click(function(){
+//                window.location.href="{:U('/addon/Chengjiaojia/Public/area')}"
+//            })
+//            $('.key_rate .content').raty({
+//                path:"{:CUSTOM_TEMPLATE_PATH}/public/images",
+//                hints:['1星',"2星","3星","4星","5星"],
+//                half:true,
+//                starHalf    : 'star-half.png',
+//                score:1,
+//                space:false,
+//                click:function(score){
+//                    $("input[name='key_rate']").val(score)
+//                }
+//            })
+        })
+    </script>
+    <style>
+
+        input[type='text']{
+            border:none;
+            height: 80px;
+            line-height: 80px;
+            margin-top: 10px;
+            font-size: 28px;
+            text-align: right;
+            margin-right: 35px;
+            width: 220px;
+            padding: 0 10px;
+        }
+        .content select{
+            direction: rtl;
+            margin-top: 10px;
+            height:80px;
+            -webkit-appearance:none;
+            appearance:none;
+            border:none;
+            font-size:28px;
+            padding:0px 10px;
+            display:block;
+            width:310px;
+            -webkit-box-sizing:border-box;
+            box-sizing:border-box;
+            background-color: #FFFFFF;
+            color:#000;
+            border-radius:4px;
+            text-align: right;
+        }
+        option{
+            direction: rtl;
+        }
+        textarea{
+            font-size: 28px;
+        }
+        .key_rate .label{
+            width: 200px;
+        }
+        .key_rate .content{
+            padding-right: 35px;
+        }
+        .key_rate .content img{
+            margin-top: 25px;
+        }
+        #publish_confirm{
+            position: fixed!important;
+            bottom: 0px;
+        }
+    </style>
+    <script>
+        $(function(){
+            //确认发布线索
+            $("#publish_confirm").click(function(){
+                var brand = $("input[name='brand']").val()
+                var series = $("input[name='series']").val()
+//                var area = $(".area .content").text()
+//                var province = $("input[name='province']").text()
+                var city = $("input[name='city']").val()
+                var time_limit = $("#time_limit").val()
+
+//                var level = $("#level").val()
+//                var key_rate = $("input[name='key_rate']").val()
+                var credit = $("input[name='credit']").val();
+
+                var url = "{:U('saveWanted')}";
+
+                if(brand.length == 0){
+                    $().message("请选择汽车品牌")
+                    return
+                }else if( series.length ==0){
+                    $().message("请选择汽车型号")
+                    return
+                }else if(time_limit.length==0){
+                    $().message("请选择悬赏期限")
+                    return
+                }else if(credit.length==0){
+                    $().message("请选择积分值")
+                    return
+                }else{
+                    $.post(
+                            url,
+                            {
+                                brand:brand,
+                                series:series,
+                                city:city,
+                                time_limit:time_limit,
+//                                level:level,
+//                                key_rate:key_rate,
+                                credit:credit
+                            },
+                            function(data){
+                                if(data > 0){
+                                    window.location.href="{:U('getList')}"
+                                    sessionStorage.clear();
+                                }else if(data == -1){
+                                    $().message("您的积分不够")
+                                }else if(data == -2){
+                                    $().message("线索发布失败");
+                                }
+                            }
+                    )
+                }
+            })
+        })
+    </script>
+</head>
+<body>
+<div>
+    <ul>
+        <li class="column brand" >
+            <div class="choose_area">
+                <div class="fl label">
+                    汽车品牌
+                </div>
+                <div class="fr content" style="margin-right: 75px">
+                    {$result.brand}
+                </div>
+                <input type="hidden" name="brand" value="{$result.brand}">
+            </div>
+        </li>
+        <li class="column series" >
+            <div class="choose_area">
+                <div class="fl label">
+                    汽车系列
+                </div>
+                <div class="fr arrow"></div>
+                <div class="fr content">
+                    <span id="series">请选择</span>
+                </div>
+                <input type="hidden" name="series" value="">
+                <!--<input type="hidden" name="type" value="">-->
+            </div>
+        </li>
+        <li class="column area">
+            <div class="choose_area">
+                <div class="fl label">
+                    购车城市
+                </div>
+                <div class="fr content" style="margin-right: 75px">
+                    <span class="city">{$result.city}</span>
+                </div>
+            </div>
+            <input type="hidden" name="city" value="{$result.city}">
+
+        </li>
+
+        <li class="column timeLimit">
+            <div class="choose_area">
+                <div class="fl label">
+                    悬赏期限
+                </div>
+                <div class="fr arrow"></div>
+                <div class="fr content">
+                    <select id="time_limit">
+
+                        <option value="3" selected="selected">三天</option>
+                        <option value="7">一周</option>
+                        <option value="14">两周</option>
+                    </select>
+                </div>
+            </div>
+
+        </li>
+        <!--<li class="column key_rate">-->
+            <!--<div class="choose_area">-->
+                <!--<div class="fl label">-->
+                    <!--线索有效率要求-->
+                <!--</div>-->
+                <!--<div class="fr content" >-->
+                <!--</div>-->
+                <!--<input type="hidden" name="key_rate"value="1">-->
+            <!--</div>-->
+        <!--</li>-->
+        <!--<li class="column levellimit">-->
+            <!--<div class="choose_area">-->
+                <!--<div class="fl label">-->
+                    <!--等级要求-->
+                <!--</div>-->
+                <!--<div class="fr arrow"></div>-->
+                <!--<div class="fr content" >-->
+                    <!--<select name="level" id="level">-->
+                        <!--<option value="0" selected="selected">无等级要求</option>-->
+                        <!--<option value="1">高于LV.1</option>-->
+                        <!--<option value="2">高于LV.2</option>-->
+                        <!--<option value="3">高于LV.3</option>-->
+                        <!--<option value="4">高于LV.4</option>-->
+                        <!--<option value="5">高于LV.5</option>-->
+                        <!--<option value="6">高于LV.6</option>-->
+                        <!--<option value="7">高于LV.7</option>-->
+                    <!--</select>-->
+                <!--</div>-->
+
+            <!--</div>-->
+        <!--</li>-->
+        <li class="column credit" style="height: 140px;">
+            <div class="choose_area">
+                <div class="fl label" style="position: relative">
+                    悬赏积分
+                    <p style="position: absolute;left: 0;top: 50px;font-size: 26px;color: #FFB704;height: 80px;">当前积分{$result.use_credit}分</p>
+                </div>
+                <div class="fr content" style="margin-right: 75px">
+                    50积分
+                </div>
+                <input type="hidden" name="credit" value="50">
+            </div>
+        </li>
+    </ul>
+    <div class="confirm_btn" id="publish_confirm">
+        确认悬赏
+    </div>
+
+</div>
+
+</body>
+</html>
+

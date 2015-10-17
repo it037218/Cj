@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>发布线索</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/index.css?v=0.04">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/detail.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/animate.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/common.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/trade.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/jquery.message.css">
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery.message.min.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/menu.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery.raty.js"></script>
+
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <script>
+        $(function(){
+            var height = parseInt($(window).height());
+            var Dheight = parseInt($(".confirm_btn").height());
+            var topHeight = height-Dheight;
+            $(".confirm_btn").css("top",topHeight)
+            var brand = sessionStorage.getItem("brand")
+            var series = sessionStorage.getItem("series")
+            var brand_id = sessionStorage.getItem("brand_id");
+            var logo = sessionStorage.getItem("logo")
+            var city = sessionStorage.getItem("city")
+            var district = sessionStorage.getItem("district");
+            var level = sessionStorage.getItem("level")
+            var textarea = $("textarea").val();
+            var  length = textarea.length;
+            $("#total_intro_text").text(length)
+            //如果缓存中有值，则直接赋值
+            if(brand != undefined && brand.length !=0){
+                $("#brand").text(brand)
+                $("input[name='brand_id']").val(brand_id)
+            }
+            if(series != undefined && series.length !=0){
+                $("#series").text(series)
+            }
+
+            if(district != undefined){
+                $(".area .content .city").text(city)
+                $(".area .content .district").text(district)
+            }
+
+            $(".brand").click(function(){
+                window.location.href="{:U('/addon/Chengjiaojia/Public/brand')}";
+            })
+
+            $(".area").click(function(){
+                window.location.href="{:U('/addon/Chengjiaojia/Public/city')}";
+            })
+        })
+    </script>
+    <style>
+
+        input[type='text'],input[type='tel'],input[type='number']{
+            border:none;
+            height: 80px;
+            line-height: 80px;
+            margin-top: 10px;
+            font-size: 28px;
+            text-align: right;
+            margin-right: 35px;
+            width: 220px;
+            padding: 0 10px;
+            float: left;
+        }
+        .content select{
+            direction: rtl;
+            margin-top: 10px;
+            height:80px;
+            -webkit-appearance:none;
+            appearance:none;
+            border:none;
+            font-size:28px;
+            padding:0px 10px;
+            display:block;
+            width:310px;
+            -webkit-box-sizing:border-box;
+            box-sizing:border-box;
+            background-color: #FFFFFF;
+            color:#000;
+            border-radius:4px;
+            text-align: right;
+        }
+       .real_get{
+           margin-right: 20px;
+       }
+        option{
+            direction: rtl;
+        }
+        textarea{
+            font-size: 28px;
+        }
+        .levellimit .label{
+            width: 200px;
+        }
+        .levellimit .content{
+            padding-right: 35px;
+        }
+        .levellimit .content img{
+            margin-top: 25px;
+        }
+        #publish_confirm{
+            position: absolute;
+            bottom: 0px;
+        }
+    </style>
+    <script>
+        var clickStatus = true;
+        $(function(){
+            $(".keyboard span").bind("touchstart",function(){
+
+                $("#money")[0].focus();
+                var tip = $(this).attr("data");
+                var obj = $(this);
+                if (tip == 1) {
+                    var con = document.getElementById('money').value;
+                    document.getElementById('money').value = con + $(this).html();
+                } else if (tip == 2) {
+                    document.getElementById('money').value = "";
+                } else if (tip == 3) {
+                    var con = document.getElementById('money').value;
+                    document.getElementById('money').value = con.slice(0, -1);
+                }
+                var money = $("#money").val().length==0?0:$("#money").val();
+                var real_money = parseInt(money) * 1;
+                $(".real_get").text(real_money.toFixed(2));
+            })
+            $(".keyboard .done").bind("touchstart",function(){
+                var money = $("#money").val().length==0?0:$("#money").val();
+                var real_money = parseInt(money) * 1;
+                $(".real_get").text(real_money.toFixed(2));
+                $(".keyboard").hide();
+
+            })
+
+            $("#money").bind("focus touchstart",function(){
+                var top1 = parseInt($(this).position().top);
+                var top2 = parseInt($(this).height());
+                var top3 = parseInt($(".keyboard").height());
+                var H = parseInt($(window).height());
+
+                if(top1+top2+top3 > H){
+//                    $("body").scrollTop(top1+top2*2+top3-H)
+                }
+
+//                $(".keyboard").show()
+//                $(".keyboard").addClass("animated slideInUp");
+//                $(".keyboard").css({"position":"fixed","bottom":0})
+            });
+            $("#money").bind("keyup",function(){
+                //实际到账金额计算
+                var inputValue = $(this).val();
+                $(this).val(inputValue.replace(/\D/g,""));
+
+                var money = $(this).val().length==0?0:$(this).val();
+                var real_money = parseInt(money) * 1;
+                $(".real_get").text(real_money.toFixed(2));
+            });
+
+            //确认发布线索
+            $("textarea").keyup(function(){
+                var textarea = $(this).val();
+                var  length = textarea.length;
+                $("#total_intro_text").text(length)
+
+            })
+
+            $(".confirm_btn").bind("touchstart",function(){
+                if(clickStatus == false){
+                    return false;
+                }
+//                clickStatus = false;
+                var brand = $("#brand").text()
+                var brand_id = $("input[name='brand_id']").val()
+                var logo = sessionStorage.getItem("logo")
+                var series = $("#series").text()
+                var area = $(".area .content").text()
+                var province = $(".area .content .province").text()
+                var city = $(".area .content .city").text()
+                var district = $.trim($(".area .content .district").text())
+                var time_limit = $("#time_limit").find("option:selected").text();
+                var buy_time = $("#time_limit").val()
+                var name = $("input[name='name']").val()
+                var telephone = $("input[name='telephone']").val()
+                var credit = $("input[name='credit']").val();
+                var description = $("textarea[name='description']").val()
+                var url = "{:U('publish')}";
+                var money = $("input[name='money']").val();
+                var real_get = $.trim($(".real_get").text());
+                var isMobile = /^((13[0-9]{1})|(14[0-9]{1})|(15[0-9]{1})|(17[0-9]{1})|(18[0-9]{1}))+\d{8}$/;
+
+                if(brand.length == 0){
+                    $().message("请选择汽车品牌")
+                    return;
+                }else if( series.length ==0){
+                    $().message("请选择汽车型号")
+                    return;
+                }else if(district.length==0){
+                    $().message("请选择地区")
+                    return;
+                }else if(buy_time == 0){
+                    $().message("请选择购车时间")
+                    return;
+                }else if(name.length==0){
+                    $().message("请选择客户姓名")
+                    return;
+                }else if(telephone.length==0){
+                    $().message("请选择客户联系方式")
+                    return;
+                }else if (!telephone.match(isMobile)){
+                    $().message("手机号输入有误");
+                    return;
+                }else if(description.length==0){
+                    $().message("请输入线索详情")
+                    return;
+                }else if(money.length == 0){
+                    $().message("请输入挂牌佣金")
+                    return
+                }else if(real_get.length == 0){
+                    $().message("请重新输入线索挂牌佣金")
+                    return
+                }
+//                else if(description.length<15){
+//                    $().message("线索详情不得少于15字")
+//                    return
+//                }
+                else{
+                    $.post(
+                        url,
+                        {
+                            brand:brand,
+                            brand_id:brand_id,
+                            series:series,
+                            city:city,
+                            district:district,
+                            custom_name:name,
+                            custom_telephone:telephone,
+                            time_limit:time_limit,
+                            brand_logo:logo,
+                            description:description,
+                            money:money,
+                            real_get:real_get
+                        },
+                        function(data){
+                            clickStatus = true;
+                            if(data > 0){
+                                window.location.href="{:U('index')}"
+                                sessionStorage.clear();
+                            }else{
+                                $().message("线索发布失败");
+                            }
+                        }
+                    )
+                }
+            })
+        })
+    </script>
+</head>
+<body>
+<div style="position: relative;margin-top: 40px">
+    <ul>
+        <li class="column brand" >
+            <div class="choose_area">
+                <div class="fl label">
+                    品牌车系
+                </div>
+                <div class="fr arrow"></div>
+                <div class="fr content">
+                    <span id="brand">请选择</span><span id="series"></span>
+                </div>
+            </div>
+            <input type="hidden" name="brand" value="{$result.brand}">
+            <input type="hidden" name="brand_id" value="">
+
+        </li>
+
+        <li class="column area">
+            <div class="choose_area">
+                <div class="fl label">
+                    购车城市
+                </div>
+                <div class="fr arrow"></div>
+                <div class="fr content">
+                    <!--<span class="province">{$result.province}</span>-->
+                    <span class="city">{$result.city}</span>
+                    <span class="district">{$result.district}</span>
+                </div>
+            </div>
+            <input type="hidden" name="city" value="{$result.city}">
+            <input type="hidden" name="district" value="{$result.district}">
+
+        </li>
+
+        <li class="column timeLimit">
+            <div class="choose_area">
+                <div class="fl label">
+                    购车时间
+                </div>
+                <div class="fr arrow"></div>
+                <div class="fr content">
+                    <select id="time_limit">
+                        <option value="0" selected="selected">请选择</option>
+                        <option value="1">一周以内</option>
+                        <option value="2">两周以内</option>
+                        <option value="3">三周以内</option>
+                        <option value="4">一个月以内</option>
+                        <option value="5">不确定</option>
+
+                    </select>
+                </div>
+            </div>
+
+                <input type="hidden" name="time_limit" value="">
+
+        </li>
+        <li class="column custom_name">
+            <div class="choose_area">
+                <div class="fl label">
+                    客户姓名
+                </div>
+                <div class="fr content">
+                    <input type="text" name="name" placeholder="请填写客户姓名">
+                </div>
+            </div>
+        </li>
+        <li class="column custom_telephone">
+            <div class="choose_area">
+                <div class="fl label">
+                    客户联系方式
+                </div>
+                <div class="fr content">
+                    <input type="tel" name="telephone" placeholder="请输入手机号">
+                </div>
+            </div>
+        </li>
+        <li class="column credit">
+            <div class="choose_area">
+                <div class="fl label" style="position: relative">
+                    线索挂牌佣金
+                </div>
+                <!--<div class="fr arrow"></div>-->
+                <div class="fr content" style="margin-right: 45px">
+                    <input type="tel" name="money" id="money" style="width: 190px;margin-right: 10px" placeholder="请输入佣金"/>
+                    <span style="float: right ">橙蕉豆</span>
+                </div>
+            </div>
+        </li>
+
+        <li class="column credit">
+            <div class="choose_area" style="position: relative;">
+                <div class="fl label" style="position: relative;">
+                    实际到账
+                </div>
+                <!--<div class="fr arrow"></div>-->
+                <div class="fr content" style="margin-right: 47px;display: block;overflow: hidden">
+                    <span class="real_get" style="float: left">0</span>
+                    <span style="float: right ">橙蕉豆</span>
+
+                </div>
+                <!--<label style="position: absolute;bottom: 0;right: 45px;;display: block;line-height: 45px;font-size: 26px;color: #999">平台收取10%的佣金</label>-->
+            </div>
+        </li>
+    </ul>
+    <div class="key_desc" style="margin-top: 40px;overflow: hidden">
+        <div class="desc_title">
+            <span class="text">线索详情</span>
+        </div>
+        <div class="dec_content">
+            <textarea style="width: 620px;height: 300px;margin:0 auto;padding: 18px;border: 1px solid #ccc" name="description" placeholder="详情不能少于15字"></textarea>
+            <div style="margin: 2% 5% 4% 8%;text-align: right"><span class="applicant_hint"></span>&nbsp;&nbsp;<span id="total_intro_text">0</span>/1000</div>
+        </div>
+    </div>
+</div>
+<div class="keyboard" style="">
+    <div class="done">完成</div>
+    <span  data="1">1</span>
+    <span  data="1">2</span>
+    <span  data="1">3</span>
+    <br>
+    <span  data="1">4</span>
+    <span  data="1">5</span>
+    <span  data="1">6</span>
+    <br>
+    <span  data="1">7</span>
+    <span  data="1">8</span>
+    <span  data="1">9</span>
+    <br>
+    <span  data="2" class="grey">C</span>
+    <span  data="1">0</span>
+    <span  data="3" class="grey del"></span>
+</div>
+<script>
+
+</script>
+<div class="confirm_btn">
+    确认发布
+</div>
+
+</body>
+</html>

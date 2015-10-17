@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/common.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/member.css">
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <title>积分详情</title>
+    <style>
+        .bold{
+            font-size: 30px;
+            color: #000000;
+            font-weight: bold;
+        }
+        #main_content li{
+            height: 120px;!important;
+        }
+        .credit_detail .credit{
+            margin-right: 35px;
+        }
+    </style>
+</head>
+<body>
+<!--<div id="main_content">-->
+    <!--<div class="credit_manage">-->
+        <!--<div class="credit_list" style="margin-top: 40px;">-->
+            <!--<span class="fl icon icon1"><img src="{:CUSTOM_TEMPLATE_PATH}/public/images/icon7.jpg"></span>-->
+            <!--<span class="fl credit_title bold">当前积分</span>-->
+            <!--<span class="fr credit_content">{$credit}积分</span>-->
+        <!--</div>-->
+    <!--</div>-->
+
+    <!--<div class="credit_manage_list">-->
+        <!--<div class="credit_list_title">-->
+            <!--<div class="credit_manage_title">-->
+                <!--<span class="icon fl"></span>-->
+                <!--<span class="text fl bold">积分明细</span>-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <!--<ul>-->
+            <!--<volist name="result" id="rows">-->
+                <!--<li class="credit_detail">-->
+                    <!--<div class="fl credit_info">-->
+                        <!--<p>{$rows.title}</p>-->
+                        <!--<span>{$rows.create_time}</span>-->
+                    <!--</div>-->
+                    <!--<div class="fr credit">-->
+                        <!--{$rows.credit}积分-->
+                    <!--</div>-->
+
+                <!--</li>-->
+            <!--</volist>-->
+        <!--</ul>-->
+    <!--</div>-->
+<!--</div>-->
+<div class="use-account" style="margin-top: 0!important;background-color: #ed2e69">
+    <div class="font1">当前积分</div>
+    <div class="font2">{$credit}</div>
+    <div class="font3">积分</div>
+</div>
+<div class="credit_manage_list use-account-list">
+    <div class="credit_list_title">
+        <div class="credit_manage_title">
+            <span class="icon fl"></span>
+            <span class="text fl bold">积分明细</span>
+        </div>
+    </div>
+
+    <ul>
+        <volist name="result" id="rows">
+            <li class="credit_detail">
+                <div class="fl credit_info">
+                    <p style="word-wrap:break-word;word-break:break-all;width: 100%">{$rows.title}</p>
+                    <span style="padding-bottom: 30px;display: block">{$rows.create_time}</span>
+                </div>
+                <div class="fr credit">
+                    {$rows.credit}<br>
+                    <span style="font-size: 26px">积分</span>
+                </div>
+
+            </li>
+        </volist>
+    </ul>
+</div>
+
+<include file="./Addons/Chengjiaojia/View/public/footer.html" />
+</body>
+</html>

@@ -1,0 +1,238 @@
+#key_list_content{
+	width: 720px;
+	margin: 0 auto;
+    /*border-bottom:1px solid #ccc;*/
+    overflow: hidden;
+}
+
+/*选择栏 start*/
+#key_list_content .select_option{
+    width: 100%;
+    height:100px;
+    border-bottom: 1px solid #ccc;
+    background-color: #fff;
+    margin-bottom: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+.select_area{
+
+    overflow: hidden;
+}
+#key_list_content .select_option .choose{
+	width:240px;
+    height: 100%;
+    float: left;
+    position: relative;
+}
+#key_list_content .select_option .choose .area_select_option,.car_select_option,.order_select_option{
+    display: block;
+    width:240px;
+    height: 50px;
+    margin: 25px auto;
+    overflow: hidden;
+    position: absolute;
+    border-right: 1px solid #e1e1e1;
+}
+
+.select_option .text{
+    height: 100%;
+    line-height: 50px;
+    text-align: center;
+    font-size: 30px;
+    left: 60px;
+    color: #707070;
+    margin: auto 5px;
+}
+.area_select_option .icon{
+    width: 40px;
+    height: 40px;
+    margin: 5px auto 5px 20px;
+    display: block;
+    background:url("../images/location.png") no-repeat;
+}
+.car_select_option .icon{
+    width: 40px;
+    height: 40px;
+    margin: 5px auto 5px 20px;
+    display: block;
+    background:url("../images/car.png") no-repeat;
+}
+.order_select_option .icon{
+    width: 40px;
+    height: 40px;
+    margin: 5px auto 5px 20px;
+    display: block;
+    background:url("../images/sort.png") no-repeat;
+}
+
+.select_option .down {
+    width: 40px;
+    height: 40px;
+    margin: 5px auto;
+    display: block;
+    background: url("../images/down.png") no-repeat;
+}
+.select_option .up {
+    width: 40px;
+    height: 40px;
+    margin: 5px auto;
+    display: block;
+    background: url("../images/up.png") no-repeat;
+}
+
+/*地区选择 下拉框*/
+#key_list_content .select_option .options{
+    width: 720px;
+    position: absolute;
+    top: 100px;
+    z-index: 100;
+    height: 700px;
+    background-color: #FFFFFF;
+    overflow-y: scroll;
+}
+.car_options{
+    left: -240px;
+}
+.order_options{
+    left: -480px;
+}
+.options li{
+    z-index: 100;
+    height: 103px;
+    width: 275px;
+    text-align: left;
+    line-height: 103px;
+    font-size: 30px;
+    padding-left:35px; ;
+    background-color: #f5f5f5;
+    /*position: relative;*/
+}
+.options .chosen{
+    background-color: #FFFFFF;
+}
+.options  dl{
+    position: absolute;
+    left: 310px;
+    width: 380px;
+    padding-left: 30px;
+    top:0
+}
+.options  dl dd{
+    border-bottom: 1px solid #ccc;
+    background-color: #FFFFFF;
+}
+
+/*排序模块*/
+
+.order_options{
+    width: 100%;
+    /*padding-left: 20px;*/
+}
+.order_options  dd{
+    height:103px ;
+    line-height: 103px;
+    font-size: 30px;
+    border-bottom: 1px solid #cccccc;
+}
+
+/*选择栏 结束*/
+/*线索列表 开始*/
+#key_list_content .key_list{
+    width: 720px;
+    background-color: #FFFFFF;
+    z-index: 99;
+    overflow-y:hidden;
+    margin:120px 0 140px 0;
+    border-bottom: 2px solid #ccc;
+}
+
+#key_list_content .key_list_detail{
+    height: 201px;
+    border-bottom: 1px solid #EFEFEF;
+}
+.key_list_detail .key_img{
+    /*width: 182px;*/
+    border-bottom: 1px solid #EFEFEF;
+    height: 100%;
+    margin-left:20px ;
+}
+.key_list_detail .key_img img{
+    width:114px;
+    height: 114px;
+    display:block;
+    margin: 42px 34px 41px 14px;
+}
+.key_list_detail .key_detail{
+    margin-left: 0;
+    height: 100%;
+    width: 325px;
+    border-bottom: 1px solid #EFEFEF;
+}
+.key_detail .key_detail_view{
+    margin: 30px auto;
+}
+.key_detail_view p{
+    height: 45px;
+    line-height: 45px;
+    font-size: 28px;
+}
+.key_detail_view img{
+    width: 36px;
+}
+.key_list_detail .key_operation{
+    padding-right: 40px;
+    width: 155px;
+    height: 100%;
+    border-bottom: 1px solid #EFEFEF;
+}
+.key_list_detail .key_operation .operation{
+    text-align: right;
+    padding-top: 45px;
+}
+.order_options{
+    padding-left: 35px;
+}
+
+/*悬赏列表 开始*/
+
+#key_list_content .wanted_list_detail{
+    /*overflow-y:scroll;*/
+    height: 250px;
+}
+.wanted_list_detail .wanted_img{
+    /*width: 182px;*/
+    border-bottom: 1px solid #ccc;
+    height: 100%;
+    margin-left:20px ;
+}
+.wanted_list_detail .wanted_img img{
+    width:114px;
+    height: 114px;
+    display:block;
+    margin: 60px 34px 41px 14px;
+}
+.wanted_list_detail .wanted_detail{
+    margin-left: 0px;
+    height: 100%;
+    width: 388px;
+    border-bottom: 1px solid #ccc;
+}
+.wanted_detail .wanted_detail_view{
+    padding-bottom: 10px;
+}
+.wanted_detail .wanted_detail_view .brand{
+
+    margin-top: 40px;
+}
+.wanted_list_detail .wanted_operation{
+    width: 150px;
+    height: 100%;
+    border-bottom: 1px solid #ccc;
+}
+.wanted_list_detail .wanted_operation .operation{
+    margin:90px auto;
+    text-align: center;
+}

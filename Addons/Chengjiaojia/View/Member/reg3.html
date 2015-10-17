@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/reg.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/member.css">
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery.message.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/jquery.message.css">
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/wx.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/uploadCard.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/card.js"></script>
+    <title>注册</title>
+    <script>
+        var URL = "{:U('/addon/Chengjiaojia/System/sign')}";
+        var uploadUrl = "{:U('/addon/Chengjiaojia/System/wxUpoloadImage')}";
+        var images = {
+            localId: [],
+            serverId: []
+        };
+        $(function(){
+
+            $(".confirm_btn").bind("touchstart",function(){
+                var realname = $.trim($("input[name='realname']").val());
+                var patrn = /^[\u4e00-\u9fa5 ]{2,20}$/;
+                var nameCheck = patrn.test(realname)
+
+                if(realname.length == 0 || nameCheck == false){
+                    $().message("请输入真实姓名");
+                    return false;
+                }
+
+                var card_number = $("input[name='card_number']").val();
+//                var res = IdentityCodeValid(card_number);
+                if(card_number.length == 0){
+                    $().message("请输入身份证号");
+                    return false;
+                }
+//                if(res == false){
+//                    $().message("请输入正确的身份证号");
+//                    return false;
+//                }
+                var card_id1 = $("input[name='card1']").val();
+                var card_id2 = $("input[name='card2']").val();
+                var business_card = $("input[name='card3']").val();
+                if(card_id1.length == 0 || card_id2.length == 0 || business_card.length == 0){
+                    $().message("请上传相关证件照片")
+                    return false;
+                }else{
+                    $.post(
+                        "{:U('register',array('opt'=>'update'))}",
+                        {
+                            realname:realname,
+                            card_number:card_number,
+                            card_id1:card_id1,
+                            card_id2:card_id2,
+                            business_card:business_card
+                        },
+                        function(data){
+                            clickStatus = true;
+                            if(data == 1){
+                                $().message("信息提交成功！")
+                                window.location.href = "{:U('reg_result')}"
+                            }else{
+                                $().message("请输入正确信息")
+                            }
+                        }
+                    )
+
+
+
+                }
+
+            })
+
+
+
+        })
+    </script>
+    <style>
+
+    </style>
+</head>
+<body>
+<div class="reg-content">
+    <ul>
+        <li>
+            <span>姓名</span><input type="text" name="realname" placeholder="请输入真实姓名">
+        </li>
+        <li>
+            <span>身份证号</span><input type="tel" name="card_number" placeholder="请输入18位身份证号">
+        </li>
+
+    </ul>
+</div>
+<div id="main_content">
+    <div class="card_area">
+        <p style="margin-top:25px;font-size: 32px;display: block">实名认证</p>
+        <div class="card fl" id="card1">
+            <div class="card_image card1"><img src="{:CUSTOM_TEMPLATE_PATH}/public/images/uploadImg.jpg"></div>
+            <input type="hidden" name="card1" value="">
+            <p>身份证（正面）</p>
+        </div>
+        <div class="card fl" id="card2">
+            <div class="card_image card2">
+                <img src="{:CUSTOM_TEMPLATE_PATH}/public/images/uploadImg.jpg">
+                <!--<div><img src="{:CUSTOM_TEMPLATE_PATH}/public/images/uploadImg.jpg" width="305" height="190"></div>-->
+            </div>
+            <input type="hidden" name="card2" value="">
+            <p>身份证（反面）</p>
+        </div>
+        <div class="card fl" id="card3">
+            <div class="card_image card3"><img src="{:CUSTOM_TEMPLATE_PATH}/public/images/uploadImg.jpg"></div>
+            <input type="hidden" name="card3" value="">
+            <p>4S店名片</p>
+        </div>
+    </div>
+</div>
+<img src="{:CUSTOM_TEMPLATE_PATH}/public/images/liucheng.jpg" style="width: 100%;">
+    <div class="confirm_btn btn_confirm">
+        确定提交
+    </div>
+</body>
+</html>
+

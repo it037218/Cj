@@ -1,0 +1,43 @@
+.functions .demo {
+    margin-bottom: 10px;
+}
+
+.functions .item {
+    background-color: #FEFEFE;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 5px;
+    padding: 5px 10px;
+}
+
+.functions .item a {
+    border: 1px solid #CCC;
+    margin-left: 10px;
+    padding: 5px;
+    text-decoration: none;
+}
+
+.functions .item input {
+    display: inline-block;
+    margin-left: 2px;
+    padding: 5px 6px;
+    width: 120px;
+}
+
+.functions .item label {
+    display: inline-block;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.hint {
+    text-align: center;
+    width: 160px
+}
+
+div.hint {
+    font-size: 1.4em;
+    height: 46px;
+    margin-top: 15px;
+    padding: 7px
+}

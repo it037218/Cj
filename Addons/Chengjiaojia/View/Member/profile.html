@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/index.css?v=0.04">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/detail.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/animate.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/common.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/member.css">
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery.message.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/jquery.message.css">
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/wx.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <!--<script src="{:CUSTOM_TEMPLATE_PATH}/public/js/reg.js"></script>-->
+    <title>个人资料编辑</title>
+    <script>
+        var URL = "{:U('/addon/Chengjiaojia/System/sign')}";
+        var uploadUrl = "{:U('/addon/Chengjiaojia/System/wxUpoloadImage')}";
+        var saveUrl = "{:U('updateMember',array('opt'=>'update'))}";
+        var images = {
+            localId: [],
+            serverId: []
+        };
+        var uploadStatus = 1;
+
+        prepareWx()
+        wx.ready(function () {
+            document.querySelector('.avatar').onclick = function () {
+                wx.chooseImage({
+                    success: function (res) {
+                        images.localId = res.localIds;
+                        $("#uploadImage").attr("src",res.localIds[0]);
+                        upload(res.localIds[0]);
+                    }
+                });
+            };
+            function upload(localIds){
+                wx.uploadImage({
+                    localId: localIds,
+                    success: function (res) {
+                        $.post(
+                                uploadUrl,
+                                {
+                                    "serverId":res.serverId
+                                },
+                                function(data){
+                                    if(data.length > 0 ){
+                                        if(uploadStatus == 1){
+//                                            alert(data)
+                                            $.post(
+                                                    saveUrl,
+                                                    {
+                                                        avatar:data
+                                                    },
+                                                    function(data1){
+                                                        $("input[name='avatar']").val(data)
+                                                        sessionStorage.setItem("avatar",data)
+                                                    }
+                                            )
+                                        }else{
+                                            $("input[name='avatar']").val(data)
+                                            sessionStorage.setItem("avatar",data)
+                                        }
+                                    }
+                                }
+
+
+                        )
+
+
+
+                    },
+                    fail: function (res) {
+                        alert(JSON.stringify(res));
+                    }
+                });
+            }
+        })
+
+
+
+
+        $(function(){
+            //手机号隐藏
+            var phone = $.trim($(".telephone .tel").text());
+            var mphone =phone.substr(3,4);
+            var lphone = phone.replace(mphone,"****");
+            $(".telephone .tel").text(lphone)
+
+
+
+            $("input[name='name']").blur(function(){
+                var name =  $("input[name='name']").val()
+                sessionStorage.setItem("name",name);
+            })
+
+            //提交信息
+//            $(".btn_confirm").click(function(){
+//                var name = $("input[name='name']").val();
+//                var shop = $("input[name='shop']").val();
+//                var brand = $("input[name='brand']").val();
+//                var brand_id = $("input[name='brand_id']").val();
+//                var city = $("input[name='city']").val();
+//                var district = $("input[name='district']").val();
+//                var city_id = $("input[name='city_id']").val();
+//                var avatar = $("input[name='avatar']").val();
+//
+//                if(avatar.length == 0){
+//                    $().message("请上传头像");
+//                    return;
+//                }else if(name.length == 0){
+//                    $().message("请输入您的真实姓名")
+//                    return
+//                }else if(shop.length == 0){
+//                    $().message("请选择所在4S店")
+//                    return
+//                }else{
+//                    var url = "{:U('updateMember',array('opt'=>'update'))}";
+//                    $.post(
+//                            url,
+//                            {
+//                                name:name,
+//                                city_id:city_id,
+//                                city:city,
+//                                district:district,
+//                                shop:shop,
+//                                brand:brand,
+//                                brand_id:brand_id,
+//                                avatar:avatar
+//                            },
+//                            function(data){
+//                                if(data == 1){
+//                                    sessionStorage.clear();
+//                                    window.location.href = "{:U('ucenter')}"
+//                                }else{
+//                                    $().message("请输入正确信息")
+//                                }
+//                            }
+//                    )
+//                }
+            })
+    </script>
+    <style>
+        input[type='text']{
+            border:none;
+            height: 80px;
+            line-height: 80px;
+            margin-top: 10px;
+            font-size: 30px;
+            text-align: right;
+            margin-right: 35px;
+            width: 220px;
+            padding: 0 10px;
+        }
+        .bold{
+            font-size: 30px;
+            color: #000000;
+            font-weight: bold;
+        }
+        .shop .content{
+            width:350px;
+            word-break:keep-all;
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+<div id="main_content">
+    <ul class="member_profile">
+        <li class="column avatar" style="height: 200px;line-height: 200px">
+            <span class="fl title bold" style="height: 100%;line-height: 200px">个人头像</span>
+
+            <span class="fr content"><img id="uploadImage" src="{$userInfo.avatar}" height="142" width="142"  style="border-radius:10px;margin:25px 35px"></span>
+            <input type="hidden" name="avatar" value="{$userInfo.avatar}">
+        </li>
+        <li class="column name">
+            <div class="choose_area">
+                <a href="{:U('editName')}" class="block">
+                <div class="fl label bold">
+                    昵称
+                </div>
+                <div class="fl content">
+
+                </div>
+                    <div class="arrow fr" ></div>
+                    <div class="fr">
+                        {$userInfo.name}
+                    </div>
+                    </a>
+            </div>
+        </li>
+    </ul>
+    <ul class="member_profile">
+        <li class="column telephone">
+            <a href="{:U('editTel')}" class="block">
+                <div class="choose_area">
+                    <div class="fl label bold">
+                        手机号
+                    </div>
+                    <div class="fl content">
+
+                    </div>
+                    <div class="arrow fr" ></div>
+                    <div class="fr tel">
+                        {$userInfo.telephone}
+                    </div>
+                </div>
+            </a>
+        </li>
+    </ul>
+    <ul class="member_profile">
+        <li class="column telephone">
+            <a href="{:U('pwdEdit')}" class="block">
+                <div class="choose_area">
+                    <div class="fl label bold">
+                        橙蕉密码
+                    </div>
+                    <div class="fl">
+
+                    </div>
+                    <div class="arrow fr" ></div>
+                    <div class="fr">
+                        修改
+                    </div>
+                </div>
+            </a>
+        </li>
+    </ul>
+    <ul class="member_profile">
+        <li class="member-info-title">
+            <a href="{:U('editInfo')}" class="block">
+            <span class="icon"></span>
+            <span class="bold">个人资料</span>
+            <div class="arrow fr" ></div>
+            <div class="fr" style="color: #FFB600;font-weight: 600">
+                修改
+            </div>
+                </a>
+        </li>
+        <li class="column area" >
+            <div class="choose_area">
+                <div class="fl label">
+                    真实姓名
+                </div>
+                <div class="fr content">
+                    {$userInfo.name}
+                </div>
+            </div>
+        </li>
+        <li class="column area" >
+            <div class="choose_area">
+                <div class="fl label">
+                    所在地
+                </div>
+                <div class="fr content">
+                    {$userInfo.city}
+                </div>
+            </div>
+        </li>
+        <li class="column brand">
+            <div class="choose_area">
+                <div class="fl label">
+                    销售品牌
+                </div>
+                <div class="fr content">
+                    {$userInfo.brand}
+                </div>
+            </div>
+        </li>
+        <li class="column shop">
+            <div class="choose_area">
+                <div class="fl label">
+                    所在4S店
+                </div>
+                <div class="fr content">
+                    {$userInfo.shop}
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+</body>
+</html>
+

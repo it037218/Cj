@@ -1,0 +1,112 @@
+<{include file="header.html"}>
+<script src="js/mall.js?v=0.1"></script>
+<style>
+    #card_pic{
+        border: 5px solid #CCCCCC;
+    }
+</style>
+<script>
+    $(function(){
+        $("#Mall").attr("aria-expanded",true).addClass("in");
+        $("#Mall").siblings("a").css("backgroundColor","#000");
+    })
+
+</script>
+<body>
+<div class="cover" style="width: 100%;height: 100%;opacity: 0.5;display: none;z-index: 100;position: absolute;background-color: #000"></div>
+
+<div id="wrapper">
+    <{include file="nav.html"}>
+    <div id="page-wrapper">
+        <div class="container-fluid" style="position: relative">
+            <div id="card_container" style="position:absolute;background-color: #ffffff;z-index: 10000;display: none">
+                <div id="card_pic" >
+                    <img src="" id="card_pic1" style="float: left">
+                </div>
+            </div>
+            <!-- Page Heading -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <ol class="breadcrumb">
+                        <li>
+                            <i class="fa fa-dashboard"></i>  <a href="#">商城管理</a>
+                        </li>
+                        <li class="active">
+                            <i class="fa fa-table"></i> 兑换管理
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            <div class="row" style="padding: 0px 15px 8px 15px">
+                    <div class="col-lg-4">
+
+                        <form class="form-inline" role="form">
+                            <label>选择列表</label>
+                            <select class="form-control" id="statusChoose">
+                                <option value="2" <{if $status == 2}>selected <{/if}>  >全部</option>
+                                <option value="1" <{if $status == 1}>selected <{/if}> >已审核</option>
+                                <option value="0" <{if $status == 0}>selected <{/if}> >未审核</option>
+                            </select>
+
+                        </form>
+                    </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th>头像</th>
+                                <th>姓名</th>
+                                <th>昵称</th>
+                                <th>手机号</th>
+                                <th>城市</th>
+                                <th>兑换商品</th>
+                                <th>积分</th>
+                                <th>兑换时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="verify_content">
+                            <{foreach from=$result item=rows}>
+                            <tr data="<{$rows.id}>">
+                                <td><img src="<{$rows.avatar}>" style="width: 50px;height: 50px"></td>
+                                <td><{$rows.name}></td>
+                                <td><{$rows.nickname}></td>
+                                <td><{$rows.telephone}></td>
+                                <td><{$rows.city}></td>
+                                <td><{$rows.commodity_name}></td>
+                                <td><{$rows.credit}></td>
+                                <td><{$rows.create_time}></td>
+                                <td>
+                                    <{if $rows.status eq 0 }>
+                                    <a href="#" class="btn btn-primary" onclick="verify(<{$rows.id}>)">审核</a>
+                                    <{elseif $rows.status eq 1}>
+                                    <button class="btn btn-success">已审核</button>
+                                    <{/if}>
+                                </td>
+                            </tr>
+                            <{/foreach}>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- /.row -->
+            <!--<ul class="pagination">-->
+                <!--<li><a href="<{$firstUrl}>" <{if $firstUrl == "#"}> class="disabled" <{/if}> >首页</a></li>-->
+                <!--<li><a href="<{$preUrl}>" <{if $preUrl == "#"}> class="disabled" <{/if}>>&laquo;</a></li>-->
+                <!--<li><a href="#" class="active disabled"><{$currentPage}></a></li>-->
+                <!--<li><a href="<{$nextUrl}>" <{if $nexttUrl == "#"}> class="disabled" <{/if}>>&raquo;</a></li>-->
+                <!--<li><a href="<{$lastUrl}>" <{if $lastUrl == "#"}> class="disabled" <{/if}>>末页</a></li>-->
+            <!--</ul>-->
+        </div>
+        <!-- /.container-fluid -->
+
+    </div>
+
+</div>
+</body>
+
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/index.css?v=0.04">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <title>已完成线索列表</title>
+    <style>
+        .key_show_list{
+            margin-bottom: 120px;
+        }
+        .key_list_detail{
+            border-bottom: 1px solid #cccccc;
+            overflow: hidden;
+            background-color: #FFFFFF;
+        }
+        .key_img{
+            border: none!important;
+            margin-top: 20px;
+        }
+        .key_detail{
+            border-bottom: none!important;
+        }
+        .key_detail .key_detail_view{
+            margin: 20px auto!important;
+        }
+    </style>
+    <script>
+        $(function(){
+            $(".key_list_detail").bind("click",function(){
+                var id = $(this).find(".key_id").val()
+                var brand = $.trim($(this).find(".brand").text())
+                var series = $.trim($(this).find(".series").text())
+                var brand_id = $.trim($(this).find(".brand_id").val())
+                sessionStorage.setItem("brand",brand);
+                sessionStorage.setItem("series",series)
+                sessionStorage.setItem("key_id",id)
+                sessionStorage.setItem("brand_id",brand_id)
+
+                window.history.go(-1);
+
+            })
+
+        })
+
+    </script>
+
+</head>
+<body>
+<div id="main_content">
+    <!--已被购买-->
+    <div class="key_show_list key_buy_yes">
+            <volist name="verified" id="rows">
+                <div class="key_list_detail list">
+                    <input type="hidden" class="key_id" value="{$rows.id}">
+                    <input type="hidden" class="brand_id" value="{$rows.brand_id}">
+                    <div class="fl key_img">
+                        <img src="{:CUSTOM_TEMPLATE_PATH}/public/images/logo/{$rows.brand_logo}.jpg" >
+                    </div>
+                    <div class="fl key_detail">
+                        <div class="key_detail_view">
+                            <p class="bold"><span class="brand">{$rows.brand}</span><span class="series">{$rows.series}</span></p>
+                            <p>购车时间：<span>{$rows.time_limit}</span></p>
+                            <p>客户姓名：<span>{$rows.custom_name}</span></p>
+                            <p>客户电话：<span>{$rows.custom_telephone}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </volist>
+    </div>
+
+</div>
+<include file="./Addons/Chengjiaojia/View/public/footer.html" />
+</body>
+</html>

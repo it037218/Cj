@@ -1,0 +1,218 @@
+<{include file="header.html"}>
+<script src="js/Member_list.js?v=0.1"></script>
+<style>
+    #card_pic{
+        border: 5px solid #CCCCCC;
+    }
+</style>
+<script>
+
+    $(function(){
+        $("#Member").attr("aria-expanded",true).addClass("in");
+        $("#Member").siblings("a").css("backgroundColor","#000");
+        $("#search").click(function(){
+            var city_id = $("#city_id").val();
+            var telephone = $("#telephone").val();
+            var name = $("#name").val();
+            var status = $("#status").val();
+            var url = "./member.php?action=index&status="+status;
+            var lastWord = url.substr(-1)
+//            alert(lastWord)
+            if(lastWord == "#"){
+                url = url.substring(0,url.length-1)
+            }
+            if(city_id != 0){
+                url += "&city_id="+city_id;
+            }
+            if(telephone.length != 0){
+                url += "&telephone="+telephone;
+            }
+            if(name.length != 0 ){
+                url += "&name="+name;
+            }
+            window.location.href = url
+        })
+    })
+
+</script>
+<body>
+<div class="cover" style="width: 100%;height: 100%;opacity: 0.5;display: none;z-index: 100;position: absolute;background-color: #000"></div>
+
+<div id="wrapper">
+    <{include file="nav.html"}>
+    <div id="page-wrapper">
+        <div class="container-fluid" style="position: relative">
+            <div id="card_container" style="position:absolute;background-color: #ffffff;z-index: 10000;display: none">
+                <div id="card_pic" >
+                    <img src="" id="card_pic1" style="float: left">
+                </div>
+            </div>
+            <!-- Page Heading -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <ol class="breadcrumb">
+                        <li>
+                            <i class="fa fa-dashboard"></i>  <a href="#">用户管理</a>
+                        </li>
+                        <li class="active">
+                            <i class="fa fa-table"></i> 待审核
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 ">
+                    <div  class="form-inline breadcrumb">
+                        <div class="form-group">
+                            <label >城市</label>
+                            <select class="form-control" id="city_id">
+                                <option value="0">请选择</option>
+                                <{foreach from=$city key=row item=i}>
+                                <option value="<{$i.cityid}>" <{if $i.cityid eq $city_id}>selected<{/if}>  ><{$i.city}></option>
+                                <{/foreach}>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only" for="exampleInputPassword4">电话</label>
+                            <input type="text" class="form-control" id="telephone" placeholder="电话号码" value="<{$telephone}>">
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only" for="exampleInputPassword5">姓名</label>
+                            <input type="text" class="form-control" id="name" placeholder="用户姓名" value="<{$name}>">
+                        </div>
+                        <div class="form-group">
+                            <label for="">注册状态</label>
+                            <select class="form-control" id="status">
+                                <option value="0" <{if $status eq 0}>selected<{/if}> >未注册</option>
+                                <option value="1" <{if $status eq 1}>selected<{/if}> >手机认证</option>
+                                <option value="2" <{if $status eq 2}>selected<{/if}> >信息填写</option>
+                                <option value="3" <{if $status eq 3}>selected<{/if}> >等待审核</option>
+                                <option value="4" <{if $status eq 4}>selected<{/if}> >审核通过</option>
+                                <option value="5" <{if $status eq 5}>selected<{/if}> >审核不通过</option>
+                            </select>
+                        </div>
+                        <button id="search" class="btn btn-success">查询</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th>编号</th>
+                                <th>头像</th>
+                                <th>姓名</th>
+                                <th>昵称</th>
+                                <th>手机号</th>
+                                <th>所在地</th>
+                                <th>4s店</th>
+                                <th>品牌</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="verify_content">
+                            <{foreach from=$result item=rows key=keys}>
+                            <tr data="<{$rows.id}>">
+                                <td><{$keys+1}></td>
+                                <td><img src="<{$rows.headimgurl}>" style="width: 50px;height: 50px"></td>
+                                <td><{$rows.name}></td>
+                                <td><{$rows.nickname}></td>
+                                <td><{$rows.telephone}></td>
+                                <td><{$rows.city}><{$rows.district}></td>
+                                <td><{$rows.shop}></td>
+                                <td><{$rows.brand}></td>
+                                <td>
+                                    <{if $rows.status eq 0}>
+                                    未注册
+                                    <{elseif $rows.status eq 1}>
+                                    手机注册
+                                    <{elseif $rows.status eq 2}>
+                                    个人信息填写
+                                    <{elseif $rows.status eq 3}>
+                                    等待审核
+                                    <{elseif $rows.status eq 4}>
+                                    审核通过
+                                    <{else}>
+                                    审核不通过
+                                    <{/if}>
+                                </td>
+                                <td><a href="#" onclick="verify(<{$rows.id}>)">查看</a></td>
+                            </tr>
+                            <{/foreach}>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <ul class="pagination" style="float: left">
+                    <li><a href="<{$firstUrl}>" <{if $firstUrl == "#"}> class="disabled" <{/if}> >首页</a></li>
+                    <li><a href="<{$preUrl}>" <{if $preUrl == "#"}> class="disabled" <{/if}>>&laquo;</a></li>
+                    <li><a href="#" class="active disabled"><{$currentPage}>/<{$pages}></a></li>
+                    <li><a href="<{$nextUrl}>" <{if $nexttUrl == "#"}> class="disabled" <{/if}>>&raquo;</a></li>
+                    <li><a href="<{$lastUrl}>" <{if $lastUrl == "#"}> class="disabled" <{/if}>>末页</a></li>
+                </ul>
+                <span style="margin: 20px 20px;display: inline-block; float: left;height: 34px;line-height: 34px">共<{$num}>条</span>
+            </div>
+            <div id="memberInfo" class="row col-lg-10" style="position: fixed;top: 10%;z-index:1001;display: none">
+                <div  class="col-lg-12">
+                    <div  class="panel panel-default">
+                        <div class="panel-heading">
+                            <span class="panel-title">注册审核</span>
+                            <span style="float:right;cursor: pointer" class="panel-close">关闭</span>
+                        </div>
+                        <!--<div class="panel-body">-->
+                        <!--这是一个基本的面板-->
+                        <!--</div>-->
+                        <table class="table">
+                            <tr><td>姓名：朱云峰</td><td>手机号：18652362600</td><td>身份证号：321283199108037218</td></tr>
+                            <tr><td>所在地：上海浦东</td><td>4S店：上海宝成汽车有限公司</td><td>品牌：宝马</td></tr>
+                            <tr><td colspan="3">昵称：紫焰</td></tr>
+                            <tr>
+                                <td class="col-lg-3" style="overflow: hidden;height: 30%"><a href="#" onclick="check_card(this)"><img class="col-lg-12" src="http://mp.chengjiao8.cn/Uploads/Avatar/bab6837a-9ac9-807d-87ff-bd342f51a342.jpg"></a></td>
+                                <td class="col-lg-3" style="overflow: hidden;height: 30%"><a href="#" onclick="check_card(this)"><img class="col-lg-12" src="http://mp.chengjiao8.cn/Uploads/Avatar/bab6837a-9ac9-807d-87ff-bd342f51a342.jpg"></a></td>
+                                <td class="col-lg-3" style="overflow: hidden;height: 30%"><a href="#" onclick="check_card(this)"><img class="col-lg-12" src="http://mp.chengjiao8.cn/Uploads/Avatar/bab6837a-9ac9-807d-87ff-bd342f51a342.jpg"></a></td>
+                            <!--</tr>-->
+                                <!--<td colspan="2"></td>-->
+                                <!--<td>-->
+                                    <!--<input type="hidden" name="user_id" value="">-->
+                                    <!--<button type="button" class="btn btn-default verify-no" style="width: 48%" >不通过</button>-->
+                                    <!--<button type="button" class="btn btn-primary verify-yes" style="width: 48%">通过</button>-->
+
+                                <!--</td>-->
+                            <!--</tr>-->
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+
+    </div>
+
+
+
+    <!--<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">-->
+        <!--<div class="modal-dialog modal-sm">-->
+            <!--<div class="modal-content">-->
+                <!--<div class="modal-body">-->
+                    <!--<h3 style="text-align: center">审核结果</h3>-->
+                <!--</div>-->
+                <!--<div class="modal-footer">-->
+                    <!--<input type="hidden" id="user_id" value="">-->
+                    <!--<button type="button" class="btn btn-default verify-no" style="width: 48%" >不通过</button>-->
+                    <!--<button type="button" class="btn btn-primary verify-yes" style="width: 48%">通过</button>-->
+                <!--</div>-->
+            <!--</div>-->
+
+        <!--</div>-->
+    <!--</div>-->
+
+</div>
+</body>
+
+</html>

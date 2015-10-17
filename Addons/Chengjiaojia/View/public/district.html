@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/choose.js"></script>
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/select.css">
+    <title>地区选择</title>
+    <script>
+        $(function(){
+            var height = $("body").height()
+            $("ul").css({"height":height,"overflow":"scroll"})
+
+            //选择汽车品牌和系列
+            $("li").click(function (event) {
+                var district = $.trim($(this).find("span").text())
+                var district_id = $.trim($(this).find("input[name='district_id']").val())
+                sessionStorage.setItem("district",district)
+                sessionStorage.setItem("district_id",district_id)
+                history.go(-2)
+            })
+        })
+
+    </script>
+    <style>
+        ul{
+            -webkit-overflow-scrolling: touch;
+        }
+        li{
+            width: 98%;
+            border-bottom: 1px solid #cccccc;
+        }
+    </style>
+
+</head>
+<body id="bg_img">
+<div id="content">
+    <ul class="options">
+        <volist name="result" id="rows">
+        <li class="chosen">
+            <span>{$rows.district}</span>
+            <input type="hidden" name="district_id" value="{$rows.district_id}" >
+        </li>
+        </volist>
+    </ul>
+</div>
+</body>
+</html>

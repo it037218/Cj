@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>商品列表</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="format-detection" content="telephone=no">
+        <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+        <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/common.css">
+        <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+        <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+        <style>
+
+            .commodity_list{
+                background-color: #EFEFEF;
+            }
+            #mall_content_list{
+                /*margin-top: 120px!important;*/
+                padding-bottom: 120px;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="mall_content_list">
+            <div class="commodity_list">
+                <volist name="result" id="rows">
+                    <div class="commodity fl">
+                        <a href="{:U('getDetail',array('id'=>$rows['id']))}" class="commodity_show">
+                            <div class="commodity_logo ">
+                                <img src="{$rows.logo_img}">
+                            </div>
+                        </a>
+                    </div>
+                </volist>
+            </div>
+        </div>
+        <include file="./Addons/Chengjiaojia/View/public/footer.html" />
+    </body>
+</html>

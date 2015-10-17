@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>线索修改</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/index.css?v=0.04">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/detail.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/animate.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/common.css">
+
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/raty.js"></script>
+    <script type="text/javascript"></script>
+    <script>
+
+        $(function(){
+            //选择品牌
+            $(".brand .choose_area").click(function(){
+                var url = "{:U('/addon/Chengjiaojia/System/getBrand')}"
+                $(this).siblings(".choose").show();
+                $.get(
+                        url,
+                        function(data){
+                            var dataObj = eval("("+data+")")
+                            $(".brand .choose ul").empty()
+                            for(var i=0;i<dataObj.length;i++){
+                                $(".brand .choose ul").append("" +
+                                "<li data="+dataObj[i].id+">"+dataObj[i].title+"</li>")
+                            }
+                        }
+                )
+            })
+
+            $(".brand .choose li").live("click",function(){
+                var id = $(this).attr("data");
+                $("input[name='brand']").val(id)
+            })
+
+            //选择车系
+            $(".series .choose_area").click(function(){
+                var pid =$("input[name='brand']").val()
+
+                if(parseInt(pid) == "0"){
+                    alert("请先选择汽车品牌")
+                }else{
+                    $(this).siblings(".choose").show();
+                    $.get(
+                            "{:U('/addon/Chengjiaojia/System/getSeries')}",
+                            {
+                                "pid":pid
+                            },
+                            function(data){
+                                var dataObj = eval("("+data+")")
+                                $(".series .choose ul").empty()
+                                for(var i=0;i<dataObj.length;i++){
+                                    $(".series .choose ul").append("" +
+                                    "<li data="+dataObj[i].id+">"+dataObj[i].title+"</li>")
+                                }
+                            }
+                    )
+                }
+            })
+            $(".series .choose li").live("click",function(){
+                var id = $(this).attr("data");
+                $("input[name='series']").val(id)
+            })
+
+
+            $(".choose li").live("click",function(){
+                $(".choose").hide();
+                var text = $(this).text();
+                var credit = $(this).find("span").text()
+                $(this).parents(".choose").siblings().find(".content").text(text)
+            })
+
+            $('#level').raty({
+                hints:['1星',"2星","3星","4星","5星"],
+                score:1,
+                onClick:function(score){
+                    $("input[name='level']").val(score)
+                }
+            })
+
+            //发布悬赏
+            $(".confirm_btn").click(function(){
+                var brand = $("input[name='brand']").val()
+                var series = $("input[name='series']").val()
+                var area = $("input[name='area']").val()
+                var time_limit = $("input[name='time_limit']").val()
+                var level_limit = $("input[name='level']").val()
+                var credit = $("input[name='credit']").val();
+                var description = $("input[name='description']").val()
+
+                var url = "{:U('saveWanted')}"
+
+                if(brand.length == 0){
+                    alert("请选择汽车品牌")
+                    return
+                }else if( series.length ==0){
+                    alert("请选择汽车型号")
+                    return
+                }else if(time_limit.length==0){
+                    alert("请选择悬赏期限")
+                    return
+                }else{
+                    $.post(
+                            url,
+                            {
+                                brand:brand,
+                                series:series,
+                                time_limit:time_limit,
+                                level_limit:level_limit,
+                                credit:credit
+                            },
+                            function(data){
+                                if(data > 0){
+                                    alert("发布悬赏成功");
+                                    window.location.href="{:U('getList')}";
+                                }else{
+                                    alert("发布悬赏失败")
+                                }
+                            }
+                    )
+                }
+            })
+        })
+    </script>
+</head>
+<body>
+<div>
+    <ul>
+        <li class="column brand" >
+            <div class="choose_area">
+                <div class="fl label">
+                    品牌
+                </div>
+                <div class="fr arrow"></div>
+                <div class="fr content">
+                    宝马
+                </div>
+            </div>
+            <div class="choose" style="display: none">
+                <!--品牌选择-->
+                <div>
+                    <ul>
+                    </ul>
+                </div>
+                <input type="hidden" name="brand" value="0">
+            </div>
+        </li>
+        <li class="column series">
+            <div class="choose_area">
+                <div class="fl label">
+                    车系
+                </div>
+                <div class="fr arrow"></div>
+                <div class="fr content">
+                    全部车系
+                </div> </div>
+            <div class="choose" style="display: none">
+
+                <!--品牌选择-->
+                <div>
+                    <ul>
+                    </ul>
+
+                </div>
+                <input type="hidden" name="series" value="0">
+
+            </div>
+        </li>
+        <li class="column area">
+            <div class="choose_area">
+                <div class="fl label">
+                    所属区域
+                </div>
+                <div class="fr arrow"></div>
+                <div class="fr content">
+                    7日之内
+                </div>
+            </div>
+            <div class="choose" style="display: none">
+                <!--悬赏期限选择-->
+                <div>
+                    <ul>
+                        <li>不限</li>
+                        <li>北京</li>
+                        <li>上海</li>
+                        <li>南京</li>
+                        <li>深圳</li>
+                        <li>两个月</li>
+                        <li>广州</li>
+                        <li>一周内</li>
+                    </ul>
+                </div>
+                <input type="hidden" name="timeLimit" value="0">
+            </div>
+        </li>
+        <li class="column timeLimit">
+            <div class="choose_area">
+                <div class="fl label">
+                    悬赏期限
+                </div>
+                <div class="fr arrow"></div>
+                <div class="fr content">
+                    7日之内
+                </div>
+            </div>
+            <div class="choose" style="display: none">
+                <!--悬赏期限选择-->
+                <div>
+                    <ul>
+                        <li>无时间期限</li>
+                        <li>一周内</li>
+                        <li>两周内</li>
+                        <li>三周内</li>
+                        <li>一个月</li>
+                        <li>两个月</li>
+                        <li>三个月</li>
+                        <li>一周内</li>
+                    </ul>
+                </div>
+                <input type="hidden" name="timeLimit" value="0">
+            </div>
+        </li>
+
+        <li class="column">
+            <div class="fl label">
+                线索准确率要求
+            </div>
+            <div class="fr content" style="padding-right: 0;width: 250px!important;" id="level">
+            </div>
+            <input type="hidden" name="level" value="1">
+        </li>
+        <li class="column levelLimit">
+            <div class="choose_area">
+                <div class="fl label">
+                    等级要求
+                </div>
+                <div class="fr arrow"></div>
+                <div class="fr content" >
+                    无等级要求
+                </div>
+            </div>
+            <div class="choose" style="display: none">
+                <!--等级选择-->
+                <div id="brand">
+                    <ul>
+                        <li data="0">无要求</li>
+                        <li data="1">LV.<span>1</span></li>
+                        <li data="2">LV.<span>2</span></li>
+                        <li data="3">LV.<span>3</span></li>
+                        <li data="4">LV.<span>4</span></li>
+                        <li data="5">LV.<span>5</span></li>
+                        <li data="6">LV.<span>6</span></li>
+                        <li data="7">LV.<span>7</span></li>
+                    </ul>
+                </div>
+                <input type="hidden" name="level" value="0">
+            </div>
+        </li>
+        <li class="column credit" style="height: 140px;">
+            <div class="choose_area">
+                <div class="fl label" style="position: relative">
+                    悬赏积分
+                    <p style="position: absolute;left: 0;top: 50px;font-size: 18px;color: #FFB704">当前积分50分</p>
+                </div>
+                <div class="fr arrow"></div>
+                <div class="fr content">
+                    50积分
+                </div>
+                <input type="hidden" name="credit" value="0">
+            </div>
+            <div class="choose" style="display: none">
+                <!--积分选择-->
+                <div>
+                    <ul>
+                        <li><span>10</span>积分</li>
+                        <li><span>20</span>积分</li>
+                        <li><span>30</span>积分</li>
+                        <li><span>40</span>积分</li>
+                        <li><span>50</span>积分</li>
+                    </ul>
+                </div>
+
+            </div>
+        </li>
+    </ul>
+    <div class="confirm_btn" style="bottom: 100px;background-color: #F30F10">
+        删除悬赏
+    </div>
+    <div class="confirm_btn" style="">
+        保存修改
+    </div>
+
+</div>
+
+
+</body>
+</html>

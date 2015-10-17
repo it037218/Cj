@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/index.css?v=0.04">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/detail.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/animate.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/common.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/member.css">
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <title>等级详情</title>
+    <style>
+        .bold{
+            font-size: 30px;
+            color: #000000;
+            font-weight: bold;
+        }
+        .yes{
+            width: 40px;
+            height: 40px!important;
+            margin-top: 30px;
+            margin-right: 25px;
+            background: url("{:CUSTOM_TEMPLATE_PATH}/public/images/ok.png") no-repeat 100% 100%;
+        }
+        .contain{
+            width: 100%;
+            overflow: hidden;
+        }
+        .show_contain{
+            width: 650px;
+            height: 35px;
+            border: 1px solid #999999;
+            border-radius: 50px;
+            margin: 30px auto;
+            overflow: hidden;
+            position: relative;
+        }
+        .show{
+            height: 100%;
+            width: 0;
+            background-color: #ffb600;
+        }
+        .current_level{
+            padding-top: 35px;
+            background-color: #FFFFFF;
+            width: 100%;
+            margin: 40px 0;
+        }
+        .current_level p{
+            margin-left: 35px;
+        }
+        .level_text{
+            color: #666666;
+            font-size: 26px;
+            height: 35px;
+            line-height: 35px;
+            position: absolute;
+            right: 35px;
+            top: 0;
+        }
+        .mr35{
+            margin-right: 75px;
+        }
+        .mr10{
+            margin-right: 10px;
+        }
+    </style>
+    <script>
+        $(function(){
+            var level = "{$level}";
+            var total = parseInt(level)*100;
+            var now = "{$jifen}";
+            var width = now/total*650+"px";
+            var showWidth = $(".show").width();
+            for(var i = showWidth ;i <= now/total*650;i++){
+                $(".show").width(i+"px")
+            }
+        })
+    </script>
+</head>
+<body>
+<div id="main_content">
+    <div class="current_level">
+        <p class=" bold">当前等级Lv.{$level}</p>
+        <div class="contain">
+            <div class="show_contain">
+                <div class="show">
+
+                </div>
+                <span class="level_text">
+                    {$jifen}/{$level*100}xp
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="credit_manage_list">
+        <div class="credit_list_title">
+            <div class="credit_manage_title">
+                <span class="icon fl"></span>
+                <span class="text fl bold">进阶任务</span>
+            </div>
+        </div>
+
+        <ul>
+            <li class="credit_detail">
+                <if condition="$level lt 1">
+                        <div class="fl credit_info">
+                            <p class="bold">每日可购买1条线索</p>
+                        </div>
+                        <div class="fr credit mr35">
+                            LV.1
+                        </div>
+                <else />
+                    <div class="fl credit_info">
+                        <p class="bold">每日可购买1条线索</p>
+                    </div>
+                    <div class="fr yes">
+                    </div>
+                    <div class="fr credit mr10">
+                        LV.1
+                    </div>
+                </if>
+            </li>
+            <li class="credit_detail">
+                <if condition="$level lt 2">
+                    <div class="fl credit_info">
+                        <p class="bold">每日可购买2条线索</p>
+                    </div>
+                    <div class="fr credit mr35">
+                        LV.2
+                    </div>
+                <else />
+                    <div class="fl credit_info">
+                        <p class="bold">每日可购买2条线索</p>
+                    </div>
+                    <div class="fr yes">
+                    </div>
+                    <div class="fr credit mr10">
+                        LV.2
+                    </div>
+                </if>
+            </li>
+            <li class="credit_detail">
+                <if condition="$level lt 3">
+                        <div class="fl credit_info">
+                            <p class="bold">招标功能开放</p>
+                        </div>
+                        <div class="fr credit mr35">
+                            LV.3
+                        </div>
+                <else />
+                        <div class="fl credit_info">
+                            <p class="bold">招标功能开放</p>
+                        </div>
+                        <div class="fr yes">
+                        </div>
+                        <div class="fr credit mr10">
+                            LV.3
+                        </div>
+                </if>
+            </li>
+            <li class="credit_detail">
+                <if condition="$level lt 4">
+                        <div class="fl credit_info">
+                            <p class="bold">高级商城解锁</p>
+                        </div>
+                        <div class="fr credit mr35">
+                            LV.5
+                        </div>
+                <else />
+                        <div class="fl credit_info">
+                            <p class="bold">高级商城解锁</p>
+                        </div>
+                        <div class="fr yes">
+                        </div>
+                        <div class="fr credit mr10">
+                            LV.5
+                        </div>
+                </if>
+
+            </li>
+
+        </ul>
+    </div>
+</div>
+<include file="./Addons/Chengjiaojia/View/public/footer.html" />
+</body>
+</html>

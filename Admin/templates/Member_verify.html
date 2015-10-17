@@ -1,0 +1,148 @@
+<{include file="header.html"}>
+<script src="js/Member.js?v=0.1"></script>
+<style>
+    #card_pic{
+        border: 5px solid #CCCCCC;
+    }
+</style>
+<script>
+    $(function(){
+        $("#Member").attr("aria-expanded",true).addClass("in");
+        $("#Member").siblings("a").css("backgroundColor","#000");
+    })
+
+</script>
+<body>
+<div class="cover" style="width: 100%;height: 100%;opacity: 0.5;display: none;z-index: 100;position: absolute;background-color: #000"></div>
+
+<div id="wrapper">
+    <{include file="nav.html"}>
+    <div id="page-wrapper">
+        <div class="container-fluid" style="position: relative">
+            <div id="card_container" style="position:absolute;background-color: #ffffff;z-index: 10000;display: none">
+                <div id="card_pic" >
+                    <img src="" id="card_pic1" style="float: left">
+                </div>
+            </div>
+            <!-- Page Heading -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <ol class="breadcrumb">
+                        <li>
+                            <i class="fa fa-dashboard"></i>  <a href="#">用户管理</a>
+                        </li>
+                        <li class="active">
+                            <i class="fa fa-table"></i> 待审核
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th>头像</th>
+                                <th>姓名</th>
+                                <th>昵称</th>
+                                <!--<th>注册时间</th>-->
+                                <th>手机号</th>
+                                <th>所在地</th>
+                                <th>4s店</th>
+                                <th>品牌</th>
+                                <!--<th>身份证号</th>-->
+                                <!--<th>身份证</th>-->
+                                <!--<th>名片</th>-->
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="verify_content">
+                            <{foreach from=$result item=rows}>
+                            <tr data="<{$rows.id}>">
+                                <td><img src="<{$rows.avatar}>" style="width: 50px;height: 50px"></td>
+                                <td><{$rows.name}></td>
+                                <td><{$rows.nickname}></td>
+                                <!--<td><{$rows.create_time}></td>-->
+                                <td><{$rows.telephone}></td>
+                                <td><{$rows.city}><{$rows.district}></td>
+                                <td><{$rows.shop}></td>
+                                <td><{$rows.brand}></td>
+                                <!--<td><{$rows.card_number}></td>-->
+                                <!--<td><a href="#" onclick="check_card(this)"><img src="<{$rows.card_id1}>" style="width: 25px;height: 25px;float: left"><img src="<{$rows.card_id2}>" style="width: 25px;height: 25px;float: left-->
+                               <!--"></a></td>-->
+                                <!--<td><a href="#" onclick="check_card(this)"><img src="<{$rows.business_card}>" style="width: 50px;height: 50px"></a></td>-->
+                                <td><a href="#" onclick="verify(<{$rows.id}>)">查看</a></td>
+                            </tr>
+                            <{/foreach}>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- /.row -->
+            <ul class="pagination">
+                <li><a href="<{$firstUrl}>" <{if $firstUrl == "#"}> class="disabled" <{/if}> >首页</a></li>
+                <li><a href="<{$preUrl}>" <{if $preUrl == "#"}> class="disabled" <{/if}>>&laquo;</a></li>
+                <li><a href="#" class="active disabled"><{$currentPage}></a></li>
+                <li><a href="<{$nextUrl}>" <{if $nexttUrl == "#"}> class="disabled" <{/if}>>&raquo;</a></li>
+                <li><a href="<{$lastUrl}>" <{if $lastUrl == "#"}> class="disabled" <{/if}>>末页</a></li>
+            </ul>
+            <div id="memberInfo" class="row col-lg-10" style="position: fixed;top: 10%;z-index:1001;display: none">
+                <div  class="col-lg-12">
+                    <div  class="panel panel-default">
+                        <div class="panel-heading">
+                            <span class="panel-title">注册审核</span>
+                            <span style="float:right;cursor: pointer" class="panel-close">关闭</span>
+                        </div>
+                        <!--<div class="panel-body">-->
+                        <!--这是一个基本的面板-->
+                        <!--</div>-->
+                        <table class="table">
+                            <tr><td>姓名：朱云峰</td><td>手机号：18652362600</td><td>身份证号：321283199108037218</td></tr>
+                            <tr><td>所在地：上海浦东</td><td>4S店：上海宝成汽车有限公司</td><td>品牌：宝马</td></tr>
+                            <tr><td colspan="3">昵称：紫焰</td></tr>
+                            <tr>
+                                <td class="col-lg-3" style="overflow: hidden;height: 30%"><a href="#" onclick="check_card(this)"><img class="col-lg-12" src="http://mp.chengjiao8.cn/Uploads/Avatar/bab6837a-9ac9-807d-87ff-bd342f51a342.jpg"></a></td>
+                                <td class="col-lg-3" style="overflow: hidden;height: 30%"><a href="#" onclick="check_card(this)"><img class="col-lg-12" src="http://mp.chengjiao8.cn/Uploads/Avatar/bab6837a-9ac9-807d-87ff-bd342f51a342.jpg"></a></td>
+                                <td class="col-lg-3" style="overflow: hidden;height: 30%"><a href="#" onclick="check_card(this)"><img class="col-lg-12" src="http://mp.chengjiao8.cn/Uploads/Avatar/bab6837a-9ac9-807d-87ff-bd342f51a342.jpg"></a></td>
+                            </tr>
+                                <td colspan="2"></td>
+                                <td>
+                                    <input type="hidden" name="user_id" value="">
+                                    <button type="button" class="btn btn-default verify-no" style="width: 48%" >不通过</button>
+                                    <button type="button" class="btn btn-primary verify-yes" style="width: 48%">通过</button>
+
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+
+    </div>
+
+
+
+    <!--<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">-->
+        <!--<div class="modal-dialog modal-sm">-->
+            <!--<div class="modal-content">-->
+                <!--<div class="modal-body">-->
+                    <!--<h3 style="text-align: center">审核结果</h3>-->
+                <!--</div>-->
+                <!--<div class="modal-footer">-->
+                    <!--<input type="hidden" id="user_id" value="">-->
+                    <!--<button type="button" class="btn btn-default verify-no" style="width: 48%" >不通过</button>-->
+                    <!--<button type="button" class="btn btn-primary verify-yes" style="width: 48%">通过</button>-->
+                <!--</div>-->
+            <!--</div>-->
+
+        <!--</div>-->
+    <!--</div>-->
+
+</div>
+</body>
+
+</html>

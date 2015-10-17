@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <!--<script src="{:CUSTOM_TEMPLATE_PATH}/public/js/choose.js"></script>-->
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/select.css">
+    <title>车系选择</title>
+    <script>
+        $(function(){
+            var height = $(window).height();
+            $("ul").css({"overflow":"scroll","height":height})
+
+            //选择车系
+            $("li").click(function (event) {
+                var type = $.trim($(this).text());
+                var type_id = $(this).attr("data");
+                sessionStorage.setItem("type",type)
+                sessionStorage.setItem("type_id",type_id)
+                history.go(-2);
+            })
+        })
+
+    </script>
+    <style>
+        li{
+            width: 98%;
+            border-bottom: 1px solid #cccccc;
+        }
+        #content ul{
+            overflow-y:scroll ;
+            -webkit-overflow-scrolling: touch;
+        }
+        .type_title{
+            width: 98%;
+            height: 100px;
+            background-color: #DDDDDD;
+            line-height: 100px;
+            padding-left: 35px;
+        }
+    </style>
+
+</head>
+<body id="bg_img">
+<div id="content">
+    <ul class="options">
+        <volist name="result" id="rows" key="key">
+            <div class="type_title">
+                {$key}
+            </div>
+            <volist name="rows" id="values" key="k">
+                <li class="chosen" data="{$values.id}">
+                    {$values.name}
+                </li>
+            </volist>
+        </volist>
+    </ul>
+</div>
+</body>
+</html>

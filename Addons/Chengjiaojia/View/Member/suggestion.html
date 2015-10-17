@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="viewport" content="width=720">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/index.css?v=0.04">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/detail.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/member.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/suggestion.css">
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery.message.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/jquery.message.css">
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/wx.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <title>意见反馈</title>
+    <script>
+        var URL = "{:U('/addon/Chengjiaojia/System/sign')}";
+        var uploadUrl = "{:U('/addon/Chengjiaojia/System/wxUpoloadImage')}";
+        $(function(){
+            var WinHeight = $(window).height();
+            var height = $(".confirm_btn").height();
+//            $(".confirm_btn").css({"position":"absolute","top":WinHeight-height})
+
+
+            prepareWx()
+            wx.ready(function () {
+                document.querySelector('#upload').onclick = function () {
+                    wx.chooseImage({
+                        success: function (res) {
+                            upload(res.localIds[0]);
+                        }
+                    });
+                };
+                function upload(localIds){
+                    wx.uploadImage({
+                        localId: localIds,
+                        success: function (res) {
+                            $.post(
+                                    uploadUrl,
+                                    {
+                                        "serverId":res.serverId
+                                    },
+                                    function(data){
+                                        if(data.length > 0 ){
+                                            $("#upload").before("<img class='uploadImages' src='"+data+"'>")
+
+                                            var img_num = $(".uploadImages").length
+                                            if(img_num>=4){
+                                                $("#upload").remove()
+                                            }
+
+
+                                        }
+                                    }
+                            )
+                        },
+                        fail: function (res) {
+                            alert(JSON.stringify(res));
+                        }
+                    });
+                }
+            })
+
+            //提交发票信息
+            $(".confirm_btn").bind("click",function(){
+                var images = [];
+                $(".uploadImages").each(function(){
+                    images.push($(this).attr("src"))
+                });
+                var content = $("#suggestion").val()
+                if(content.length == 0){
+                    $().message("请先填写反馈意见");
+                    return
+                }else{
+                    $.post(
+                            "{:U('/addon/Chengjiaojia/Member/saveSuggestion')}",
+                            {
+                                "images":images,
+                                "content":content
+                            },
+                            function(data){
+                                if(data == 1){
+//                                    $().message("提交成功");
+                                    $(".cover").show();
+
+                                    $("#buy_confirm").show();
+
+                                    //屏幕宽度
+                                    var xWidth = parseInt($(window).width());
+                                    var yHeight = parseInt($(window).height());
+
+                                    //弹出框宽度
+                                    var cWidth = parseInt($("#buy_confirm").width())
+                                    var cHeight = parseInt($("#buy_confirm").height())
+                                    $("#buy_confirm").css({"left":(xWidth-cWidth)/2,"top":(yHeight-cHeight)/2})
+//
+                                }else{
+                                    $().message("提交失败")
+                                }
+                            }
+                    )
+                }
+
+            })
+
+            //点击确认
+            $(".confirm_operation").click(function(){
+                window.location.href = "{:U('/addon/Chengjiaojia/Member/ucenter')}"
+            })
+
+        })
+    </script>
+    <style>
+        #buy_confirm .confirm_content p{
+            padding: 30px!important;
+        }
+        .confirm .confirm_operation p{
+            width: 100%!important;
+            text-align: center!important;
+        }
+        #buy_confirm .confirm_content{
+            height: 200px!important;
+        }
+    </style>
+</head>
+<body>
+<div id="main_content">
+    <!--是否购买-->
+    <div id="buy_confirm" class="confirm" style="display:none">
+        <div class="confirm_content">
+            <p>感谢您提出宝贵的意见，我们将经快解决并优化产品，为您提供一个更好的平台。
+            </p>
+        </div>
+        <div class="confirm_operation">
+            <p>确定</p>
+        </div>
+    </div>
+    <div id="content">
+        <textarea placeholder="有什么需要吐槽的快反馈给我们吧！产品意见被采纳，送星巴克一杯！" id="suggestion"></textarea>
+    </div>
+
+    <div id="images">
+        <!--<img class="uploadImages" src="{:CUSTOM_TEMPLATE_PATH}/public/images/addImg.png" >-->
+        <!--<img class="uploadImages" src="{:CUSTOM_TEMPLATE_PATH}/public/images/addImg.png" >-->
+        <!--<img class="uploadImages" src="{:CUSTOM_TEMPLATE_PATH}/public/images/addImg.png" >-->
+        <!--<img class="uploadImages" src="{:CUSTOM_TEMPLATE_PATH}/public/images/addImg.png" >-->
+        <img src="{:CUSTOM_TEMPLATE_PATH}/public/images/addImg.png" id="upload">
+    </div>
+
+</div>
+<div class="confirm_btn">
+    提交
+</div>
+</body>
+</html>

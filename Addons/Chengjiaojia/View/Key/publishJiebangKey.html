@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>发布线索</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/index.css?v=0.04">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/detail.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/animate.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/common.css">
+
+
+    <!--<script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/zepto.min.js"></script>-->
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/menu.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery.raty.js"></script>
+
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <script>
+        $(function(){
+            var brand = sessionStorage.getItem("brand")
+            var series = sessionStorage.getItem("series")
+
+            var province = sessionStorage.getItem("province")
+            var city = sessionStorage.getItem("city")
+            var level = sessionStorage.getItem("level")
+            //如果缓存中有值，则直接赋值
+            if(brand != undefined && brand.length !=0){
+                $("#brand").text(brand)
+            }
+            if(series != undefined && series.length !=0){
+                $("#series").text(series)
+            }
+
+            if(province != undefined && province.length !=0 && city != undefined && city.length !=0){
+                $(".area .content .province").text(province)
+                $(".area .content .city").text(city)
+            }
+
+            $(".brand").click(function(){
+                window.location.href="{:U('/addon/Chengjiaojia/Public/series')}"
+            })
+
+            $(".area").click(function(){
+                window.location.href="{:U('/addon/Chengjiaojia/Public/area')}"
+            })
+            $('.levellimit .content').raty({
+                path:"{:CUSTOM_TEMPLATE_PATH}/public/images",
+                hints:['1星',"2星","3星","4星","5星"],
+                half:true,
+                starHalf    : 'star-half.png',
+                score:1,
+                space:false,
+                click:function(score){
+                    $("input[name='level']").val(score)
+                }
+            })
+        })
+    </script>
+    <style>
+
+        input[type='text']{
+            border:none;
+            height: 80px;
+            line-height: 80px;
+            margin-top: 10px;
+            font-size: 28px;
+            text-align: right;
+            margin-right: 35px;
+            width: 220px;
+            padding: 0 10px;
+        }
+        .content select{
+            direction: rtl;
+            margin-top: 10px;
+            height:80px;
+            -webkit-appearance:none;
+            appearance:none;
+            border:none;
+            font-size:28px;
+            padding:0px 10px;
+            display:block;
+            width:auto;
+            -webkit-box-sizing:border-box;
+            box-sizing:border-box;
+            background-color: #FFFFFF;
+            color:#000;
+            border-radius:4px;
+            text-align: right;
+        }
+        option{
+            direction: rtl;
+        }
+        textarea{
+            font-size: 28px;
+        }
+        .levellimit .label{
+            width: 200px;
+        }
+        .levellimit .content{
+            padding-right: 35px;
+        }
+        .levellimit .content img{
+            margin-top: 25px;
+        }
+        #publish_confirm{
+            position: fixed!important;
+            bottom: 0px;
+        }
+        .key_desc{
+            margin-bottom: 140px;
+        }
+
+    </style>
+    <script>
+        $(function(){
+            //确认发布线索
+
+            $("#publish_confirm").click(function(){
+                var brand = $("#brand").text()
+                var series = $("#series").text()
+                var area = $(".area .content").text()
+                var province = $(".area .content .province").text()
+                var city = $(".area .content .city").text()
+                var time_limit = $("#time_limit").find("option:selected").text()
+                var name = $("input[name='name']").val()
+                var telephone = $("input[name='telephone']").val()
+                var level = $("input[name='level']").val()
+                var credit = $("input[name='credit']").val();
+                var description = $("textarea[name='description']").val()
+                var url = "{:U('jieBang',array('id'=>$wanted_id))}";
+
+                if(brand.length == 0){
+                    alert("请选择汽车品牌")
+                    return
+                }else if( series.length ==0){
+                    alert("请选择汽车型号")
+                    return
+                }else if(area.length==0){
+                    alert("请选择地区")
+                    return
+                }else if(time_limit.length==0){
+                    alert("请选择购车时间")
+                    return
+                }else if(name.length==0){
+                    alert("请选择客户姓名")
+                    return
+                }else if(telephone.length==0){
+                    alert("请选择客户联系方式")
+                    return
+                }else if(level.length==0){
+                    alert("请选择等级要求")
+                    return
+                }else if(credit.length==0){
+                    alert("请选择积分值")
+                    return
+                }else if(description.length==0){
+                    alert("请输入线索详情")
+                    return
+                }else{
+                    $.post(
+                        url,
+                        {
+                            brand:brand,
+                            series:series,
+                            area:area,
+                            province:province,
+                            city:city,
+                            custom_name:name,
+                            custom_telephone:telephone,
+                            time_limit:time_limit,
+                            key_rate:level,
+                            credit:credit,
+                            description:description
+                        },
+                        function(data){
+                            if(data == -1){
+                                alert("该悬赏已结束")
+                                return
+                            }else if(data == -2){
+                                alert("揭榜失败");
+                                return
+                            }else if(data > 0){
+                                window.location.href="{:U('index')}"
+                                sessionStorage.clear();
+                            }else{
+                                alert("线索发布失败");
+                                return
+                            }
+                        }
+                    )
+                }
+            })
+        })
+    </script>
+</head>
+<body>
+<div>
+    <ul>
+        <li class="column brand" >
+            <div class="choose_area">
+                <div class="fl label">
+                    品牌车系
+                </div>
+                <div class="fr arrow"></div>
+                <div class="fr content">
+                    <span id="brand">宝马</span><span id="series">320</span>
+                </div>
+            </div>
+            <input type="hidden" name="brand" value="">
+
+        </li>
+
+        <li class="column area">
+            <div class="choose_area">
+                <div class="fl label">
+                    购车城市
+                </div>
+                <div class="fr arrow"></div>
+                <div class="fr content">
+                    <span class="province">上海市</span><span class="city">上海市</span>
+                </div>
+            </div>
+            <input type="hidden" name="area" value="">
+
+        </li>
+
+        <li class="column timeLimit">
+            <div class="choose_area">
+                <div class="fl label">
+                    购车时间
+                </div>
+                <div class="fr arrow"></div>
+                <div class="fr content">
+                    <select id="time_limit">
+                        <option value="0" selected="selected">无时间期限</option>
+                        <option value="1">一周以内</option>
+                        <option value="2">两周以内</option>
+                        <option value="3">三周以内</option>
+                        <option value="4">一个月以内</option>
+                        <option value="5">两个月以内</option>
+                        <option value="6">半年以内</option>
+                        <option value="7">一年以内</option>
+                    </select>
+                </div>
+            </div>
+
+            <input type="hidden" name="time_limit" value="">
+
+        </li>
+        <li class="column custom_name">
+            <div class="choose_area">
+                <div class="fl label">
+                    客户姓名
+                </div>
+                <div class="fr content">
+                    <input type="text" name="name" placeholder="请填写客户姓名">
+                </div>
+            </div>
+
+        </li>
+        <li class="column custom_telephone">
+            <div class="choose_area">
+                <div class="fl label">
+                    客户联系方式
+                </div>
+                <div class="fr content">
+                    <input type="text" name="telephone" placeholder="请输入手机号">
+                </div>
+            </div>
+        </li>
+
+        <li class="column levellimit">
+            <div class="choose_area">
+                <div class="fl label">
+                    等级要求
+                </div>
+                <div class="fr content" >
+                </div>
+                <input type="hidden" name = "level" id="level" value="1">
+            </div>
+        </li>
+        <li class="column credit">
+            <div class="choose_area">
+                <div class="fl label" style="position: relative">
+                    购车价值
+                </div>
+                <div class="fr arrow"></div>
+                <div class="fr content">
+                    10积分
+                    <input type="hidden" name="credit" value="10">
+                </div>
+            </div>
+        </li>
+    </ul>
+    <div class="key_desc" style="margin-top: 40px">
+        <div class="desc_title">
+            <span class="text">线索详情</span>
+        </div>
+        <div class="dec_content">
+            <textarea style="width: 620px;height: 300px;margin:0 auto;padding: 18px;border: 1px solid #ccc" name="description"></textarea>
+        </div>
+    </div>
+    <div class="confirm_btn" id="publish_confirm">
+        保存并揭榜
+    </div>
+
+</div>
+
+</body>
+</html>

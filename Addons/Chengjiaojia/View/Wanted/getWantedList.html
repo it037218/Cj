@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=720" />
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/index.css?v=0.04">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/detail.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/common.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/member.css">
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <!--<script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>-->
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery.raty.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/plugin/countDown/countdown/jquery.countdown.js"></script>
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/plugin/countDown/countdown/jquery.countdown.css">
+    <title>悬赏列表</title>
+    <script>
+        $(function(){
+            var height = parseInt($(window).height()) - 300
+            $(".nokey").height(height)
+            $(".bought").click(function(){
+                $(this).removeClass("off").addClass("on");
+                $(".unbought").removeClass("on").addClass("off")
+                $(".key_buy_yes").show();
+                $(".key_buy_no").hide()
+            })
+            $(".unbought").click(function(){
+                $(this).removeClass("off").addClass("on");
+                $(".bought").removeClass("on").addClass("off")
+                $(".key_buy_no").show();
+                $(".key_buy_yes").hide()
+            })
+        })
+    </script>
+    <style>
+        .key_list{
+            margin-top: 0!important;
+        }
+        .key_img{
+            width: 182px;
+            margin-top: 43px;
+        }
+        </style>
+
+</head>
+<body>
+<div id="main_content">
+    <div class="index-menu">
+        <div class="option"><a href="{:U('/addon/Chengjiaojia/Wanted/getList')}">招标榜</a></div>
+        <div class="option"><a href="{:U('/addon/Chengjiaojia/Wanted/userWantedList')}">我的招标</a></div>
+        <div class="option yes">我的投标</div>
+    </div>
+    <div class="content_header">
+        <div class="fl on tab_item unbought">
+            <span class="fl tab_title">当前揭榜</span>
+            <span class="fr num">共{$unBought.total|default=0}条</span>
+        </div>
+        <div class="fl off tab_item bought">
+            <span class="fl tab_title">历史揭榜</span>
+            <span class="fr num">共{$Bought.total|default=0}条</span>
+        </div>
+    </div>
+
+    <!--发布线索详情-->
+    <!--未被购买-->
+    <div class="key_show_list key_buy_no">
+        <if condition="$unBought['total'] eq 0">
+            <div class="nokey" style="width:100%;height:500px;background: url('{:CUSTOM_TEMPLATE_PATH}/public/images/nojie.png') no-repeat center center">
+            </div>
+        <else />
+            <div id="key_list_content">
+            <div class="key_list">
+                <div class="cover"></div>
+                    <volist name="unBought['rows']" id = "row">
+                            <div class="key_list_detail list">
+                                <a href="{:U('getKeyDetail',array('id'=>$row['id']))}" class="block">
+                                    <div class="fl key_img">
+                                        <img src="{:CUSTOM_TEMPLATE_PATH}/public/images/logo/bmw.jpg" >
+                                    </div>
+                                    <div class="fl key_detail">
+                                        <div class="key_detail_view">
+                                            <p class="bold">{$row.brand}{$row.series}</p>
+                                            <p>购车时间{$row.id}：<span>{$row.time_limit}</span></p>
+                                            <p>线索准确率：<span class="key_rate_{$row.id} fr" style="margin-right: 35px"></span></p>
+                                            <script>
+                                                $(".key_rate_"+{$row.id}).raty({
+                                                    path:"{:CUSTOM_TEMPLATE_PATH}/public/images",
+                                                    readOnly:true,
+                                                    size:14,
+                                                    space:false,
+                                                    score:"{$row['key_rate']}"
+                                                })
+                                            </script>
+                                        </div>
+                                    </div>
+                                    <div class="fr key_operation">
+
+                                        <div class="operation">
+                                            <p class="bold"><span>{$row.credit}</span>积分</p>
+                                            <p>{$row.city}</p>
+                                        </div>
+
+                                    </div>
+                                </a>
+                            </div>
+                    </volist>
+                <div id="pullUp" style="width: 100%;height: 100px;border-top: 1px solid #ccc;display: none">
+                    <span class="pullUpIcon"></span>
+                    <span class="pullUpLabel" style="width: 720px;height: 100px;font-size: 40px;text-align: center;display: block;line-height: 100px">Pull up to refresh...</span>
+                </div>
+            </div>
+                </div>
+        </if>
+    </div>
+
+    <!--已被购买-->
+    <div class="key_show_list key_buy_yes" style="display:none">
+        <if condition="$Bought['total'] eq 0">
+            <div class="nokey" style="width:100%;height:500px;background: url('{:CUSTOM_TEMPLATE_PATH}/public/images/nojie.png') no-repeat center center">
+            </div>
+        <else />
+            <div id="key_list_content">
+            <div class="key_list">
+                <div class="cover"></div>
+                    <volist name="Bought['rows']" id = "row">
+                            <div class="key_list_detail list">
+                                <a href="{:U('getKeyDetail',array('id'=>$row['id']))}" class="block">
+                                    <div class="fl key_img">
+                                        <img src="{:CUSTOM_TEMPLATE_PATH}/public/images/logo/bmw.jpg" >
+                                    </div>
+                                    <div class="fl key_detail">
+                                        <div class="key_detail_view">
+                                            <p class="bold">{$row.brand}{$row.series}</p>
+                                            <p>购车时间{$row.id}：<span>{$row.time_limit}</span></p>
+                                            <p>线索准确率：<span class="key_rate_{$row.id} fr" style="margin-right: 35px"></span></p>
+                                            <script>
+                                                $(".key_rate_"+{$row.id}).raty({
+                                                    path:"{:CUSTOM_TEMPLATE_PATH}/public/images",
+                                                    readOnly:true,
+                                                    size:14,
+                                                    space:false,
+                                                    score:"{$row['key_rate']}"
+                                                })
+                                            </script>
+                                        </div>
+                                    </div>
+                                    <div class="fr key_operation">
+
+                                        <div class="operation">
+                                            <p class="bold"><span>{$row.credit}</span>积分</p>
+                                            <p>{$row.city}</p>
+                                        </div>
+
+                                    </div>
+                                </a>
+                            </div>
+                    </volist>
+                <div id="pullUp" style="width: 100%;height: 100px;border-top: 1px solid #ccc;display: none">
+                    <span class="pullUpIcon"></span>
+                    <span class="pullUpLabel" style="width: 720px;height: 100px;font-size: 40px;text-align: center;display: block;line-height: 100px">Pull up to refresh...</span>
+                </div>
+            </div>
+                </div>
+        </if>
+    </div>
+
+</div>
+<include file="./Addons/Chengjiaojia/View/public/footer.html" />
+</body>
+</html>

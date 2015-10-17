@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/invite.css">
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <meta name="viewport" content="width=720">
+    <title>邀请好友</title>
+    <script>
+        $(function(){
+            $(".title2").click(function(){
+                $(this).next(".content").slideDown();
+                $(this).find(".op").removeClass("down").addClass("up")
+                $($(this).next(".content")).siblings(".content").slideUp()
+                $(this).siblings(".title2").find(".op").removeClass("up").addClass("down")
+            })
+        })
+    </script>
+    <style>
+        .up{
+            background: url("{:CUSTOM_TEMPLATE_PATH}/public/images/up.png") no-repeat 100% 100%;
+            background-position: 50% 50%;
+            /*background-size: 50% 50%;*/
+            float: right;
+            margin-right: 35px;
+            display: block;
+            height: 100%;
+            width: 85px;
+        }
+        .down{
+            background: url("{:CUSTOM_TEMPLATE_PATH}/public/images/down.png") no-repeat 100% 100%;
+            background-position: 50% 50%;
+            float: right;
+            margin-right: 35px;
+            display: block;
+            height: 100%;
+            width: 85px;
+        }
+
+    </style>
+</head>
+<body>
+<div id="main_content">
+    <div class="logo">
+        <img src="{:CUSTOM_TEMPLATE_PATH}/public/images/invite_pic.png">
+    </div>
+    <div class="content_text">
+        <span class="fl">我的邀请码是:</span>
+        <span class="fr">{$invite_code}</span>
+    </div>
+
+    <div class="invite_desc">
+        您可邀请任何品牌的销售顾问入驻。为了保持线索交
+        易的供需平衡，同级别品牌入驻人数需均衡发展，超
+        出名额后该品牌入驻成员需排队等候其他同级品牌人数提升方可使用平台。
+    </div>
+    <div class="choujiang">
+        <span>
+            <a href="{:U('gift')}" class="block">您有<label style="font-size: 32px;font-weight: bold">{$num}</label>次抽奖机会！</a>
+        </span>
+    </div>
+    <!--<div class="invite_limit">-->
+        <!--<div class="title1 title">-->
+           <!--<span style="width: 250px">品牌（上海）</span>-->
+           <!--<span style="width: 180px">当前人数</span>-->
+           <!--<span style="width: 180px">剩余名额</span>-->
+        <!--</div>-->
+        <!--<div class="title2 title">-->
+            <!--<span>豪华品牌</span>-->
+            <!--<span class="up op"></span>-->
+        <!--</div>-->
+        <!--<div class="content">-->
+            <!--<volist name="result['good']" id="rows">-->
+                <!--<div class="brand_list">-->
+                    <!--<span style="width: 250px">{$rows.brand_name}</span>-->
+                    <!--<span style="width: 180px">{$rows.realtime_number}</span>-->
+                    <!--<span style="width: 180px">{$rows.remain}</span>-->
+                <!--</div>-->
+            <!--</volist>-->
+        <!--</div>-->
+        <!--<div class="title2 title">-->
+            <!--<span>合资品牌</span>-->
+            <!--<span class="up op"></span>-->
+        <!--</div>-->
+        <!--<div class="content">-->
+            <!--<volist name="result['normal']" id="rows">-->
+                <!--<div class="brand_list">-->
+                    <!--<span style="width: 250px">{$rows.brand_name}</span>-->
+                    <!--<span style="width: 180px">{$rows.realtime_number}</span>-->
+                    <!--<span style="width: 180px">{$rows.remain}</span>-->
+                <!--</div>-->
+            <!--</volist>-->
+        <!--</div>-->
+        <!--<div class="title2 title">-->
+            <!--<span>国产品牌</span>-->
+            <!--<span class="up op"></span>-->
+        <!--</div>-->
+        <!--<div class="content">-->
+            <!--<volist name="result['guochan']" id="rows">-->
+                <!--<div class="brand_list">-->
+                    <!--<span style="width: 250px">{$rows.brand_name}</span>-->
+                    <!--<span style="width: 180px">{$rows.realtime_number}</span>-->
+                    <!--<span style="width: 180px">{$rows.remain}</span>-->
+                <!--</div>-->
+            <!--</volist>-->
+        <!--</div>-->
+    <!--</div>-->
+</div>
+<include file="./Addons/Chengjiaojia/View/public/footer.html" />
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>线索详情</title>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+	<link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/index.css?v=0.04">
+	<link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+	<link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/detail.css">
+	<link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/animate.css">
+	<link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/common.css">
+	<link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/jquery.message.css">
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery.message.min.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery.raty.js"></script>
+
+	<script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+	<!--script src="js/index.js"></script-->
+	<script type="text/javascript">
+		$(function(){
+            $(".rate").raty({
+                path:"{:CUSTOM_TEMPLATE_PATH}/public/images/star",
+                readOnly:true,
+                size:14,
+                space:false,
+                score:{$rate}
+            })
+//			$(".buy_button a").click(function(){
+//                var url = "{:U('checkKeyBuyer')}";
+//                var id = "{$result.id}"
+//                $.post(
+//                    url,
+//                    {"id":id},
+//                     function(data){
+//                        if(data == -1){
+//                            $().message("不能购买自己发布的线索！")
+//                            return
+//                        }else{
+//
+//                            $(".cover").show();
+//
+//                            $("#buy_confirm").show();
+//
+//                            //屏幕宽度
+//                            var xWidth = parseInt($(window).width());
+//                            var yHeight = parseInt($(window).height());
+//
+//                            //弹出框宽度
+//                            var cWidth = parseInt($("#buy_confirm").width())
+//                            var cHeight = parseInt($("#buy_confirm").height())
+//                            $("#buy_confirm").css({"left":(xWidth-cWidth)/2,"top":(yHeight-cHeight)/2})
+//                        }
+//
+//                     }
+//                )
+//			})
+
+            $(".buy_button a").click(function(){
+				var self = "{$self}";
+				if(self == 1){
+					return false;
+				}
+				var url = "{:U('confirm',array('id'=>$result['id']))}"
+                window.location.href=url;
+            })
+			$(".cancel").click(function(){
+                $("#buy_confirm").hide();
+                $(".cover").hide();
+			})
+
+            //确定购买
+            $(".confirm_operation .yes").click(function(){
+
+                var url = "{:U('buyKey')}";
+                var id = "{$result.id}"
+                $.post(
+                        url,
+                        {id:id},
+                        function(data){
+                            if(data == -1){
+                                $("#buy_confirm").hide();
+                                $(".cover").hide();
+                                $().message("不能购买自己发布的线索！")
+//                                window.location.href="{:U('index')}"
+                            }else if(data == 1){
+                                $("#buy_confirm").hide();
+                                $(".cover").hide();
+                                $().message("线索购买成功")
+                                window.location.href="{:U('boughtKeyList')}"
+                            }else if(data == -3){
+                                $("#buy_confirm").hide();
+                                $(".cover").hide();
+                                $().message("您的积分不够");
+                                return;
+                            }else{
+                                $("#buy_confirm").hide();
+                                $(".cover").hide();
+                                $().message("购买失败")
+                            }
+                        }
+
+                )
+            })
+		})
+	</script>
+    <style>
+        .text p{
+            height: 40px;
+            line-height: 40px;
+            font-size: 30px;
+        }
+        .rate{
+            height: 40px;
+            margin-right: 65px;
+        }
+        .rate img{
+            width: 30px;
+        }
+		.connect .connect-contain{
+
+		}
+		.contact-button{
+		  height: 90px;
+		  line-height: 90px;
+		  text-align: center;
+		  font-size: 35px;
+		  width: 610px;
+		  border-radius: 5px;
+		  background-color: #FFB600;
+		  border: none!important;
+		  /* position: absolute; */
+		  margin: 40px auto;
+		  bottom: 0;
+  		}
+		.contact-button .contact-publisher{
+			color: #ffffff;
+		}
+    </style>
+</head>
+<body>
+	<div class="cover">
+		
+	</div>
+
+	<!--是否购买-->
+	<div id="buy_confirm" class="confirm" style="display:none">
+		<div class="confirm_title">
+			<div>确认购买</div>
+		</div>
+		<div class="confirm_content">
+			<p>当前积分：<span>{$credit}</span>
+			</p>
+			<p>扣除积分：<span>{$result.credit}</span>
+			</p>
+		</div>
+		<div class="confirm_operation">
+			<p class="cancel fl">取消</p>
+			<p class="yes fl">购买</p>
+		</div>
+	</div>
+	<div id="key_detail_content">
+		<!--发布者信息-->
+		<div id="member_info">
+			<!--头像-->
+			<div class="fl avatar">
+				<div class="avatar_img">
+					<img src="{$user_info.avatar}" width="140" height="140">
+				</div>
+			</div>
+
+			<!--信息-->
+			<div class="fl info_detail">
+				<p class="name" style="font-size: 40px;color: #FFFFFF;">卖家</p>
+				<p class="value">线索准确度:<span class="rate fr"></span></p>
+				<p class="bought_num">被购买线索数:&nbsp;{$user_info.bought_keys}</p>
+			</div>
+			
+			<!--等级-->
+			<!--<div class="fr contact-publisher">-->
+				<!--<div class="connect-contain">-->
+					<!--<a href="tel:{$user_info.telephone}"></a>-->
+					<!--联系卖家-->
+				<!--</div>-->
+			<!--</div>-->
+		</div>
+
+		<!--线索简介-->
+		<div class="key_info" style="height: auto!important;">
+			<div class="fl logo">
+				<div>
+                    <img src="{:CUSTOM_TEMPLATE_PATH}/public/images/logo/{$result.brand_logo}.jpg" >
+				</div>
+			</div>
+			<div class="fl text">
+				<p class="brand bold">{$result.series}</p>
+				<p class="but_time">售价：{$result.money}</p>
+                <p class="but_time">购车时间：{$result.time_limit}</p>
+                <p class="but_time">购车地点：{$result.city}{$result.district}</p>
+				<p class="sned_time">发布时间：{$result.create_time|substr=0,10}</p>
+			</div>
+			<div class="fr buy_button bold">
+				<a href="#">
+					<p class="credit">购买</p>
+					<p style="font-size: 35px;color: #FFFFFF">线索</p>
+
+				</a>
+			</div>
+			<if condition="$self eq 1">
+				<style>
+					.buy_button{
+						background-color: #CCCCCC!important;
+					}
+
+				</style>
+			</if>
+
+		</div>
+
+		<!--线索描述-->
+		<div class="key_desc">
+			<div class="desc_title">
+				<span class="icon fl"></span>
+				<span class="text fl bold">详情描述</span>
+			</div>
+			<div class="dec_content">
+				{$result.description}
+			</div>
+		</div>
+
+
+		<!--如果查看者是发布者自身，则不显示-->
+		<if condition="$self eq 0">
+        <!--联系卖家-->
+        <div class="contact-button">
+            <a href="tel:{$user_info.telephone}" class="contact-publisher block">联系卖家</a>
+        </div>
+			</if>
+	</div>
+
+
+    <include file="./Addons/Chengjiaojia/View/public/footer.html" />
+
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>悬赏列表</title>
+    <meta charset="utf-8">
+    <meta content=”width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0″ name=”viewport” />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/index.css?v=0.04">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/detail.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery.raty.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/index.js?v=0.01"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/plugin/countDown/countdown/jquery.countdown.js"></script>
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/plugin/countDown/countdown/jquery.countdown.css">
+</head>
+<script>
+    var url ="{:U('getList')}"
+</script>
+<style>
+    .wanted_detail_view img{
+        width: 30px;
+    }
+    .wanted_detail_view p{
+        height: 40px;
+        line-height: 40px;
+    }
+    .wanted_detail_view .countdown{
+        height: 45px;
+        line-height: 45px;
+    }
+    .position{
+        margin-top: 0;
+        width: 1em;
+        height: 1.5em;
+        margin-right: 1px;
+    }
+    .digit.static{
+        box-shadow: none;
+    }
+    .digit{
+        height: 45px;
+        line-height: 45px;
+    }
+    .countdownHolder{
+        font: 30px 'Open Sans Condensed',sans-serif;
+        letter-spacing:0;
+        text-align: center;
+        height: 45px;
+        line-height: 45px;
+        margin: 0;
+    }
+    .countDiv{
+        width: 10px;
+        height: 1.5em;
+        box-shadow: none;
+    }
+    .current{
+        color: #FFFFFF;
+        height: 100px;
+        width: 100%;
+        background: url("{:CUSTOM_TEMPLATE_PATH}/public/images/yes3.png") no-repeat;
+    }
+</style>
+<body style="overflow-y:scroll;">
+<div id="key_list_content">
+    <div class="index-menu">
+        <div class="option current">招标榜</div>
+        <div class="option" style="border-right: 1px solid #cccccc;width: 239px;height: 100px"><a href="{:U('/addon/Chengjiaojia/Wanted/userWantedList')}">我的招标</a></div>
+        <div class="option"><a href="{:U('/addon/Chengjiaojia/Wanted/getUserWantedList')}">我的投标</a></div>
+    </div>
+    <div class="key_list">
+        <div class="cover"></div>
+        <volist name="wantedList" id = "rows">
+            <a href="{:U('/addon/Chengjiaojia/Key/availableKey',array('id'=>$rows['id']))}" class=" block">
+            <div class="wanted_list_detail list">
+                <div class="fl wanted_img">
+                    <img src="{:CUSTOM_TEMPLATE_PATH}/public/images/logo/bmw.jpg" >
+                </div>
+                <div class="fl wanted_detail">
+                    <div class="wanted_detail_view">
+                        <p class="bold brand">{$rows.brand}{$rows.series}</p>
+                        <p style="height: 36px;line-height:36px">卖家信誉：<span class="key_rate_{$rows.id} fr" style="margin-right: 70px"></span></p>
+                        <script>
+                            $(".key_rate_"+{$rows.id}).raty({
+                                path:"{:CUSTOM_TEMPLATE_PATH}/public/images",
+                                readOnly:true,
+                                size:14,
+                                space:false,
+                                score:"{$rows['key_rate']}"
+                            })
+                        </script>
+                        <p>等级要求：<span>Lv.{$rows.level_limit}</span></p>
+                        <p class="countdown">剩余时间：<span class="countdown_{$rows.id}"></span></p>
+                        <script>
+                            var start_time ="{$rows.create_time}";
+                            var time = parseInt({$rows.time_limit})*24*60*60*1000;
+                            start_time = start_time.replace(/-/g,"/")
+                            var ts = new Date(start_time),
+                                    newYear = false;
+                            if((new Date()) > ts){
+                                // The new year is here! Count towards something else.
+                                // Notice the *1000 at the end - time must be in milliseconds
+                                ts = (new Date(start_time)).getTime() + time;
+                                newYear = false;
+                            }
+
+                            $('.countdown_'+{$rows.id}).countdown({
+                                timestamp	: ts,
+                                callback	: function(days, hours, minutes, seconds){
+
+                                    var message = "";
+
+                                    //message += days + " day" + ( days==1 ? '':'s' ) + ", ";
+                                    message += hours + " hour" + ( hours==1 ? '':'s' ) + ", ";
+                                    message += minutes + " minute" + ( minutes==1 ? '':'s' ) + " and ";
+                                    message += seconds + " second" + ( seconds==1 ? '':'s' ) + " <br />";
+
+                                    if(newYear){
+                                        message += "left until the new year!";
+                                    }
+                                    else {
+                                        message += "left to 10 days from now!";
+                                    }
+
+                                }
+                            });
+                        </script>
+                    </div>
+                </div>
+                <div class="fr wanted_operation">
+
+                    <div class="operation">
+                        <p class="bold"><span>{$rows.credit}</span>积分</p>
+                        <p >{$rows.city}</p>
+                    </div>
+
+                </div>
+            </div>
+            </a>
+        </volist>
+    </div>
+</div>
+<include file="./Addons/Chengjiaojia/View/public/footer.html" />
+</body>
+</html>

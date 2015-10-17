@@ -1,0 +1,83 @@
+﻿body,ul,ol,li,p,h1,h2,h3,h4,h5,h6,form,fieldset,table,td,img,div{margin:0;padding:0;border:0;}
+body{color:#333; font-size:12px;font-family:"Microsoft YaHei"}
+ul,ol{list-style-type:none;}
+select,input,img,select{vertical-align:middle;}
+input{ font-size:12px;}
+a{ text-decoration:none; color:#000;}
+a:hover{color:#c00; text-decoration:none;}
+.clear{clear:both;}
+
+/* 大转盘样式 */
+.banner{position:absolute;display:block;width:77.22%;left:82px;overflow: hidden;top: 320px}
+.banner .turnplate{display:block;width:100%;position:relative;}
+.banner .turnplate canvas.item{width:100%;}
+.banner .turnplate img.pointer{position:absolute;width:31.5%;height:42.5%;left:34.6%;top:23%;}
+body{
+    background: url("images/bg.jpg") no-repeat 100% 100%;
+    background-size: 100% 100%;
+    overflow: hidden;
+    position: relative;
+}
+.spendCredit{
+    width: 262px;
+    height: 95px;
+    position: absolute;
+    top: 88.73%;
+    left: 82px;
+}
+.invite{
+    width: 262px;
+    height: 95px;
+    position: absolute;
+    top: 88.73%;
+    left: 377px;
+}
+.btn a{
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.times{
+    width: 73px;
+    height: 35px;
+    line-height: 35px;
+    position: absolute;
+    left: 63.89%;
+    top: 81.55%;
+    color: #ffbe02;
+    font-size: 35px;
+}
+ .yes{
+    background: url("images/1.png") no-repeat 100% 100%;
+    position: absolute;
+    top: 0px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+}
+ .yes .reward_credit{
+    width: 204px;
+    height: 55px;
+    font-size: 55px;
+    color: #910909;
+    position: absolute;
+    top:55%;
+    left:44.17%
+}
+ .no{
+    background: url("images/2.png") no-repeat 100% 100%;
+    position: absolute;
+    top: 0px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+}
+
+#sign_bg_img{
+    background: url("images/sign.jpg") no-repeat 100% 100%;
+    background-size: 100% 100%;
+    overflow: hidden;
+    position: relative;
+}

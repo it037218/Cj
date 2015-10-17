@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/common.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/member.css">
+
+    <title>橙蕉豆</title>
+    <script>
+        $(function(){
+            $(".recharge").bind("touchstart",function(){
+                window.location.href="{:U('recharge')}"
+            })
+            $(".cash").bind("touchstart",function(){
+                window.location.href="{:U('cash')}"
+            })
+        })
+
+    </script>
+</head>
+<body>
+    <div class="use-account">
+        <div class="font1">当前余额</div>
+        <div class="font2">{$use_account|number_format=2}</div>
+        <div class="font3">橙蕉豆</div>
+    </div>
+    <div class="credit_manage_list use-account-list">
+        <div class="credit_list_title">
+            <div class="credit_manage_title">
+                <span class="icon fl"></span>
+                <span class="text fl bold">交易明细</span>
+            </div>
+        </div>
+
+        <ul>
+            <volist name="list" id="rows">
+            <li class="credit_detail">
+                <div class="fl credit_info">
+                    <p style="word-wrap:break-word;word-break:break-all;width: 100%">{$rows.desc}</p>
+                    <span style="padding-bottom: 30px;display: block">{$rows.create_time}</span>
+                </div>
+                <div class="fr credit">
+                    {$rows.remark}<br>
+                    <span style="font-size: 26px">橙蕉豆</span>
+                </div>
+
+            </li>
+            </volist>
+        </ul>
+    </div>
+
+    <div class="account-operate">
+        <div class="fl recharge">
+            充值
+        </div>
+        <div class="fl cash">
+            提现
+        </div>
+
+    </div>
+
+
+</body>
+</html>

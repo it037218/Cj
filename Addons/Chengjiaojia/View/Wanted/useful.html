@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>线索评价</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/index.css?v=0.04">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/detail.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/animate.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/common.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/member.css">
+
+    <!--<script type="text/javascript" src="js/zepto.min.js"></script>-->
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/raty.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <!--script src="js/index.js"></script-->
+    <script type="text/javascript">
+        $(function(){
+
+            $("#judge").raty(
+                    {
+                        hints:['1星',"2星","3星","4星","5星"],
+                        score:1,
+                        onClick:function(score){
+                            $("input[name='level']").val(score)
+                        }
+                    }
+            );
+
+        })
+    </script>
+</head>
+<body>
+<div class="appeal_create">
+    <div class="judge_column">
+        <div class="item">
+            <span class="fl">评价</span>
+            <div class="fr" id="judge" style="width: 250px!important;"></div>
+        </div>
+    </div>
+    <ul>
+        <li>
+            直接索取个人信息
+        </li>
+        <li>
+            违规操作
+        </li>
+        <li style="height: auto;border: none;padding-bottom: 20px">
+            <p>其他<span></span></p>
+            <textarea></textarea>
+        </li>
+    </ul>
+
+
+    <div class="confirm_btn">
+        提交
+
+    </div>
+
+</div>
+</body>
+</html>

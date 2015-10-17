@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1.0 ,maximum-scale=1.0,minimum-scale=1.0,  user-scalable=no" name="viewport">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/index.css?v=0.04">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/detail.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/common.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/member.css">
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery.raty.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/plugin/countDown/countdown/jquery.countdown.js"></script>
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/plugin/countDown/countdown/jquery.countdown.css">
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <title>悬赏列表</title>
+    <style>
+        .wanted_detail_view img{
+            width: 30px;
+        }
+        .wanted_detail_view p{
+            height: 40px;
+            line-height: 40px;
+        }
+        .wanted_detail_view .countdown{
+            height: 45px;
+            line-height: 45px;
+        }
+        .position{
+            margin-top: 0;
+            width: 1em;
+            height: 1.5em;
+            margin-right: 1px;
+        }
+        .digit.static{
+            box-shadow: none;
+        }
+        .digit{
+            height: 45px;
+            line-height: 45px;
+        }
+        .countdownHolder{
+            font: 30px 'Open Sans Condensed',sans-serif;
+            letter-spacing:0;
+            text-align: center;
+            height: 45px;
+            line-height: 45px;
+            margin: 0;
+        }
+        .countDiv{
+            width: 10px;
+            height: 1.5em;
+            box-shadow: none;
+        }
+        .key_list{
+            width: 720px;
+            background-color: #FFFFFF;
+            z-index: 99;
+            overflow-y: hidden;
+            margin-bottom:40px;
+            border-bottom: 2px solid #ccc;
+        }
+        .wanted_list_detail{
+            height: 250px;
+        }
+        .key_list_detail .key_img{
+            width: 182px;
+        }
+    </style>
+</head>
+<body>
+<div id="main_content">
+    <div class="key_list">
+        <div class="wanted_list_detail list">
+            <div class="fl wanted_img">
+                <img src="{:CUSTOM_TEMPLATE_PATH}/public/images/logo/bmw.jpg" >
+            </div>
+            <div class="fl wanted_detail">
+                <div class="wanted_detail_view">
+                    <p class="bold brand">{$info.brand}{$info.series}</p>
+                    <p style="height: 36px;line-height:36px">线索准确率：<span class="key_rate_{$info.id} fr" style="margin-right: 70px"></span></p>
+                    <script>
+                        $(".key_rate_"+{$info.id}).raty({
+                            path:"{:CUSTOM_TEMPLATE_PATH}/public/images",
+                            readOnly:true,
+                            size:14,
+                            space:false,
+                            score:"{$info['key_rate']}"
+                        })
+                    </script>
+                    <p>等级要求：<span>Lv.{$info.level_limit}</span></p>
+                    <p>购车城市：<span>{$info.area}</span></p>
+                    <p class="countdown">剩余时间：<span class="countdown_{$info.id}"></span></p>
+                    <script>
+                        var start_time ="{$info.create_time}";
+                        var time = parseInt({$info.time_limit})*24*60*60*1000;
+                        start_time = start_time.replace(/-/g,"/")
+                        var ts = new Date(start_time),
+                                newYear = false;
+                        if((new Date()) > ts){
+                            // The new year is here! Count towards something else.
+                            // Notice the *1000 at the end - time must be in milliseconds
+                            ts = (new Date(start_time)).getTime() + time;
+                            newYear = false;
+                        }
+
+                        $('.countdown_'+{$info.id}).countdown({
+                            timestamp	: ts,
+                            callback	: function(days, hours, minutes, seconds){
+
+                                var message = "";
+
+                                //message += days + " day" + ( days==1 ? '':'s' ) + ", ";
+                                message += hours + " hour" + ( hours==1 ? '':'s' ) + ", ";
+                                message += minutes + " minute" + ( minutes==1 ? '':'s' ) + " and ";
+                                message += seconds + " second" + ( seconds==1 ? '':'s' ) + " <br />";
+
+                                if(newYear){
+                                    message += "left until the new year!";
+                                }
+                                else {
+                                    message += "left to 10 days from now!";
+                                }
+
+                            }
+                        });
+                    </script>
+                </div>
+            </div>
+            <div class="fr wanted_operation">
+
+                <div class="operation">
+                    <p class="bold"><span>{$info.credit}</span></p>
+                    <p >积分</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="credit_manage_list">
+        <div class="credit_list_title">
+            <div class="credit_manage_title">
+                <span class="icon fl"></span>
+                <span class="text fl">揭榜单</span>
+            </div>
+        </div>
+    </div>
+    <!--某条揭榜悬赏所对应的线索列表-->
+    <div class="key_show_list key_buy_no">
+        <volist name="keys" id="rows">
+            <a href="{:U('/addon/Chengjiaojia/Key/publishKeyDetail',array('id'=>$rows['id']))}">
+            <div class="key_list_detail list">
+                <div class="fl key_img">
+                    <img src="{:CUSTOM_TEMPLATE_PATH}/public/images/logo/bmw.jpg" >
+                </div>
+                <div class="fl key_detail">
+                    <div class="key_detail_view">
+                        <p class="bold">{$rows.brand}{$rows.series}</p>
+                        <p>购车时间：<span>{$rows.time_limit}</span></p>
+                        <p>发布时间：<span>{$rows.create_time|substr=0,10}</span></p>
+                    </div>
+                </div>
+            </div>
+                </a>
+        </volist>
+    </div>
+</div>
+<include file="./Addons/Chengjiaojia/View/public/footer.html" />
+</body>
+</html>

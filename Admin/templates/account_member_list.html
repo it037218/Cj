@@ -1,0 +1,162 @@
+<{include file="header.html"}>
+<link href="css/detail.css" rel="stylesheet">
+<style>
+    #card_pic{
+        border: 5px solid #CCCCCC;
+    }
+    #keyInfo td{
+        border:none!important;
+    }
+    #keyInfo table{
+        border-bottom: 1px solid #CCCCCC;
+    }
+</style>
+<script>
+    $(function(){
+        $("#Account").attr("aria-expanded",true).addClass("in");
+        $("#Account").siblings("a").css("backgroundColor","#000");
+
+        $(".panel-close").click(function(){
+            $("#accountInfo").hide();
+        })
+
+    })
+
+</script>
+<body>
+<div class="cover" style="width: 100%;height: 100%;opacity: 0.5;display: none;z-index: 100;position: absolute;background-color: #000"></div>
+
+<div id="wrapper">
+    <{include file="nav.html"}>
+    <div id="page-wrapper">
+        <div class="container-fluid" style="position: relative">
+            <div id="card_container" style="position:absolute;background-color: #ffffff;z-index: 10000;display: none">
+                <div id="card_pic" >
+                    <img src="" id="card_pic1" style="float: left">
+                </div>
+            </div>
+            <!-- Page Heading -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <ol class="breadcrumb">
+                        <li>
+                            <i class="fa fa-dashboard"></i>  <a href="#">财务管理</a>
+                        </li>
+                        <li class="active">
+                            <i class="fa fa-table"></i> 用户资金管理
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th>编号</th>
+                                <th>用户名</th>
+                                <th>真实姓名</th>
+                                <th>可用金额</th>
+                                <th>冻结金额</th>
+                                <th>累计充值金额</th>
+                                <th>累计提现金额</th>
+                                <th>注册时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="verify_content">
+                            <{foreach from=$result item=rows key = key}>
+                            <tr data="<{$rows.id}>">
+                                <td><{$key +1}></td>
+                                <td><{$rows.name}></td>
+                                <td><{$rows.realname}></td>
+                                <td><{$rows.use_account|default:"0.00"}></td>
+                                <td><{$rows.frozen_account|default:"0.00"}></td>
+                                <td><{$rows.totalRecharge|default:"0.00"}></td>
+                                <td><{$rows.totalCash|default:"0.00"}></td>
+                                <td><{$rows.create_time}></td>
+                                <td><button class="btn btn-default" onclick="checkInfo('<{$rows.user_openid}>')">查看资金变动明细</button></td>
+
+                            </tr>
+                            <{/foreach}>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- /.row -->
+            <ul class="pagination">
+                <li><a href="<{$firstUrl}>" <{if $firstUrl == "#"}> class="disabled" <{/if}> >首页</a></li>
+                <li><a href="<{$preUrl}>" <{if $preUrl == "#"}> class="disabled" <{/if}>>&laquo;</a></li>
+                <li><a href="#" class="active disabled"><{$currentPage}></a></li>
+                <li><a href="<{$nextUrl}>" <{if $nexttUrl == "#"}> class="disabled" <{/if}>>&raquo;</a></li>
+                <li><a href="<{$lastUrl}>" <{if $lastUrl == "#"}> class="disabled" <{/if}>>末页</a></li>
+            </ul>
+            <div id="accountInfo" class="row col-lg-10" style="position: fixed;top: 10%;z-index:1001;display: none;">
+                <div  class="col-lg-12">
+                    <div  class="panel panel-default">
+                        <div class="panel-heading">
+                            <span class="panel-title">用户资金使用明细</span>
+                            <span style="float:right;cursor: pointer" class="panel-close">返回</span>
+                        </div>
+                        <div class="panel-content">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>编号</th>
+                                    <th>描述</th>
+                                    <th>资金</th>
+                                    <th>时间</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>充值</td>
+                                    <td>100</td>
+                                    <td>2015-1-1 11：11：11</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>充值</td>
+                                    <td>100</td>
+                                    <td>2015-1-1 11：11：11</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>充值</td>
+                                    <td>100</td>
+                                    <td>2015-1-1 11：11：11</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>充值</td>
+                                    <td>100</td>
+                                    <td>2015-1-1 11：11：11</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>充值</td>
+                                    <td>100</td>
+                                    <td>2015-1-1 11：11：11</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+
+    </div>
+
+</div>
+<script>
+
+</script>
+<script src="js/account.js?v=0.1"></script>
+</body>
+
+</html>

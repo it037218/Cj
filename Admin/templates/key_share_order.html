@@ -1,0 +1,398 @@
+<{include file="header.html"}>
+<!--<script src="js/key_view.js?v=0.1"></script>-->
+<link href="css/detail.css" rel="stylesheet">
+<style>
+    #card_pic{
+        border: 5px solid #CCCCCC;
+    }
+    #keyInfo td{
+        /*border:none!important;*/
+    }
+    #keyInfo table{
+        border-bottom: 1px solid #CCCCCC;
+    }
+</style>
+<script>
+    $(function(){
+        $("#Key").attr("aria-expanded",true).addClass("in");
+        $("#Key").siblings("a").css("backgroundColor","#000");
+
+        //关闭面板
+        $(".panel-close").bind("click",function(){
+            $("#keyInfo").hide();
+            //$(".cover").hide();
+        })
+
+        $("#card_pic").click(function(){
+            $("#card_container").hide();
+            $(".cover").hide();
+        })
+    })
+    function verify(e){
+        $('#myModal').modal('toggle')
+        $("#order_key_id").val(e)
+    }
+    function check_card(e) {
+
+        var content = $(e).attr("src");
+        console.log(content);
+        $("#card_pic").empty()
+        $("#card_pic").append("<img src='" + content + "' style='width:500px'>")
+        var height = $("#card_container").height();
+        var width = $("#card_container").width();
+
+        $("#card_container").css({
+            "top": function () {
+                return ( (parseInt($(window).height())-height) / 2 + "px");
+            },
+            "left": function () {
+                return ((parseInt($("#page-wrapper").width()) - width) / 2 + "px");
+            }
+        });
+        $(".cover").css({"height":$(window).height(),"width":$(window).width()}).show();
+        $("#card_container").show();
+    }
+
+    //选择
+    function navChoose(e){
+        $(e).addClass("active").siblings("li").removeClass("active");
+        var panel = $(e).find("a").attr("href");
+        $(panel).show().siblings(".panel-choose").hide()
+    }
+
+    //关闭晒单信息面板
+    function closePanel(){
+        $("#keyInfo").hide();
+    }
+
+    //查看晒单信息
+    function checkOrder(id){
+
+//        var id = $("#order_id").val();
+        $.post(
+            "./key.php?action=shareOrderDetail",
+            {
+                id:id
+            },
+            function(data){
+                var dataObj = eval("("+data+")")
+                $("#keyInfo").empty();
+                $("#keyInfo").append(''+
+                        '<div  class="col-lg-12">'+
+                        '<div  class="panel panel-default">'+
+                        '<div class="panel-heading">'+
+                        '<span class="panel-title">详情</span>'+
+                        '<span style="float:right;cursor: pointer" class="panel-close" onclick="closePanel()">返回</span>'+
+                        '</div>'+
+                        '<div class="panel-content">'+
+                        '<div class="key-nav">'+
+                        '<ul class="nav nav-tabs">'+
+                        '<li role="presentation" class="active" onclick="navChoose(this)"><a href="#num1">晒单详情</a></li>'+
+                        '<li role="presentation" onclick="navChoose(this)" ><a href="#num2">线索详情</a></li>'+
+                        '</ul>'+
+
+                        '</div>'+
+                        '<div class="panel-choose" id="num1">'+
+                        '<div class="key-desc">'+
+                        '<div  class="content">'+
+                        '<table class="table table-bordered	">'+
+                        '<tr><td >客户名称：'+dataObj.orders.name+'</td><td>最终成交车型：'+dataObj.orders.car_type+' </td><td>裸车价：'+dataObj.orders.content.luoche+'万元</td> </tr>'+
+                        '<tr><td > 购置税：'+dataObj.orders.content.gouzhi+'万元 </td> <td> 商业保险：'+dataObj.orders.content.shangye+'万元 </td> <td> 车船使用税：'+dataObj.orders.content.chechuan+'万元 </td> </tr>'+
+                        '<tr> <td > 交强险：'+dataObj.orders.content.jiaoqiang+'万元 </td> <td> 上牌费：'+dataObj.orders.content.shangpai+'万元 </td> <td> 晒单时间：'+dataObj.orders.create_time+' </td> </tr>'+
+                        '<tr> <td colspan="3"> <img src="'+dataObj.orders.pic_url+'" height="20%" onclick="check_card(this)"> </td> </tr>'+
+                        '</table></div></div></div>'+
+
+                        '<div class="panel-choose" id="num2" style="display: none;">'+
+                        '<div class="key-desc">'+
+                        '<div  class="content">'+
+                        '<table class="table table-bordered	">'+
+                        '<tr> <td > 线索发布者：林若炜 </td> <td> 线索价值：'+dataObj.keys.money+'橙蕉豆 </td> <td> 实际成交：'+dataObj.keys.real_get+'橙蕉豆 </td> </tr>'+
+                        '<tr> <td> 地点：'+dataObj.keys.city+dataObj.keys.district+'</td> <td> 品牌：'+dataObj.keys.brand+' </td> <td > 车系：'+dataObj.keys.series+' </td> </tr>'+
+                        '<tr> <td> 时间期限：'+dataObj.keys.time_limit+' </td> <td> 用户姓名：'+dataObj.keys.custom_name+' </td> <td > 用户电话：'+dataObj.keys.custom_telephone+' </td> </tr>'+
+                        '<tr> <td > 发布时间：'+dataObj.keys.create_time+' </td> <td > </td> </tr>'+
+                        '<tr> <td colspan="3"> 线索描述：'+dataObj.keys.description+' </td> </tr>'+
+                        '</table>'+
+                        '</div> </div> </div> </div></div> </div>')
+                $("#keyInfo").show()
+            }
+        )
+
+    }
+
+    //判断晒单结果
+    function verifyResult(e){
+        var result= e;
+        var remark = $("#remark").val();
+        var id = $("#order_key_id").val();
+
+        if(id.length == 0){
+            alert("系统错误");
+            return
+        }
+
+        $.post(
+            "./key.php?action=shareOrderVerify",
+                {
+                    "id":id,
+                    "result":result,
+                    "remark":remark
+                },
+                function(data){
+
+                    if(data ==1){
+                        alert("审核成功");
+                        location.reload()
+                    }else{
+                        alert("审核失败");
+                        return
+                    }
+
+                }
+        )
+    }
+
+</script>
+
+
+
+
+<body>
+<div class="cover" style="width: 100%;height: 100%;opacity: 0.5;display: none;z-index: 1002;position: absolute;background-color: #000"></div>
+
+<div id="wrapper">
+    <{include file="nav.html"}>
+    <div id="page-wrapper">
+        <div class="container-fluid" style="position: relative">
+            <!--晒单照片-->
+            <div id="card_container" style="position:absolute;background-color: #ffffff;z-index: 10000;display: none">
+                <div id="card_pic" >
+                    <img src="" id="card_pic1" style="float: left">
+                </div>
+            </div>
+            <!-- Page Heading -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <ol class="breadcrumb">
+                        <li>
+                            <i class="fa fa-dashboard"></i>  <a href="#">线索管理管理</a>
+                        </li>
+                        <li class="active">
+                            <i class="fa fa-table"></i> 晒单管理
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th>编号</th>
+                                <th>发布时间</th>
+                                <th>发布者</th>
+                                <th>发布真实姓名</th>
+                                <th>晒单车型</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="verify_content">
+                            <{foreach from=$result key = key item=rows}>
+                            <tr data="<{$row.id}>">
+                                <td><{$key+1}></td>
+                                <td><{$rows.create_time}></td>
+                                <td><{$rows.name}></td>
+                                <td><{$rows.realname}></td>
+                                <td><{$rows.car_type}></td>
+                                <td >
+                                    <{if $rows.status eq 0}>
+                                    <button class="btn btn-info" onclick="verify(<{$rows.id}>)">审核</button>
+                                    <{elseif $rows.status eq 1}>
+                                    <button class="btn btn-success">审核通过</button>
+                                    <{elseif $rows.status eq 2}>
+                                    <button class="btn btn-danger">审核不通过</button>
+
+                                    <{/if}>
+                                </td>
+                                <td><button class="btn btn-primary" onclick="checkOrder(<{$rows.id}>)">查看</button></td>
+                            </tr>
+                            <{/foreach}>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- /.row -->
+            <!--model-->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close"
+                                    data-dismiss="modal" aria-hidden="true">
+                                &times;
+                            </button>
+                            <h4 class="modal-title" id="myModalLabel">
+                                确认框
+                            </h4>
+                        </div>
+                        <div class="modal-body">
+                            <h4>该晒单是否有效？</h4>
+                            <textarea class="form-control" rows="3" placeholder="请输入备注" id="remark"></textarea>
+                            <input type="hidden" id="order_key_id">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" onclick="verifyResult(1)" style="width: 20%">
+                                晒单有效
+                            </button>
+                            <button type="button" class="btn btn-warning" onclick="verifyResult(0)" style="width: 20%">
+                                晒单无效
+                            </button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal -->
+            </div>
+            <!--分页-->
+            <ul class="pagination">
+                <li><a href="<{$firstUrl}>" <{if $firstUrl == "#"}> class="disabled" <{/if}> >首页</a></li>
+                <li><a href="<{$preUrl}>" <{if $preUrl == "#"}> class="disabled" <{/if}>>&laquo;</a></li>
+                <li><a href="#" class="active disabled"><{$currentPage}></a></li>
+                <li><a href="<{$nextUrl}>" <{if $nexttUrl == "#"}> class="disabled" <{/if}>>&raquo;</a></li>
+                <li><a href="<{$lastUrl}>" <{if $lastUrl == "#"}> class="disabled" <{/if}>>末页</a></li>
+            </ul>
+            <div id="keyInfo" class="row col-lg-10" style="position: fixed;top: 10%;z-index:1001;display: none">
+                <div  class="col-lg-12">
+                    <div  class="panel panel-default">
+                        <div class="panel-heading">
+                            <span class="panel-title">详情</span>
+                            <span style="float:right;cursor: pointer" class="panel-close">返回</span>
+                        </div>
+                        <div class="panel-content">
+                            <div class="key-nav">
+                                <ul class="nav nav-tabs">
+                                    <li role="presentation" class="active" onclick="navChoose(this)"><a href="#num1">晒单详情</a></li>
+                                    <li role="presentation" onclick="navChoose(this)" ><a href="#num2">线索详情</a></li>
+                                </ul>
+                            </div>
+                            <div class="panel-choose" id="num1">
+                                <div class="key-desc">
+                                    <div  class="content">
+                                        <table class="table table-bordered	">
+                                            <tr>
+                                                <td >
+                                                    客户名称：林若炜
+                                                </td>
+                                                <td>
+                                                    最终成交车型：奔驰C级
+                                                </td>
+                                                <td>
+                                                    裸车价：100万元
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td >
+                                                    购置税：100万元
+                                                </td>
+                                                <td>
+                                                    商业保险：100万元
+                                                </td>
+                                                <td>
+                                                    车船使用税：100万元
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td >
+                                                    交强险：100万元
+                                                </td>
+                                                <td>
+                                                    上牌费：100万元
+                                                </td>
+                                                <td>
+                                                    晒单时间：2015-09-09 11:11:11
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3">
+                                                <img src="images/pic.jpg" height="20%">
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="panel-choose" id="num2" style="display: none;">
+                                <div class="key-desc">
+                                    <div  class="content">
+                                        <table class="table table-bordered	">
+                                            <tr>
+                                                <td >
+                                                    线索发布者：林若炜
+                                                </td>
+                                                <td>
+                                                    线索价值：100橙蕉豆
+                                                </td>
+                                                <td>
+                                                    实际成交：100橙蕉豆
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    地点：上海 浦东
+                                                </td>
+                                                <td>
+                                                    品牌：大众
+                                                </td>
+                                                <td >
+                                                    车系：途观
+                                                </td>
+                                            </tr>
+                                            <tr>
+
+                                                <td>
+                                                    时间期限：一周以内
+                                                </td>
+                                                <td>
+                                                    用户姓名：朱云峰
+                                                </td>
+                                                <td >
+                                                    用户电话：18652362600
+                                                </td>
+                                            </tr>
+                                            <tr>
+
+                                                <td >
+                                                    发布时间：2015-02-03 11:11:11
+                                                </td>
+                                                <td >
+
+                                                </td>
+
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3">
+                                                    线索描述：111111111111
+                                                </td>
+
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+    </div>
+
+</div>
+</body>
+
+</html>

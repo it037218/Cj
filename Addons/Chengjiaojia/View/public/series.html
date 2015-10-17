@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/choose.js"></script>
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/select.css">
+    <title>车系选择</title>
+    <script>
+        $(function(){
+            var height = $(window).height();
+            $("ul").css({"overflow":"scroll","height":height})
+
+            //选择车系
+            $("li").click(function (event) {
+                var series = $.trim($(this).text())
+                sessionStorage.setItem("series",series)
+                history.go(-2)
+            })
+        })
+
+    </script>
+    <style>
+        li{
+            width: 98%;
+            border-bottom: 1px solid #cccccc;
+        }
+        #content ul{
+            overflow-y:scroll ;
+            -webkit-overflow-scrolling: touch;
+        }
+    </style>
+
+</head>
+<body id="bg_img">
+<div id="content">
+    <ul class="options">
+        <volist name="result" id="rows">
+            <li class="chosen">
+                {$rows.series}
+
+            </li>
+        </volist>
+    </ul>
+</div>
+</body>
+</html>

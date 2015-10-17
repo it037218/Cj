@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>线索评价</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/common.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/jquery.message.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/judge.css">
+
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery.message.min.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <!--script src="js/index.js"></script-->
+    <script type="text/javascript">
+        $(function(){
+
+            $(".confirm_btn").click(function(){
+
+            })
+
+            $(".judge-title .yes").bind("touchstart",function(){
+                $(this).find(".select-button").addClass("active");
+                $(this).siblings().find(".select-button").removeClass("active")
+                $(".judge-yes").show().siblings().hide()
+            })
+            $(".judge-title .no").bind("touchstart",function(){
+                $(this).find(".select-button").addClass("active");
+                $(this).siblings().find(".select-button").removeClass("active")
+                $(".judge-no").show().siblings().hide()
+            })
+            var key_id = "{$id}";
+            $(".judge-yes .judge-confirm").bind("touchstart",function(){
+                var judge_status = 1;
+                var judge_reason = $(".judge-yes textarea").val();
+                var result = true;
+                if(judge_reason.length == 0){
+                    $().message("请先填写评价理由");
+                    return
+                }else{
+                    $.post(
+                            "{:U('treat',array('id'=>$id))}",
+                            {
+                                "id":key_id,
+                                "judge_status":judge_status,
+                                "judge_reason":judge_reason,
+                                "result":result
+                            },
+                            function(data){
+                                if(data == 1){
+                                    $().message("操作成功")
+                                    setInterval(function(){
+                                        window.location.href = "{:U('publishList')}"
+                                    },500)
+                                    return
+                                }else{
+                                    $().message("操作失败");
+                                    return
+                                }
+                            }
+
+
+                    )
+                }
+            })
+
+            $(".judge-no .judge-confirm").bind("touchstart",function(){
+                var judge_status = 2;
+                var judge_reason = $(".judge-yes textarea").val();
+                var result = false;
+                if(judge_reason.length == 0){
+                    $().message("请先填写评价理由");
+                    return
+                }else{
+                    $.post(
+                            "{:U('treat',array('id'=>$id))}",
+                            {
+                                "id":key_id,
+                                "judge_status":judge_status,
+                                "judge_reason":judge_reason,
+                                "result":result
+                            },
+                            function(data){
+                                if(data == 2){
+                                    $().message("申诉成功")
+                                    return
+                                }else{
+                                    $().message("申诉失败");
+                                    return
+                                }
+                            }
+
+
+                    )
+                }
+            })
+        })
+    </script>
+
+</head>
+<body>
+<div id="judge_contain">
+    <div class="judge-title">
+        <div class="yes judge-selection">
+            <div class="select-button active">确认通过</div>
+        </div>
+        <div class="no judge-selection">
+            <div class="select-button">欺诈申诉</div>
+        </div>
+    </div>
+    <div class="judge-contain">
+        <div class="judge-yes judge-content">
+            <div class="judge-main">
+                <div class="font">
+                    评价：
+                </div>
+                <div class="judge-text">
+                    <textarea placeholder="写点什么吧"></textarea>
+                </div>
+            </div>
+            <p>
+                您将同意买方最终线索未能成交的结果，橙蕉豆将不再转入您的个人账户。
+
+            </p>
+            <div class="judge-confirm">
+                确定提交
+            </div>
+        </div>
+        <div class="judge-no judge-content" style="display: none">
+            <div class="judge-main">
+                <div class="font">
+                    申诉理由：
+                </div>
+                <div class="judge-text">
+                    <textarea placeholder="写点什么吧"></textarea>
+                </div>
+            </div>
+            <p>
+                您将对买方未能成交的结果进行申诉，提交申诉后，客服人员将进一步确认该线索是否确实未成交，如申诉成功，平台将对买家做出相应的惩罚，并给您一定的补偿。
+
+            </p>
+            <div class="judge-confirm">
+                确定提交
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

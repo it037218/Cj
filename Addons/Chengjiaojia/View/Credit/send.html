@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+	    <title>线索详情</title>
+	    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css"/>
+	    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/key_detail.css"/>
+	    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.2.min.js"></script>
+	    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/self.js"></script>
+	    <script type= "text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/index.js?v=0.01"></script>
+		<style type="text/css"> body{font-size:12px;}</style>
+	</head>
+	<body>
+		<div class="send_content">
+			<div class="item">
+				<span>品牌</span>
+				<div class="select">
+				<select id="brand" style="-webkit-appearance: none;">
+					<option value="0">宝马</option>
+					<option value="0">奔驰</option>
+					<option value="0">奥迪</option>
+					<option value="0">大众</option>
+					<option value="0">兰博基尼</option>
+				</select>
+				</div>
+			</div>
+			<div class="item">
+				<span>车型</span>
+				<div class="select">
+				<select id="brand" style="-webkit-appearance: none;">
+					<option value="0">3系</option>
+					<option value="0">5系</option>
+					<option value="0">7系</option>
+				</select>
+				</div>
+			</div>
+			<div class="item">
+				<span>客户名称</span>
+				<div class="select">
+					朱云峰
+				</div>
+			</div>
+			<div class="item">
+				<span>客户联系方式</span>
+				<div class="select">
+					18652362600
+				</div>
+			</div>
+			<div class="item">
+				<span>购车时间</span>
+				<div class="select">
+					11个月以内
+				</div>
+			</div>
+			
+			<div class="item">
+				<span>积分</span>
+				<div class="select">
+					<select id="brand" style="-webkit-appearance: none;">
+						<option value="0">10分</option>
+						<option value="0">15分</option>
+						<option value="0">20分</option>
+						<option value="0">30分</option>
+						<option value="0">40分</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="desc">
+			<div class="desc_title">线索详情描述</div>
+
+			<div>
+				<textarea >客户对宝马三系车型非常比较感兴趣，想要线索的赶紧来抢吧！</textarea>
+			</div>
+		</div>
+		<div class="send_button">
+			<button onclick="goback()">发布悬赏</button>
+		</div>
+        <script>
+            function goback(){
+            	window.location.href="key_list.html"
+            }
+        </script>
+	</body>
+
+</html>

@@ -1,0 +1,90 @@
+#main_content{
+    background-color: #FFFFFF;
+    width: 720px;
+    padding: 40px 0;
+    margin-bottom: 80px;
+}
+#main_content .logo{
+    width: 670px;
+    margin: 0 auto;
+}
+.content_text{
+    width: 670px;
+    margin: 40px auto;
+    background-color: #bbd25a;
+    border-radius: 15px;
+    overflow: hidden;
+    height: 85px;
+    line-height: 85px;
+}
+.content_text span{
+    height: 100%;
+    display: block;
+    color: #FFFFFF;
+    font-size: 35px;
+    margin: 0 35px;
+}
+.invite_desc{
+    width: 670px;
+    padding: 20px 25px;
+    font-size: 28px;
+}
+.invite_limit{
+    width: 670px;
+    padding: 20px 25px;
+}
+.invite_limit .title{
+    height: 85px;
+    line-height: 85px;
+}
+.invite_limit .title1{
+    background-color: #DDDDDD;
+    font-size: 32px;
+    font-weight: bold;
+}
+.invite_limit .title1 span{
+    display: block;
+    float: left;
+    margin: 0 10px;
+    height: 100%;
+}
+.invite_limit .title2{
+    background-color: #EAEAEA;
+    font-size: 30px;
+    font-weight: bold;
+}
+.invite_limit .title2 span{
+    margin-left: 10px;
+}
+.invite_limit .brand_list{
+    height: 80px;
+    line-height: 80px;
+    font-size: 30px;
+    border-bottom: 1px solid #cccccc;
+}
+.invite_limit .brand_list span{
+    display: block;
+    float: left;
+    margin: 0 10px;
+    height: 100%;
+}
+.choujiang{
+    width: 360px;
+    margin: 40px auto;
+    border-radius: 15px;
+    overflow: hidden;
+    height: 85px;
+    line-height: 85px;
+    background-color: #FFB600;
+}
+.choujiang span{
+    height: 100%;
+    width: 100%;
+
+    display: block;
+    color: #FFFFFF;
+    font-size: 30px;
+}
+.choujiang a{
+    text-align: center;
+}

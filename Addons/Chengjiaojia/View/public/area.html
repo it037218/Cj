@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/select.css">
+    <title>地区选择</title>
+    <script>
+
+        $(function(){
+            $("li").eq(0).addClass("chosen")
+            $("li").eq(0).find("dl").show()
+
+            var height = $("body").height()
+            $("dl").css({"height":height,"overflow":"scroll","offsetTop":"0"})
+            $("ul").css({"height":height,"overflow":"scroll"})
+            $(".options li").click(function (event) {
+                $(this).addClass("chosen").find("dl").show()
+                $(this).siblings().removeClass("chosen").find("dl").hide()
+                $(this).css("z-index",99)
+                $(this).find("dl").css({"position":"fixed","offsetTop":0,"z-index":100})
+            });
+            //选择汽车品牌和系列
+            $(".options  dd").click(function (event) {
+                $(this).css({"color":"#ffb600","borderBottomColor":"#ffb600"}).siblings().css({"color":"#000","borderBottomColor":"#ccc"});
+                var city = $(this).text()
+                var province = $(this).parent().siblings("span").text();
+                sessionStorage.setItem("city",city)
+                sessionStorage.setItem("province",province)
+                history.go(-1)
+            })
+        })
+
+    </script>
+    <style>
+        ul,dl{
+            -webkit-overflow-scrolling: touch;
+        }
+
+
+        </style>
+
+</head>
+<body id="bg_img">
+<div id="content">
+    <ul class="options">
+        <volist name="result" id="rows" key="key">
+            <li>
+                <span>{$key}</span>
+                <dl style="display: none">
+                    <volist name="rows" id="city">
+                        <dd >{$city}</dd>
+                    </volist>
+                </dl>
+            </li>
+        </volist>
+    </ul>
+</div>
+</body>
+</html>

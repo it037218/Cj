@@ -1,0 +1,1 @@
+<?php	include_once("./libs/Smarty.class.php");	define("__SITE_ROOT__", "./");	$tpl = new Smarty();	$tpl->template_dir = __SITE_ROOT__ . "/templates/";	$tpl->compile_dir = __SITE_ROOT__ . "/templates_c/";	$tpl->config_dir = __SITE_ROOT__ . "/configs/";	$tpl->cache_dir = __SITE_ROOT__ . "/cache/";	$tpl->left_delimiter = "<{";	$tpl->right_delimiter = "}>";

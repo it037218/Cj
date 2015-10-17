@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1.0 ,maximum-scale=1.0,minimum-scale=1.0,  user-scalable=no" name="viewport">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/index.css?v=0.04">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/detail.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/animate.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/common.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/member.css">
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <title>悬赏列表</title>
+    <script>
+        $(function(){
+            $(".bought").click(function(){
+                $(this).removeClass("off").addClass("on");
+                $(".unbought").removeClass("on").addClass("off")
+                $(".key_buy_yes").show();
+                $(".key_buy_no").hide()
+            })
+            $(".unbought").click(function(){
+                $(this).removeClass("off").addClass("on");
+                $(".bought").removeClass("on").addClass("off")
+                $(".key_buy_no").show();
+                $(".key_buy_yes").hide()
+            })
+        })
+    </script>
+</head>
+<body>
+<div id="main_content">
+    <div class="index-menu">
+        <div class="option "><a href="{:U('/addon/Chengjiaojia/Wanted/getList')}">招标榜</a></div>
+        <div class="option yes ">我的招标</div>
+        <div class="option"><a href="{:U('/addon/Chengjiaojia/Wanted/getUserWantedList')}">我的投标</a></div>
+    </div>
+    <div class="content_header">
+        <div class="fl on tab_item unbought">
+            <span class="fl tab_title">最新悬赏</span>
+            <span class="fr num">共{$unBought.total}</span>
+        </div>
+        <div class="fl off tab_item bought">
+            <span class="fl tab_title">历史悬赏</span>
+            <span class="fr num">共{$Bought.total}</span>
+        </div>
+    </div>
+
+    <!--发布线索详情-->
+    <!--未被购买-->
+
+    <div class="key_show_list key_buy_no">
+        <volist name="unBought['rows']" id="rows">
+            <div class="key_list_detail list">
+                <a href="{:U('getWantedDetail',array('id'=>$rows['id']))}" class="block">
+                    <div class="fl key_img">
+                        <img src="{:CUSTOM_TEMPLATE_PATH}/public/images/logo/bmw.jpg" >
+                    </div>
+                    <div class="fl key_detail">
+                        <div class="key_detail_view">
+                            <p class="bold">{$rows.brand}{$rows.series}</p>
+                            <p>购车时间：<span>{$rows.time_limit}</span></p>
+                            <p>发布时间：<span>{$rows.create_time|substr=0,10}</span></p>
+                        </div>
+                    </div>
+                    <div class="fr arrow">
+                    </div>
+                </a>
+            </div>
+        </volist>
+    </div>
+
+    <!--已被购买-->
+    <div class="key_show_list key_buy_yes" style="display:none">
+
+        <volist name="Bought['rows']" id="rows">
+
+            <div class="key_list_detail list">
+                <a href="{:U('getWantedDetail',array('id'=>$rows['id']))}" class="block">
+                <div class="fl key_img">
+                    <img src="{:CUSTOM_TEMPLATE_PATH}/public/images/logo/bmw.jpg" >
+                </div>
+                <div class="fl key_detail">
+                    <div class="key_detail_view">
+                        <p class="bold">{$rows.brand}{$rows.series}</p>
+                        <p>购车时间：<span>{$rows.time_limit}</span></p>
+                        <p>发布时间：<span>{$rows.create_time|substr=0,10}</span></p>
+                    </div>
+                </div>
+                <div class="fr arrow">
+
+                </div>
+                    </a>
+            </div>
+        </volist>
+    </div>
+
+</div>
+<include file="./Addons/Chengjiaojia/View/public/footer.html" />
+</body>
+</html>

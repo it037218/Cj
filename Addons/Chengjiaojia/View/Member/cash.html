@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/common.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/animate.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/jquery.message.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/trade.css">
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery.message.min.js"></script>
+
+    <title>橙蕉豆 提现</title>
+    <script>
+        $(function(){
+            $(".bank-account").keyup(function(){
+                var inputValue = $(this).val();
+                $(this).val(inputValue.replace(/\D/g,""));
+            })
+            $("#account").keyup(function(){
+                var inputValue = $(this).val();
+                $(this).val(inputValue.replace(/\D/g,""));
+            })
+            $(".cash-confirm").bind("touchstart",function(){
+                $(".cash-row input").blur();
+                var bank_account = $(".bank-account").val();
+                var bank_name = $(".bank-name").val();
+                var cash_name = $(".cash-name").val();
+                var account = parseInt($("#account").val());
+                var re = /^\d{16}|\d{19}$/;
+                if(bank_account.length == 0){
+                    $().message("请输入银行卡号")
+                    return
+                }else if(bank_name.length == 0){
+                    $().message("请输入开户行")
+                    return
+                }else if(cash_name.length == 0){
+                    $().message("请输入收款人姓名")
+                    return
+                }else if($.trim(account).length == 0){
+                    $().message("请先输入提现金额")
+                    return
+                }else if(account % 100 != 0){
+                    $().message("金额须为100的倍数")
+                    return
+                }else if(!re.test(bank_account)){
+                    $().message("请输入正确的银行账号")
+                    return
+                }else if(account > "{$use_account}"){
+                    $().message("提现金额超过可用金额")
+                    return
+                }
+                $(".trade-money").html("￥"+account.toFixed(2))
+
+
+                var WHeight = $(window).height()
+                var THeight = $(".trade-code").height()
+
+                var WWidth = $(window).width();
+                var TWidth = $(".trade-code").width();
+
+                $(".trade-code").css({"top":(WHeight-THeight)/6,"left":(WWidth-TWidth)/2})
+                $('.trade-code').show()
+                $('.trade-code').addClass('animated fadeIn');
+                $(".cover").show()
+                $(".keyboard").show()
+                $(".keyboard").addClass('animated slideInUp');
+            })
+
+            $(".close").bind("touchstart",function(){
+                $(".trade-code").hide();
+                $(".cover").hide()
+                $(".keyboard").hide();
+            })
+
+            $(".pwd").keyup(function(){
+                var content = $(this).val();
+                $(this).css("fontSize","38")
+                var rep = content.replace(/./g,'●')
+                $(this).val(rep);
+                var length = $(this).val().length;
+                if(length == 6){
+                    $(this).blur();
+                }
+                $(".trade-pwd span").text(content)
+            })
+            $(".keyboard div").bind("touchstart",function(){
+                $(this).css("backgroundColor","#cccccc")
+            })
+            $(".keyboard div").bind("touchend",function(){
+                $(this).css("backgroundColor","#ffffff")
+            })
+        })
+
+    </script>
+</head>
+<body>
+    <!--遮罩层-->
+    <div class="cover">
+    </div>
+    <!--交易密码输入-->
+    <div class="trade-code" style="display: none">
+        <div>
+            <div class="close">
+            </div>
+            <div class="trade-title">
+                请输入交易密码
+            </div>
+            <div class="trade-text">
+                提现
+            </div>
+            <div class="trade-money">
+
+            </div>
+            <div class="trade-pwd">
+                <!--<input type="tel" name="pwd" class="pwd" autofocus="autofocus" maxlength="6" value="">-->
+                <input type="hidden" id="pwd-value" value="">
+                <div class="pwd-content">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="cash-contain">
+        <div class="cash-row">
+            <span class="bold">
+                银行卡号
+            </span>
+
+            <input type="tel" placeholder="请输入银行卡号" class="bank-account">
+        </div>
+        <div class="cash-row">
+            <span class="bold">
+                开户行
+                </span>
+            <input type="text" placeholder="请输入开户行" class="bank-name">
+        </div>
+        <div class="cash-row">
+            <span class="bold">
+                收款人
+                </span>
+            <input type="text" placeholder="请输入姓名" class="cash-name">
+        </div>
+        <div class="cash-row">
+            <span class="bold">
+                金额
+                </span>
+            <input type="tel" placeholder="当前余额{$use_account}橙蕉豆" id="account">
+        </div>
+    </div>
+    <p class="cash-notice">您本月还可提现 <span >{$num} </span>次，单笔金额须为100的倍数。</p>
+    <div class="cash-confirm">
+        下一步
+    </div>
+    <div class="keyboard">
+        <div  data="1">1</div>
+        <div  data="1">2</div>
+        <div  data="1">3</div>
+        <br>
+        <div  data="1">4</div>
+        <div  data="1">5</div>
+        <div  data="1">6</div>
+        <br>
+        <div  data="1">7</div>
+        <div  data="1">8</div>
+        <div  data="1">9</div>
+        <br>
+        <div  data="2" class="grey">C</div>
+        <div  data="1">0</div>
+        <div  data="3" class="grey del"></div>
+    </div>
+    <script>
+        //        function demo(obj,tip) {
+        $(function(){
+
+            $(".keyboard div").bind("touchstart",function(){
+                var tip = $(this).attr("data")
+                var obj = $(this)
+                var length = $("#pwd-value").val().length;
+                if(length >= 6){
+                    return false;
+                }
+                if (tip == 1) {
+                    var con = document.getElementById('pwd-value').value;
+                    document.getElementById('pwd-value').value = con + $(this).html();
+                    $(".pwd-content").append(" <span>●</span>");
+                } else if (tip == 2) {
+                    document.getElementById('pwd-value').value = "";
+                    $(".pwd-content").empty();
+                } else if (tip == 3) {
+                    var con = document.getElementById('pwd-value').value;
+                    document.getElementById('pwd-value').value = con.slice(0, -1);
+                    $(".pwd-content").find("span").last().remove();
+                }
+
+                var current_length = $("#pwd-value").val().length;
+                if(current_length == 6){
+                    $(".trade-code").hide();
+                    $(".cover").hide();
+                    $(".keyboard").hide();
+
+                    var pwd = $("#pwd-value").val();
+                    var account = $("#account").val();
+                    $("#pwd-value").val("");
+                    $(".pwd-content").empty();
+                    $.post(
+                            "{:U('cashConfirm')}",
+                            {
+                                "pwd":pwd,
+                                "account":account
+                            },
+                            function(data){
+                                if(data == -1){
+                                    alert("交易密码错误，请重新输入")
+                                    return
+                                }else if(data == 1){
+                                    alert("提现成功。")
+                                    setInterval(function(){
+                                        window.location.href = "{:U('cashResult')}"
+                                    },500)
+                                    return
+                                }else if(data == -2){
+                                    alert("当前可用橙蕉豆不足，提现失败！");
+                                    return
+                                }else if(data == -3){
+                                    alert("您当月提现次数已超过三次。请下月再试！ß")
+                                    return
+                                }else{
+                                    alert("提现失败")
+                                    return
+                                }
+
+                            }
+                    )
+                }
+            })
+        })
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/reg.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/member.css">
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery.message.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/jquery.message.css">
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/wx.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <!--<script src="{:CUSTOM_TEMPLATE_PATH}/public/js/reg.js"></script>-->
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/uploadCard.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/card.js"></script>
+    <title>实名认证</title>
+    <style>
+        input[type='text']{
+            border:none;
+            height: 80px;
+            line-height: 80px;
+            margin-top: 10px;
+            font-size: 28px;
+            text-align: right;
+            margin-right: 35px;
+            width: 220px;
+            padding: 0 10px;
+        }
+        #uploadImage{
+            border-radius: 10px;
+        }
+        .shop .content{
+            width:350px;
+            word-break:keep-all;
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+<div id="main_content" style="position: relative">
+    <ul class="member_profile">
+        <li class="column name">
+            <div class="choose_area">
+                <div class="fl label">
+                    真实姓名
+                </div>
+                <div class="fr content">
+                    <input type="text" name="name" style="width: 290px" value="" placeholder="请填写您的真实姓名">
+                </div>
+            </div>
+        </li>
+        <li class="column card_number">
+            <div class="choose_area">
+                <div class="fl label">
+                    身份证号
+                </div>
+                <div class="fr content">
+                    <input type="text" style="width: 290px" name="card_number"  value="" placeholder="请输入18位身份证号">
+                </div>
+            </div>
+        </li>
+        <li class="column area" >
+            <div class="choose_area">
+                <div class="fl label">
+                    所在地
+                </div>
+                <div class="fr arrow"></div>
+                <div class="fr content">
+                    请选择
+                </div>
+                <input type="hidden" name="city" value="">
+                <input type="hidden" name="city_id" value="">
+                <input type="hidden" name="district" value="">
+            </div>
+        </li>
+        <li class="column brand">
+            <div class="choose_area">
+                <div class="fl label">
+                    销售品牌
+                </div>
+                <div class="fr arrow"></div>
+                <div class="fr content">
+                    请选择
+                </div>
+                <input type="hidden" name="brand_id" value="">
+                <input type="hidden" name="brand" value="">
+            </div>
+        </li>
+        <li class="column shop">
+            <div class="choose_area">
+                <div class="fl label">
+                    所在4S店
+                </div>
+                <div class="fr arrow"></div>
+                <div class="fr content">
+                    请选择
+                </div>
+                <input type="hidden" name="shop" value="">
+            </div>
+        </li>
+    </ul>
+
+    <div class="card_area">
+        <p style="margin-top:25px;font-size: 32px;display: block">实名认证</p>
+        <div class="card fl" id="card1">
+            <div class="card_image card1"><img src="{:CUSTOM_TEMPLATE_PATH}/public/images/uploadImg.jpg"></div>
+            <input type="hidden" name="card1" value="">
+            <p>身份证（正面）</p>
+        </div>
+        <div class="card fl" id="card2">
+            <div class="card_image card2">
+                <img src="{:CUSTOM_TEMPLATE_PATH}/public/images/uploadImg.jpg">
+                <!--<div><img src="{:CUSTOM_TEMPLATE_PATH}/public/images/uploadImg.jpg" width="305" height="190"></div>-->
+            </div>
+            <input type="hidden" name="card2" value="">
+            <p>身份证（反面）</p>
+        </div>
+        <div class="card fl" id="card3">
+            <div class="card_image card3"><img src="{:CUSTOM_TEMPLATE_PATH}/public/images/uploadImg.jpg"></div>
+            <input type="hidden" name="card3" value="">
+            <p>4S店名片</p>
+        </div>
+    </div>
+    <img src="{:CUSTOM_TEMPLATE_PATH}/public/images/liucheng.jpg" style="width: 100%;">
+    <div class="confirm_btn">
+        <a href="#">实名认证</a>
+    </div>
+</div>
+<script>
+    var URL = "{:U('/addon/Chengjiaojia/System/sign')}";
+    var uploadUrl = "{:U('/addon/Chengjiaojia/System/wxUpoloadImage')}";
+    var images = {
+        localId: [],
+        serverId: []
+    };
+    $(function(){
+        //设置确认按钮的高度
+        var name_s = $.trim(sessionStorage.getItem("name"));
+        var card_number_s = $.trim(sessionStorage.getItem("card_number"));
+        var shop_s = $.trim(sessionStorage.getItem("shop"));
+        var shop_brand_s = $.trim(sessionStorage.getItem("brand"));
+        var shop_brand_id_s = $.trim(sessionStorage.getItem("brand_id"));
+        var city_s = $.trim(sessionStorage.getItem("city"));
+        var district_s = $.trim(sessionStorage.getItem("district"))
+        var city_id = $.trim(sessionStorage.getItem("city_id"))
+        if(card_number_s != undefined && card_number_s.length != 0){
+            $("input[name='card_number']").val(card_number_s)
+        }
+        if(name_s != undefined && name_s.length != 0){
+            $("input[name='name']").val(name_s)
+        }
+        if(shop_s != undefined && shop_s.length != 0){
+            $(".shop .content").text(shop_s)
+            $("input[name='shop']").val(shop_s);
+        }
+        if(shop_brand_s != undefined && shop_brand_s.length != 0){
+            $(".brand .content").text(shop_brand_s)
+            $("input[name='brand']").val(shop_brand_s);
+            $("input[name='brand_id']").val(shop_brand_id_s);
+            var brand_now = sessionStorage.getItem("brand_now")
+            if(shop_brand_s != brand_now && brand_now != null){
+                $(".shop .content").text("请选择所在4S店");
+                $("input[name='shop']").val("");
+            }
+        }
+        if(city_s != undefined && city_s.length != 0){
+            $(".area .content").text(city_s+district_s)
+            $("input[name='city']").val(city_s);
+            $("input[name='district']").val(district_s);
+            $("input[name='city_id']").val(city_id);
+            var city_now = sessionStorage.getItem("city_now")
+            if(city_s != city_now && city_now != null){
+                $(".shop .content").text("请选择所在4S店");
+                $("input[name='shop']").val("")
+            }
+        }
+
+        //地址选择
+        $(".area").click(function(){
+            var city_now = $.trim($(this).find("input[name='city']").val())
+            sessionStorage.setItem("city_now",city_now);
+            var brand_now = $.trim($(".brand").find(".content").text())
+            sessionStorage.setItem("brand_now",brand_now);
+            window.location.href="{:U('/addon/Chengjiaojia/Public/city')}"
+        })
+        //销售品牌
+        $(".brand").click(function(){
+            var city_now = $.trim($(".area").find("input[name='city']").val())
+            sessionStorage.setItem("city_now",city_now);
+            var brand_now = $.trim($(this).find(".content").text())
+            sessionStorage.setItem("brand_now",brand_now);
+            window.location.href="{:U('/addon/Chengjiaojia/Public/shop_brand')}"
+        })
+        //所属4s店
+        $(".shop").click(function(){
+            var city = $("input[name='city']").val();
+            var city_id = $("input[name='city_id']").val();
+
+            var brand = $("input[name='brand']").val();
+            var brand_id = $("input[name='brand_id']").val();
+            if( city.length== 0){
+                $().message("请先选择所在地区");
+                return
+            }else{
+                var city_now = $.trim($(".area").find("input[name='city']").val())
+                sessionStorage.setItem("city_now",city_now);
+                var brand_now = $.trim($(".brand").find(".content").text())
+                sessionStorage.setItem("brand_now",brand_now);
+                window.location.href="{:U('/addon/Chengjiaojia/Public/shop/cityid/"+city_id+"/brandid/"+brand_id+"')}"
+            }
+        })
+
+        //记录用户真实姓名
+        $("input[name='name']").blur(function(){
+            var name =  $("input[name='name']").val()
+            sessionStorage.setItem("name",name);
+        });
+
+        //记录用户身份证号
+        $("input[name='card_number']").blur(function(){
+            var card_number =  $("input[name='card_number']").val()
+            sessionStorage.setItem("card_number",card_number);
+        });
+
+        var clickStatus = true;
+        //提交信息
+        $(".confirm_btn").bind("touchstart",function(){
+            if(clickStatus == false){
+                return;
+            }else{
+
+                var card_id1 = $("input[name='card1']").val();
+                var card_id2 = $("input[name='card2']").val();
+                var business_card = $("input[name='card3']").val();
+                var name = $("input[name='name']").val();
+                var shop = $("input[name='shop']").val();
+                var brand_id = $("input[name='brand_id']").val();
+                var brand = $("input[name='brand']").val();
+                var city_id = $("input[name='city_id']").val();
+                var city = $("input[name='city']").val();
+                var avatar = $("input[name='avatar']").val();
+                var district = $("input[name='district']").val()
+
+                var patrn = /^[\u4e00-\u9fa5 ]{2,20}$/;
+                var nameCheck = patrn.test(name)
+
+                var card_number = $("input[name='card_number']").val();
+//                var res = IdentityCodeValid(card_number);
+                if(card_number.length == 0){
+                    $().message("请输入身份证号");
+                    return false;
+                }
+//                if(res == false){
+//                    $().message("请输入正确的身份证号");
+//                    return false;
+//                }
+
+
+                if(card_id1.length == 0 || card_id2.length == 0 || business_card.length == 0){
+                    $().message("请上传相关证件照片")
+                    return
+                }else if(name.length == 0 || nameCheck == false){
+                    $().message("请输入您的真实姓名")
+                    return
+                }else{
+                    $.post(
+                            "{:U('editApply')}",
+                            {
+                                realname:name,
+                                card_number:card_number,
+                                city_id:city_id,
+                                city:city,
+                                district:district,
+                                shop:shop,
+                                brand_id:brand_id,
+                                brand:brand,
+                                card_id1:card_id1,
+                                card_id2:card_id2,
+                                business_card:business_card,
+                            },
+                            function(data){
+                                clickStatus = true;
+                                if(data == 1){
+                                    $().message("信息修改提交完成！")
+                                    setInterval(function(){
+                                        window.location.href="{:U('ucenter')}";
+                                    },500)
+                                }else{
+                                    $().message("请输入正确信息")
+                                }
+                            }
+                    )
+                }
+            }
+
+        })
+    })
+</script>
+</body>
+</html>
+

@@ -1,0 +1,318 @@
+<{include file="header.html"}>
+<script src="js/key_view.js?v=0.1"></script>
+<link href="css/detail.css" rel="stylesheet">
+<style>
+    #card_pic{
+        border: 5px solid #CCCCCC;
+    }
+    #keyInfo td{
+        border:none!important;
+    }
+    #keyInfo table{
+        border-bottom: 1px solid #CCCCCC;
+    }
+</style>
+<script>
+    $(function(){
+        $("#Key").attr("aria-expanded",true).addClass("in");
+        $("#Key").siblings("a").css("backgroundColor","#000");
+    })
+
+</script>
+<body>
+<div class="cover" style="width: 100%;height: 100%;opacity: 0.5;display: none;z-index: 100;position: absolute;background-color: #000"></div>
+
+<div id="wrapper">
+    <{include file="nav.html"}>
+    <div id="page-wrapper">
+        <div class="container-fluid" style="position: relative">
+            <div id="card_container" style="position:absolute;background-color: #ffffff;z-index: 10000;display: none">
+                <div id="card_pic" >
+                    <img src="" id="card_pic1" style="float: left">
+                </div>
+            </div>
+            <!-- Page Heading -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <ol class="breadcrumb">
+                        <li>
+                            <i class="fa fa-dashboard"></i>  <a href="#">线索管理管理</a>
+                        </li>
+                        <li class="active">
+                            <i class="fa fa-table"></i> 线索管理
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th>编号</th>
+                                <th>发布时间</th>
+                                <th>发布人</th>
+                                <th>售价（橙蕉豆）</th>
+                                <th>客户名称</th>
+                                <th>购买地址</th>
+                                <th>品牌车系</th>
+                                <th>购车时间</th>
+                                <th>购买次数</th>
+                                <th>状态</th>
+                                <th>详情</th>
+                            </tr>
+                            </thead>
+                            <tbody id="verify_content">
+                            <{foreach from=$result item=rows}>
+                            <tr data="<{$rows.id}>">
+                                <td><{$rows.id}></td>
+                                <td><{$rows.create_time}></td>
+                                <td><{$rows.realname}></td>
+                                <td><{$rows.money}></td>
+                                <td><{$rows.custom_name}></td>
+                                <td><{$rows.city}><{$rows.district}></td>
+                                <td><{$rows.brand}><{$rows.series}></td>
+                                <td><{$rows.time_limit}></td>
+                                <td><{$rows.buy_times}></td>
+                                <td><{$rows.status}></td>
+                                <td><a href="#" onclick="view(<{$rows.id}>)">查看</a></td>
+                            </tr>
+                            <{/foreach}>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- /.row -->
+            <ul class="pagination">
+                <li><a href="<{$firstUrl}>" <{if $firstUrl == "#"}> class="disabled" <{/if}> >首页</a></li>
+                <li><a href="<{$preUrl}>" <{if $preUrl == "#"}> class="disabled" <{/if}>>&laquo;</a></li>
+                <li><a href="#" class="active disabled"><{$currentPage}></a></li>
+                <li><a href="<{$nextUrl}>" <{if $nexttUrl == "#"}> class="disabled" <{/if}>>&raquo;</a></li>
+                <li><a href="<{$lastUrl}>" <{if $lastUrl == "#"}> class="disabled" <{/if}>>末页</a></li>
+            </ul>
+            <div id="keyInfo" class="row col-lg-10" style="position: fixed;top: 10%;z-index:1001;display: none">
+                <div  class="col-lg-12">
+                    <div  class="panel panel-default">
+                        <div class="panel-heading">
+                            <span class="panel-title">详情</span>
+                            <span style="float:right;cursor: pointer" class="panel-close">返回</span>
+                        </div>
+                        <div class="panel-content">
+                            <div class="key-nav">
+                                <ul class="nav nav-tabs">
+                                    <li role="presentation" class="active" onclick="navChoose(this)"><a href="#num1">一次购买</a></li>
+                                    <li role="presentation" onclick="navChoose(this)" ><a href="#num2">二次购买</a></li>
+                                </ul>
+
+                            </div>
+
+                            <div class="panel-choose" id="num1">
+                                <table class="table" style="margin-top: 20px">
+                                    <tr>
+                                        <td rowspan="6" style="text-align: center">
+                                            <img src="./images/pic.jpg" width="100"/>
+                                            <br>卖家
+                                        </td>
+                                        <td>姓名：朱云峰111</td>
+                                        <td rowspan="6" style="text-align: center">
+                                            <img src="./images/pic.jpg" width="100"/>
+                                            <br>买家
+                                        </td>
+                                        <td>姓名：朱云峰</td>
+                                    </tr>
+                                    <tr>
+                                        <td>联系方式：18652362600</td>
+                                        <td>联系方式：18652362600</td>
+                                    </tr>
+                                    <tr>
+                                        <td>品牌：18652362600</td>
+                                        <td>品牌：18652362600</td>
+                                    </tr>
+                                    <tr>
+                                        <td>所在地：18652362600</td>
+                                        <td>所在地：18652362600</td>
+                                    </tr>
+                                    <tr>
+                                        <td>4S店：18652362600</td>
+                                        <td>4S店：18652362600</td>
+                                    </tr>
+                                    <tr>
+                                        <td>发布时间：18652362600</td>
+                                        <td>购买时间：18652362600</td>
+                                    </tr>
+
+                                </table>
+                                <table class="table">
+                                    <tr>
+                                        <td >
+                                            客户名称：林若炜
+                                        </td>
+                                        <td>
+                                            线索品牌：奔驰C级
+                                        </td>
+                                        <td>
+                                            购车地址：上海,浦东
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td >
+                                            联系方式：13661673982
+                                        </td>
+                                        <td>
+                                            购车时间：一个月内
+                                        </td>
+                                        <td>
+                                            线索状态：跟进中
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td >
+                                            价格：2000橙蕉豆
+                                        </td>
+                                        <td>
+                                            被购买次数：1
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                </table>
+
+                                <div class="key-desc" style="margin-top: 20px">
+                                    <div class="title">
+                                        线索详情
+                                    </div>
+                                    <div  class="content">
+                                        fbjkngjengjklwnfkljEGFJKnefjkNWEG
+                                    </div>
+                                </div>
+
+                                <div class="key-desc">
+                                <div class="title">
+                                    评价详情
+                                </div>
+                                <div class="content">
+                                    <div>CC超人于2015.10.01,12:00评价</div>
+                                    fbjkngjengjklwnfkljEGFJKnefjkNWEG
+                                </div>
+                            </div>
+                            </div>
+
+                            <div class="panel-choose" id="num2" style="display: none">
+                                <table class="table" style="margin-top: 20px">
+                                    <tr>
+                                        <td rowspan="6" style="text-align: center">
+                                            <img src="./images/pic.jpg" width="100"/>
+                                        </td>
+                                        <td>姓名：朱云峰</td>
+                                        <td rowspan="6" style="text-align: center">
+                                            <img src="./images/pic.jpg" width="100"/>
+                                        </td>
+                                        <td>姓名：朱云峰</td>
+                                    </tr>
+                                    <tr>
+                                        <td>联系方式：18652362600</td>
+                                        <td>联系方式：18652362600</td>
+                                    </tr>
+                                    <tr>
+                                        <td>品牌：18652362600</td>
+                                        <td>品牌：18652362600</td>
+                                    </tr>
+                                    <tr>
+                                        <td>所在地：18652362600</td>
+                                        <td>所在地：18652362600</td>
+                                    </tr>
+                                    <tr>
+                                        <td>4S店：18652362600</td>
+                                        <td>4S店：18652362600</td>
+                                    </tr>
+                                    <tr>
+                                        <td>发布时间：18652362600</td>
+                                        <td>购买时间：18652362600</td>
+                                    </tr>
+                                    <!--<tr><td colspan="3">昵称：紫焰</td></tr>-->
+                                    <!--<tr><td colspan="3">昵称：紫焰</td></tr>-->
+                                    <!--<tr><td colspan="3">昵称：紫焰</td></tr>-->
+                                    <!--<tr><td colspan="3">昵称：紫焰</td></tr>-->
+                                    <!--<tr>-->
+                                    <!--<td class="col-lg-3" style="overflow: hidden;height: 30%"><a href="#" onclick="check_card(this)"><img class="col-lg-12" src="http://mp.chengjiao8.cn/Uploads/Avatar/bab6837a-9ac9-807d-87ff-bd342f51a342.jpg"></a></td>-->
+                                    <!--<td class="col-lg-3" style="overflow: hidden;height: 30%"><a href="#" onclick="check_card(this)"><img class="col-lg-12" src="http://mp.chengjiao8.cn/Uploads/Avatar/bab6837a-9ac9-807d-87ff-bd342f51a342.jpg"></a></td>-->
+                                    <!--<td class="col-lg-3" style="overflow: hidden;height: 30%"><a href="#" onclick="check_card(this)"><img class="col-lg-12" src="http://mp.chengjiao8.cn/Uploads/Avatar/bab6837a-9ac9-807d-87ff-bd342f51a342.jpg"></a></td>-->
+                                    <!--</tr>-->
+                                    <!--<td colspan="2"></td>-->
+                                    <!--<td>-->
+                                    <!--<input type="hidden" name="user_id" value="">-->
+                                    <!--<button type="button" class="btn btn-default verify-no" style="width: 48%" >不通过</button>-->
+                                    <!--<button type="button" class="btn btn-primary verify-yes" style="width: 48%">通过</button>-->
+
+                                    <!--</td>-->
+                                    <!--</tr>-->
+                                </table>
+                                <table class="table">
+                                    <tr>
+                                        <td >
+                                            客户名称：林若炜
+                                        </td>
+                                        <td>
+                                            线索品牌：奔驰C级
+                                        </td>
+                                        <td>
+                                            购车地址：上海,浦东
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td >
+                                            联系方式：13661673982
+                                        </td>
+                                        <td>
+                                            购车时间：一个月内
+                                        </td>
+                                        <td>
+                                            线索状态：跟进中
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td >
+                                            价格：2000橙蕉豆
+                                        </td>
+                                        <td>
+                                            被购买次数：1
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                </table>
+
+                                <div class="key-desc" style="margin-top: 20px">
+                                    <div class="title">
+                                        线索详情
+                                    </div>
+                                    <div  class="content">
+                                        fbjkngjengjklwnfkljEGFJKnefjkNWEG
+                                    </div>
+                                </div>
+
+                                <div class="key-desc">
+                                    <div class="title">
+                                        评价详情
+                                    </div>
+                                    <div class="content">
+                                        <div>CC超人于2015.10.01,12:00评价</div>
+                                        fbjkngjengjklwnfkljEGFJKnefjkNWEG
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+
+    </div>
+
+</div>
+</body>
+
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>线索评价</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/common.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/jquery.message.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/judge.css">
+
+    <!--<script type="text/javascript" src="js/zepto.min.js"></script>-->
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery.message.min.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <!--script src="js/index.js"></script-->
+    <script type="text/javascript">
+        $(function(){
+            //确认发布线索
+            $("textarea").keyup(function(){
+                var textarea = $(this).val();
+                var  length = textarea.length;
+                $(this).parent().siblings(".judge-word").find("span").text(length)
+                if(length == 150){
+                    return false;
+                }
+
+            })
+            $(".confirm_btn").click(function(){
+
+            })
+
+            $(".judge-title .yes").bind("touchstart",function(){
+                $(this).find(".select-button").addClass("active");
+                $(this).siblings().find(".select-button").removeClass("active")
+                $(".judge-yes").show().siblings().hide()
+            })
+            $(".judge-title .no").bind("touchstart",function(){
+                $(this).find(".select-button").addClass("active");
+                $(this).siblings().find(".select-button").removeClass("active")
+                $(".judge-no").show().siblings().hide()
+            })
+            var key_id = "{$id}";
+            var judge_status = "";
+            $(".judge-yes .judge-confirm").bind("touchstart",function(){
+                var judge_status = 1;
+                var judge_reason = $(".judge-yes textarea").val();
+                var result = true;
+                if(judge_reason.length == 0){
+                    $().message("请先填写评价理由");
+                    return
+                }else{
+                    $.post(
+                            "{:U('judge')}",
+                            {
+                                "key_id":key_id,
+                                "judge_status":judge_status,
+                                "judge_reason":judge_reason,
+                                "result":result
+                            },
+                            function(data){
+                                if(data == 1){
+                                    $().message("评价成功")
+                                    setInterval(
+                                            function(){
+                                                window.location.href="{:U('boughtKeyList')}"
+                                            }, 500)
+
+                                }else{
+                                    $().message("评价失败")
+                                }
+                            }
+
+
+                    )
+                }
+            })
+
+            $(".judge-no .judge-confirm").bind("touchstart",function(){
+                var judge_status = 2;
+                var judge_reason = $(".judge-no textarea").val();
+                var result = false
+                        ;
+                if(judge_reason.length == 0){
+                    $().message("请先填写评价理由");
+                    return
+                }else{
+                    $.post(
+                            "{:U('judge')}",
+                            {
+                                "key_id":key_id,
+                                "judge_status":judge_status,
+                                "judge_reason":judge_reason,
+                                "result":result
+                            },
+                            function(data){
+                                if(data == 1){
+                                    $().message("评价成功")
+                                    setInterval(
+                                            function(){
+                                                window.location.href="{:U('boughtKeyList')}"
+                                            }, 500)
+                                }else{
+                                    $().message("评价失败")
+                                }
+                            }
+
+
+                    )
+                }
+            })
+
+        })
+    </script>
+
+</head>
+<body>
+<div id="judge_contain">
+    <div class="judge-title">
+        <div class="yes judge-selection">
+            <div class="select-button active">线索成交</div>
+        </div>
+        <div class="no judge-selection">
+            <div class="select-button">线索未成交</div>
+        </div>
+    </div>
+    <div class="judge-contain">
+        <div class="judge-yes judge-content">
+            <div class="judge-main">
+                <div class="font">
+                    评价：
+                </div>
+                <div class="judge-text">
+                    <textarea placeholder="写点什么吧"></textarea>
+                </div>
+                <div class="judge-word">
+                    <span>0
+                    </span>/150
+                </div>
+            </div>
+            <p>
+                确认客户线索成交后，您压付的橙蕉豆将转入对方账户。
+
+            </p>
+            <div class="judge-confirm">
+                确定提交
+            </div>
+        </div>
+        <div class="judge-no judge-content" style="display: none">
+            <div class="judge-main">
+                <div class="font">
+                    原因：
+                </div>
+                <div class="judge-text">
+                    <textarea placeholder="写点什么吧"></textarea>
+                </div>
+                <div class="judge-word">
+                    <span>0
+                    </span>/150
+                </div>
+            </div>
+            <p>
+                提交后，橙蕉豆将退还至您的账户，但卖房可对此交易提出疑义，平台将对此次交易做出审核,如有任何违规作弊行为，平台将做出惩罚。
+
+            </p>
+            <div class="judge-confirm">
+                确定提交
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

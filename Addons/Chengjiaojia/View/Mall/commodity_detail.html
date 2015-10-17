@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>线索列表</title>
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+        <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/index.css?v=0.04">
+        <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+        <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/animate.css">
+        <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/detail.css">
+        <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/common.css">
+        <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/mall.css">
+        <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+        <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery.message.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/jquery.message.css">
+        <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+
+        <script>
+            $(function(){
+                $("#buy_now").click(function(){
+
+                    $(".cover").show();
+
+                    $("#buy_confirm").show();
+
+                    //屏幕宽度
+                    var xWidth = parseInt($(window).width());
+                    var yHeight = parseInt($(window).height());
+
+                    //弹出框宽度
+                    var cWidth = parseInt($("#buy_confirm").width())
+                    var cHeight = parseInt($("#buy_confirm").height())
+                    $("#buy_confirm").css({"left":(xWidth-cWidth)/2,"top":(yHeight-cHeight)/2})
+
+                })
+
+                $(".cancel").click(function(){
+                    $("#buy_confirm").hide();
+                    $(".cover").hide();
+                })
+
+                var clickStatus = true
+                $(".confirm_operation .yes").bind("touchstart",function(){
+                    if(clickStatus != true){
+                        return false;
+                    }else{
+                        clickStatus = false;
+                        var commodity_id = "{$result.id}";
+                        var num = "{$result.realtime_number}"
+
+                        if(parseInt(num) <= 0){
+                            $().message("该商品已售完")
+                            return;
+                        }else{
+                            $.post(
+                                    "{:U('exchange')}",
+                                    {
+                                        id:commodity_id
+                                    },
+                                    function(data){
+                                        if(data == -3){
+                                            $().message("您当天已兑换，明天再来兑换吧！")
+                                            return;
+                                        }else if(data == -1){
+                                            $().message("您的积分不够，请先去赚积分吧!")
+                                            return;
+                                        }else if(data == -2){
+                                            $().message("该商品已售完")
+                                            return
+                                        }else if(data == 1){
+//                                            $().message("你已成功兑换该商品")
+                                            var num = parseInt($("#realtime_number").text())
+                                            $("#realtime_number").text(num-1)
+                                            location.reload()
+                                        }else{
+                                            $().message("兑换失败")
+                                        }
+
+                                    }
+                            )
+                        }
+                    }
+                })
+            })
+        </script>
+
+        <style>
+            .over{
+                background-color: #cccccc!important;
+                color: #FFFFFF;
+            }
+            #buy_confirm{
+                background-color: #FFFFFF!important;
+            }
+            #buy_confirm *{
+                color: #000000!important;
+            }
+            #buy_confirm .confirm_title div{
+                border-bottom: 2px solid #666!important;
+            }
+            .confirm_operation p{
+                border-top: 1px solid #666666!important;
+            }
+            .confirm_operation :first-child{
+                border-right: 1px solid #666666!important;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="cover">
+
+        </div>
+
+        <!--是否购买-->
+        <div id="buy_confirm" class="confirm" style="display:none">
+            <div class="confirm_title">
+                <div>确认购买</div>
+            </div>
+            <div class="confirm_content">
+                <p>当前积分：<span>{$credit}</span>
+                </p>
+                <p>扣除积分：<span>{$result.credit}</span>
+                </p>
+            </div>
+            <div class="confirm_operation">
+                <p class="cancel fl">取消</p>
+                <p class="yes fl">购买</p>
+            </div>
+        </div>
+        <div id="mall_content">
+
+            <div class="commodity_detail">
+                <div class="commodity_img">
+                    <img src="{$result.commodity_img}">
+                </div>
+                <div class="commodity_exchange">
+                    <div class="exchange_credit fl">
+                        <p style="margin-top: 30px;font-size: 30px">价值￥{$result.price}元</p>
+                        <p style="font-size: 50px;color: #ffaa00">{$result.credit}积分</p>
+                    </div>
+                    <div class="exchange_button fr">
+                        <if condition="$status eq 1">
+                            <span class="over">已抢购</span>
+                            <p>您已抢购</p>
+
+                        <elseif condition="($result.realtime_number gt 0) and ($status eq 0) and ($ready eq 1)" />
+                                <span><a href="#" id="buy_now">抢购</a></span>
+                            <!--<p>剩余：<label id="realtime_number">{$result.realtime_number}</label>份</p>-->
+
+                        <elseif condition ="$ready eq 0" />
+                            <span class="over">抢购</span>
+                            <p style="color: #999999;margin-top: 10px">10:00准时开抢</p>
+
+                        <else />
+                            <span class="over">已抢完</span>
+                            <p>请明天10:00再来</p>
+                        </if>
+                    </div>
+                </div>
+                <div class="commodity_desc">
+                    <p class="commodity_name">{$result.commodity_name}</p>
+                    <div style="margin-top: 20px">
+                        <p class="desc_title">礼品介绍</p>
+                        <p>1、活动时间：2015年6月9日-2015年12月31日</p>
+                        <p>2、使用范围：全国</p>
+                    </div>
+                    <div style="margin-top: 20px">
+                        <p class="desc_title">使用说明</p>
+                        <p>{$result.description}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

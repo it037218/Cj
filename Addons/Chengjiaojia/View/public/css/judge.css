@@ -1,0 +1,89 @@
+#judge_contain{
+    overflow: hidden;
+
+}
+#judge_contain .judge-title{
+    width: 100%;
+    height: 100px;
+    overflow: hidden;
+    background-color: #ffffff;
+}
+.judge-title .judge-selection{
+    width: 50%;
+    float: left;
+    height: 95px;
+}
+.judge-title .select-button{
+    width: 80%;
+    margin: 0 auto;
+    height: 100%;
+    line-height: 100px;
+    color: #999999;
+    font-size: 35px;
+    text-align: center;
+}
+.yes .active{
+    color: #FFB600;
+    border-bottom:5px solid #FFB600;
+}
+.no .active{
+    color: #ef1818;
+    border-bottom: 5px solid #ef1818;
+}
+.judge-contain {
+    margin-top: 40px;
+}
+.judge-contain .judge-main{
+    background-color: #ffffff;
+    width: 100%;
+    padding: 30px 0 40px 0;
+}
+.judge-contain .judge-main>div{
+    width: 90%;
+    margin: auto;
+}
+/*.judge-contain .judge-content{*/
+    /*width: 100%;*/
+    /*margin: 0 auto;*/
+/*}*/
+.judge-main .font{
+    font-size: 35px;
+    padding-bottom: 30px;
+}
+.judge-text textarea{
+    width: 95%;
+    height: 200px;
+    border: 1px solid #CCCCCC;
+    padding: 10px;
+    font-size: 32px;
+}
+.judge-content p{
+    display: block;
+    padding: 30px;
+}
+.judge-confirm{
+    height: 90px;
+    line-height: 90px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 35px;
+    color: #FFFFFF;
+    width: 610px;
+    border: none!important;
+    /* position: absolute; */
+    margin: 40px auto;
+    bottom: 0;
+}
+.judge-yes .judge-confirm{
+    background-color: #FFB600;
+}
+.judge-no .judge-confirm{
+    background-color: #ef1818;
+}
+.judge-word{
+    font-size: 30px;
+    color: #999999;
+    padding-right: 15px ;
+    width: 100%;
+    text-align: right;
+}

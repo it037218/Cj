@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/common.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/member.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/jquery.message.css">
+
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery.message.min.js"></script>
+
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/recharge.js"></script>
+    <title>手机号修改绑定</title>
+    <script type="text/javascript">
+        var href = "{$href}";
+        $(function(){
+            $(".confirm_btn").bind("touchstart",function(){
+                var telephone = $("input").val();
+                if(telephone.length === 0){
+                    $().message("请输入昵称")
+                    return;
+                }else{
+                    $.post(
+                            "{:U('editSave')}",
+                            {
+                                "telephone":telephone
+                            },
+                            function(data){
+                                if(data == 1){
+                                    $().message("修改手机号成功！");
+                                    setInterval(function(){
+                                        window.location.href = href;
+                                    },400)
+                                }else{
+                                    $().message("修改失败");
+                                    return
+                                }
+                            }
+
+
+                    )
+                }
+            })
+        })
+    </script>
+</head>
+<body>
+<div class="edit-content">
+        <span>
+            手机号
+        </span>
+    <div class="input">
+        <input type="text" placeholder="请输入手机号">
+    </div>
+</div>
+
+<div class="confirm_btn">
+    确认修改
+</div>
+</body>
+</html>

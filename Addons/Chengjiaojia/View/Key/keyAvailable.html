@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>选择线索</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/index.css?v=0.04">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/detail.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/animate.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/common.css">
+
+
+    <!--<script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/zepto.min.js"></script>-->
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <!--script src="js/index.js"></script-->
+    <script type="text/javascript"></script>
+    <script>
+        $(function(){
+            $(".key_list_detail").click(function(){
+                $($(this).find(".operation")).toggleClass("unmark").toggleClass("mark");
+            })
+
+            //确认揭榜
+            $(".confirm_btn").click(function(){
+                var keys = "";
+                var keyIds = [];
+                $(".operation").each(function(){
+                    if($(this).hasClass("mark")){
+                        var key_id = $(this).find("input").val();
+                        keyIds.push(key_id)
+                    }
+                })
+                keys = keyIds.join(",");
+                var wanted_id = "{$wanted_id}";
+                if(keys.length == 0){
+                    alert("请选择线索")
+                    return;
+                }else{
+                    $.post(
+                        "{:U('/addon/Chengjiaojia/Wanted/jieBang')}",
+                        {
+                            "wanted_id":wanted_id,
+                            "keys":keys
+                        },
+                        function(data){
+                            if(data > 0){
+                                alert("已成功投出"+data+"条线索")
+                                window.location.href="{:U('/addon/Chengjiaojia/Wanted/getUserWantedList')}"
+                            }else if(data == -3){
+                                alert("您不能投自己的悬赏")
+                                return
+                            }else{
+                                alert("您该条线索已经使用，请选择其他线索")
+                            }
+                        }
+                    )
+                }
+
+
+            })
+
+
+        })
+
+
+    </script>
+    <style>
+        input[type='checkbox']{
+            width: 50px;
+            height: 50px;;
+        }
+        .key_operation{
+            padding: 0!important;
+            width: 190px!important;
+        }
+
+        </style>
+</head>
+<body>
+<div>
+    <div id="key_list_content">
+
+        <div id="create_key">
+            <a href="{:U('publishJieBangKey',array('id'=>$wanted_id))}" class="block">
+            <span class="title">新建线索</span>
+            <span class="fr" style="margin-right: 35px;">+</span>
+            </a>
+        </div>
+
+        <div class="key_desc">
+            <div class="desc_title">
+                <span class="icon fl"></span>
+                <span class="text fl">我的发布</span>
+            </div>
+            <volist name="result" id="rows">
+                <div class="key_list_detail list" style="background-color: #fff">
+
+                    <div class="fl key_img">
+                        <img src="{:CUSTOM_TEMPLATE_PATH}/public/images/logo/{$rows.brand_logo}.jpg" >
+                    </div>
+                    <div class="fl key_detail">
+                        <div class="key_detail_view">
+                            <p class="bold">{$rows.series}</p>
+                            <p>购车时间：<span>{$rows.time_limit}</span></p>
+                            <p>线索准确率：<span></span></p>
+                        </div>
+                    </div>
+                    <div class="fr key_operation">
+                        <div class="operation unmark">
+                            <input type="hidden" name="id" value="{$rows.id}">
+                        </div>
+                    </div>
+                </div>
+            </volist>
+
+
+        </div>
+        <div class="confirm_btn">
+            揭榜
+
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

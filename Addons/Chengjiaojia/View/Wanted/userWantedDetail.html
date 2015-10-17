@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1.0 ,maximum-scale=1.0,minimum-scale=1.0,  user-scalable=no" name="viewport">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/index.css?v=0.04">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/detail.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/animate.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/common.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/member.css">
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <title>悬赏详情</title>
+    <style>
+
+
+    </style>
+</head>
+<body>
+<div id="main_content">
+    <!--线索简介-->
+    <div class="wanted_info">
+        <div class="fl logo">
+            <div>
+                <img src="{:CUSTOM_TEMPLATE_PATH}/public/images/logo/bmw.jpg" width="130">
+            </div>
+        </div>
+        <div class="fl text">
+            <p class="brand">所有车系</p>
+            <p class="">有效率要求：<span>{$result.custom_name}</span></p>
+            <p class="but_time">等级要求：LV.2</p>
+            <p class="but_time">购车城市：上海</p>
+            <p class="but_time">积分：50</p>
+
+            <p class="sned_time">发布时间：2015-06-06</p>
+            <!--<p class="sned_time">发布时间：{$result.create_time|substr=0,10}</p>-->
+        </div>
+        <div class="fr">
+        </div>
+    </div>
+    <div class="credit_manage_list">
+        <div class="credit_list_title">
+            <div class="credit_manage_title">
+                <span class="icon fl"></span>
+                <span class="text fl">揭榜单</span>
+            </div>
+        </div>
+    </div>
+    <div class="key_show_list key_buy_no">
+        <volist name="keys" id="rows">
+            <div class="key_list_detail list">
+                <a href="{:U('getWantedDetail',array('id'=>$rows['id']))}" class="block">
+                    <div class="fl key_img">
+                        <img src="{:CUSTOM_TEMPLATE_PATH}/public/images/logo/bmw.jpg" >
+                    </div>
+                    <div class="fl key_detail">
+                        <div class="key_detail_view">
+                            <p class="bold">{$rows.brand}{$rows.series}</p>
+                            <p>购车时间：<span>{$rows.time_limit}</span></p>
+                            <p>发布时间：<span>{$rows.create_time|substr=0,10}</span></p>
+                        </div>
+                    </div>
+                    <div class="fr arrow">
+                    </div>
+                </a>
+            </div>
+        </volist>
+    </div>
+
+</div>
+<include file="./Addons/Chengjiaojia/View/public/footer.html" />
+</body>
+</html>

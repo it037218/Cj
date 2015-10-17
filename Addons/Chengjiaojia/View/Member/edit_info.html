@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/reg.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/member.css">
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery.message.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/jquery.message.css">
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/wx.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/reg.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/uploadCard.js"></script>
+    <title>修改个人资料</title>
+    <style>
+        input[type='text']{
+            border:none;
+            height: 80px;
+            line-height: 80px;
+            margin-top: 10px;
+            font-size: 28px;
+            text-align: right;
+            margin-right: 35px;
+            width: 220px;
+            padding: 0 10px;
+        }
+        #uploadImage{
+            border-radius: 10px;
+        }
+        .shop .content{
+            width:350px;
+            word-break:keep-all;
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+<div id="main_content" style="position: relative">
+    <ul class="member_profile">
+        <li class="column name">
+            <div class="choose_area">
+                <div class="fl label">
+                    真实姓名
+                </div>
+                <div class="fr content">
+                    <input type="text" name="name" readonly value="{$userInfo.realname}" >
+                </div>
+            </div>
+        </li>
+        <li class="column card_number">
+            <div class="choose_area">
+                <div class="fl label">
+                    身份证号
+                </div>
+                <div class="fr content">
+                    <input type="text" name="card_number" readonly value="{$userInfo.card_number}" style="width: 300px">
+                </div>
+            </div>
+        </li>
+        <li class="column area" >
+            <div class="choose_area">
+                <div class="fl label">
+                    所在地
+                </div>
+                <div class="fr arrow"></div>
+                <div class="fr content">
+                    {$userInfo.city}{$userInfo.district}
+                </div>
+                <input type="hidden" name="city" value="{$userInfo.city}">
+                <input type="hidden" name="city_id" value="{$userInfo.city_id}">
+                <input type="hidden" name="district" value="{$userInfo.district}">
+            </div>
+        </li>
+        <li class="column brand">
+            <div class="choose_area">
+                <div class="fl label">
+                    销售品牌
+                </div>
+                <div class="fr arrow"></div>
+                <div class="fr content">
+                    {$userInfo.brand}
+                </div>
+                <input type="hidden" name="brand_id" value="{$userInfo.brand_id}">
+                <input type="hidden" name="brand" value="{$userInfo.brand}">
+            </div>
+        </li>
+        <li class="column shop">
+            <div class="choose_area">
+                <div class="fl label">
+                    所在4S店
+                </div>
+                <div class="fr arrow"></div>
+                <div class="fr content">
+                    {$userInfo.shop}
+                </div>
+                <input type="hidden" name="shop" value="{$userInfo.shop}">
+            </div>
+        </li>
+    </ul>
+
+    <div class="card_area">
+        <p style="margin-top:25px;font-size: 32px;display: block">名片修改</p>
+        <div class="card fl" id="card3">
+            <div class="card_image card3"><img src="{$userInfo.business_card}" style="width: 305px;height: 190px;"></div>
+            <input type="hidden" name="card3" value="{$userInfo.business_card}">
+            <p>4S店名片</p>
+        </div>
+    </div>
+    <img src="{:CUSTOM_TEMPLATE_PATH}/public/images/liucheng.jpg" style="width: 100%;">
+    <div class="confirm_btn">
+        <a href="#">提交修改</a>
+    </div>
+</div>
+<script>
+    var URL = "{:U('/addon/Chengjiaojia/System/sign')}";
+    var uploadUrl = "{:U('/addon/Chengjiaojia/System/wxUpoloadImage')}";
+    var images = {
+        localId: [],
+        serverId: []
+    };
+    $(function(){
+        //设置确认按钮的高度
+        var name_s = $.trim(sessionStorage.getItem("name"));
+        var shop_s = $.trim(sessionStorage.getItem("shop"));
+        var shop_brand_s = $.trim(sessionStorage.getItem("brand"));
+        var shop_brand_id_s = $.trim(sessionStorage.getItem("brand_id"));
+        var city_s = $.trim(sessionStorage.getItem("city"));
+        var district_s = $.trim(sessionStorage.getItem("district"))
+        var city_id = $.trim(sessionStorage.getItem("city_id"))
+        if(name_s != undefined && name_s.length != 0){
+            $("input[name='name']").val(name_s)
+        }
+        if(shop_s != undefined && shop_s.length != 0){
+            $(".shop .content").text(shop_s)
+            $("input[name='shop']").val(shop_s);
+        }
+        if(shop_brand_s != undefined && shop_brand_s.length != 0){
+            $(".brand .content").text(shop_brand_s)
+            $("input[name='brand']").val(shop_brand_s);
+            $("input[name='brand_id']").val(shop_brand_id_s);
+            var brand_now = sessionStorage.getItem("brand_now")
+            if(shop_brand_s != brand_now && brand_now != null){
+                $(".shop .content").text("请选择所在4S店");
+                $("input[name='shop']").val("");
+            }
+        }
+        if(city_s != undefined && city_s.length != 0){
+            $(".area .content").text(city_s+district_s)
+            $("input[name='city']").val(city_s);
+            $("input[name='district']").val(district_s);
+            $("input[name='city_id']").val(city_id);
+            var city_now = sessionStorage.getItem("city_now")
+            if(city_s != city_now && city_now != null){
+                $(".shop .content").text("请选择所在4S店");
+                $("input[name='shop']").val("")
+            }
+        }
+
+        //地址选择
+        $(".area").click(function(){
+            var city_now = $.trim($(this).find("input[name='city']").val())
+            sessionStorage.setItem("city_now",city_now);
+            var brand_now = $.trim($(".brand").find(".content").text())
+            sessionStorage.setItem("brand_now",brand_now);
+            window.location.href="{:U('/addon/Chengjiaojia/Public/city')}"
+        })
+        //销售品牌
+        $(".brand").click(function(){
+            var city_now = $.trim($(".area").find("input[name='city']").val())
+            sessionStorage.setItem("city_now",city_now);
+            var brand_now = $.trim($(this).find(".content").text())
+            sessionStorage.setItem("brand_now",brand_now);
+            window.location.href="{:U('/addon/Chengjiaojia/Public/shop_brand')}"
+        })
+        //所属4s店
+        $(".shop").click(function(){
+            var city = $("input[name='city']").val();
+            var city_id = $("input[name='city_id']").val();
+
+            var brand = $("input[name='brand']").val();
+            var brand_id = $("input[name='brand_id']").val();
+            if( city.length== 0){
+                $().message("请先选择所在地区");
+                return
+            }else{
+                var city_now = $.trim($(".area").find("input[name='city']").val())
+                sessionStorage.setItem("city_now",city_now);
+                var brand_now = $.trim($(".brand").find(".content").text())
+                sessionStorage.setItem("brand_now",brand_now);
+                window.location.href="{:U('/addon/Chengjiaojia/Public/shop/cityid/"+city_id+"/brandid/"+brand_id+"')}"
+            }
+        })
+
+
+        $("input[name='name']").blur(function(){
+            var name =  $("input[name='name']").val()
+            sessionStorage.setItem("name",name);
+        })
+
+        var clickStatus = true;
+        //提交信息
+        $(".confirm_btn").bind("touchstart",function(){
+            if(clickStatus == false){
+                return;
+            }else{
+                var business_card = $("input[name='card3']").val();
+                var name = $("input[name='name']").val();
+                var shop = $("input[name='shop']").val();
+                var brand_id = $("input[name='brand_id']").val();
+                var brand = $("input[name='brand']").val();
+                var city_id = $("input[name='city_id']").val();
+                var city = $("input[name='city']").val();
+                var avatar = $("input[name='avatar']").val();
+                var district = $("input[name='district']").val()
+                if(name.length == 0){
+                    $().message("请输入您的真实姓名")
+                    return
+                }else{
+                    $.post(
+                            "{:U('editApply')}",
+                            {
+                                realname:name,
+                                city_id:city_id,
+                                city:city,
+                                district:district,
+                                shop:shop,
+                                brand_id:brand_id,
+                                brand:brand,
+                                business_card:business_card
+                            },
+                            function(data){
+                                clickStatus = true;
+                                if(data == 1){
+                                    $().message("信息修改提交完成！")
+                                    setInterval(function(){
+                                        window.location.href = "{:U('ucenter')}"
+                                    },500)
+//                                        history.go(-1)
+                                }else{
+                                    $().message("请输入正确信息")
+                                }
+                            }
+                    )
+                }
+            }
+
+        })
+    })
+</script>
+</body>
+</html>
+

@@ -1,0 +1,101 @@
+#mall_content{
+    width: 100%;
+}
+.commodity_list{
+    width: 100%;
+    background-color: #FFFFFF;
+    overflow: hidden;
+    padding: 88px 0;
+}
+.commodity_list .commodity{
+    width: 50%;
+}
+
+.commodity_show{
+    display: block;
+    width: 300px;
+    margin: 0 auto;
+}
+
+.commodity_list .commodity_logo{
+    width: 300px;
+    height: 205px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.commodity_list .commodity img{
+    width:300px;
+    height: 205px;
+}
+.commodity_list .commodity_content{
+    width: 100%;
+    height: 80px;
+    line-height: 80px;
+    text-align: center;
+    font-size: 32px;
+}
+
+/*商品详情*/
+.commodity_detail .commodity_img{
+    background-color: #FFFFFF;
+}
+
+.commodity_exchange{
+    height: 200px;
+    width: 100%;
+    overflow: hidden;
+    border-bottom: 1px solid #cccccc;
+}
+.commodity_exchange .exchange_credit{
+    height: 100%;
+   width: 300px;
+}
+.commodity_exchange .exchange_button{
+    height: 100%;
+    margin-right: 40px;
+}
+.exchange_credit p{
+    padding-left: 45px;
+    height: 50px;
+    line-height: 50px;
+    text-align: left;
+}
+.exchange_button span a{
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: #FFFFFF;
+}
+.exchange_button span{
+    display: block;
+    width: 228px;
+    height: 76px;
+    line-height: 76px;
+    background-color: #ffaa00;
+    font-size: 40px;
+    text-align: center;
+    margin-top: 45px;
+    border-radius: 10px;
+}
+.exchange_button p{
+    margin-top: 20px;
+    text-align: center;
+    font-size: 30px;
+    color: #ffaa00;
+}
+
+/*礼品描述*/
+.commodity_desc{
+    /*width: 100%;*/
+    padding: 20px 45px 70px 45px;
+
+}
+.commodity_desc .commodity_name{
+    font-size: 32px;
+    height: 80px;
+    line-height: 80px;
+}
+.commodity_desc .desc_title{
+    height: 60px;
+    line-height: 60px;
+}

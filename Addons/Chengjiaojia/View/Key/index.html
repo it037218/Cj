@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>线索池</title>
+	<meta charset="utf-8">
+    <meta content=”width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0″ name=”viewport” />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+	<link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/index.css?v=0.04">
+	<link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+	<link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/detail.css">
+	<!--<link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/iscroll.css">-->
+
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery.raty.js"></script>
+	<script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+	<script src="{:CUSTOM_TEMPLATE_PATH}/public/js/index.js?v=0.01"></script>
+    <script>
+        var url ="{:U('index')}"
+
+        $(function(){
+        })
+
+
+    </script>
+    <style>
+        .current{
+            color: #FFFFFF;
+            height: 100px;
+            width: 100%;
+
+            background: url("{:CUSTOM_TEMPLATE_PATH}/public/images/yes3.png") no-repeat;
+        }
+    </style>
+</head>
+<body style="overflow-y:scroll;">
+    <div id="key_list_content">
+
+        <div class="index-menu">
+            <div class="option current">抢线索</div>
+            <div class="option" style="border-right: 1px solid #cccccc;width: 239px;height: 100px"><a href="{:U('/addon/Chengjiaojia/Key/publishList')}" class="block">发布的线索</a></div>
+            <div class="option"><a href="{:U('/addon/Chengjiaojia/Key/boughtKeyList')}" class="block"> 购买的线索</a></div>
+        </div>
+        <div class="key_list">
+            <div class="key1" style="">
+                <ul>
+                    <volist name="result" id = "row">
+                        <li>
+                        <div class="key_list_detail list">
+                            <a href="{:U('getKeyDetail',array('id'=>$row['id']))}" class="block">
+                                <div class="fl key_img">
+                                    <img src="{:CUSTOM_TEMPLATE_PATH}/public/images/logo/{$row.brand_logo}.jpg" >
+                                </div>
+                                <div class="fl key_detail">
+                                    <div class="key_detail_view">
+                                        <p class="bold"style="line-height: 50px;">{$row.series}</p>
+                                        <p  style="line-height: 50px;height: 45px">购车时间：<span>{$row.time_limit}</span></p>
+                                        <p>卖家信誉：<span class="key_rate_{$row.id} fr" style=""></span></p>
+                                        <script>
+                                            $(".key_rate_"+{$row.id}).raty({
+                                                path:"{:CUSTOM_TEMPLATE_PATH}/public/images",
+                                                readOnly:true,
+                                                size:14,
+                                                space:false,
+                                                score:"{$row['key_rate']}"
+                                            })
+                                        </script>
+                                    </div>
+                                </div>
+                                <div class="fr key_operation">
+
+                                    <div class="operation">
+                                        <p style="font-size: 30px;color: #000" class="bold"><span>{$row.money}</span></p>
+                                        <p style="font-weight:600;font-size: 26px!important;height: 30px;line-height: 30px;color: #FFB600">橙蕉豆</p>
+                                        <p style="text-align: right;font-size: 26px">{$row.city}{$row.district}</p>
+                                    </div>
+
+                                </div>
+                            </a>
+                        </div>
+                        </li>
+                    </volist>
+                    <volist name="rst" id = "row">
+                            <li>
+                                <div class="key_list_detail list">
+                                        <div class="fl key_img">
+                                            <img src="{:CUSTOM_TEMPLATE_PATH}/public/images/logo/{$row.brand_logo}.jpg" >
+                                        </div>
+                                        <div class="fl key_detail">
+                                            <div class="key_detail_view">
+                                                <p class="bold" style="">{$row.series}</p>
+                                                <p>购车时间：<span>{$row.time_limit}</span></p>
+                                                <p>卖家信誉：<span class="key_rate_{$row.id} fr" style=""></span></p>
+                                                <script>
+                                                    $(".key_rate_"+{$row.id}).raty({
+                                                        path:"{:CUSTOM_TEMPLATE_PATH}/public/images",
+                                                        readOnly:true,
+                                                        size:14,
+                                                        space:false,
+                                                        score:"{$row['key_rate']}"
+                                                    })
+                                                </script>
+                                            </div>
+                                        </div>
+                                        <div class="fr key_operation">
+
+                                            <div class="operation" style="padding-top: 60px; ">
+                                                <img src="{:CUSTOM_TEMPLATE_PATH}/public/images/qiang.png">
+                                                <p style="text-align: right;height: 50px;line-height: 50px">{$row.city}{$row.district}</p>
+                                                <p style="text-align: right"></p>
+                                            </div>
+
+                                        </div>
+                                </div>
+                            </li>
+                        </volist>
+                </ul>
+            </div>
+            <div id="pullUp" style="width: 100%;height: 100px;border-top: 1px solid #ccc;display: none">
+                <span class="pullUpIcon"></span>
+                <span class="pullUpLabel" style="width: 720px;height: 100px;font-size: 40px;text-align: center;display: block;line-height: 100px">Pull up to refresh...</span>
+            </div>
+        </div>
+    </div>
+    <include file="./Addons/Chengjiaojia/View/public/footer.html" />
+
+</body>
+</html>
