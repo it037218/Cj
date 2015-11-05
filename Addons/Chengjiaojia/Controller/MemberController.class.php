@@ -24,31 +24,31 @@
                 return true;
             }
             //获取用户openid
-//            if(isset($_GET['test']) && $_GET['test'] == 1){
-//                //超
-//                $this->user_openid = "o0nM4txt6C1J0s-QYOPu8utZZ__I";
-//                $_SESSION['user_openid'] = $this->user_openid;
-//            }else if(isset($_GET['test']) && $_GET['test'] == 2){
-//                //朱
-//                $this->user_openid = "o0nM4t4nSz5FDTJERyVctDjrylKw";
-//                $_SESSION['user_openid'] = $this->user_openid;
-//            }else if(isset($_GET['test']) && $_GET['test'] == 3){
-//                //伟
-//                $this->user_openid = "o0nM4tzlrljX1Co_zqJ9Z1sKYGWg";
-//                $_SESSION['user_openid'] = $this->user_openid;
-//            }else if(isset($_GET['test']) && $_GET['test'] == 4){
-//                //李
-//                $this->user_openid = "o0nM4t1lM4_rqfTIHeusQZ5Pm1Y8";
-//                $_SESSION['user_openid'] = $this->user_openid;
-//            }else if(isset($_GET['test']) && $_GET['test'] == 5){
-//                //橙蕉
-//                $this->user_openid = "o0nM4t2H1jq4bzZdCnVtYyNLoltU";
-//                $_SESSION['user_openid'] = $this->user_openid;
-//            }else if(isset($_GET['test']) && $_GET['test'] == 6){
-//                //季
-//                $this->user_openid = "o0nM4tza3aoVJ6FsMUg4BlYAQG-I";
-//                $_SESSION['user_openid'] = $this->user_openid;
-//            }else
+            if(isset($_GET['test']) && $_GET['test'] == 1){
+                //超
+                $this->user_openid = "o0nM4txt6C1J0s-QYOPu8utZZ__I";
+                $_SESSION['user_openid'] = $this->user_openid;
+            }else if(isset($_GET['test']) && $_GET['test'] == 2){
+                //朱
+                $this->user_openid = "o0nM4t4nSz5FDTJERyVctDjrylKw";
+                $_SESSION['user_openid'] = $this->user_openid;
+            }else if(isset($_GET['test']) && $_GET['test'] == 3){
+                //伟
+                $this->user_openid = "o0nM4tzlrljX1Co_zqJ9Z1sKYGWg";
+                $_SESSION['user_openid'] = $this->user_openid;
+            }else if(isset($_GET['test']) && $_GET['test'] == 4){
+                //李
+                $this->user_openid = "o0nM4t1lM4_rqfTIHeusQZ5Pm1Y8";
+                $_SESSION['user_openid'] = $this->user_openid;
+            }else if(isset($_GET['test']) && $_GET['test'] == 5){
+                //橙蕉
+                $this->user_openid = "o0nM4t2H1jq4bzZdCnVtYyNLoltU";
+                $_SESSION['user_openid'] = $this->user_openid;
+            }else if(isset($_GET['test']) && $_GET['test'] == 6){
+                //季
+                $this->user_openid = "o0nM4tza3aoVJ6FsMUg4BlYAQG-I";
+                $_SESSION['user_openid'] = $this->user_openid;
+            }
 
             if(isset($_GET['openid']) && !empty($_GET['openid'])){
                 $this->user_openid = $_GET['openid'];
@@ -57,6 +57,10 @@
                 $this->user_openid = $_GET['id'];
                 $_SESSION['user_openid'] = $_GET['id'];
             }else {
+//                if($_SESSION['user_openid'] == "o0nM4t4nSz5FDTJERyVctDjrylKw"){
+//                    $_SESSION['user_openid'] = "";
+//                }
+//                echo $_SESSION['user_openid'];exit;
                 if(isset($_SESSION['user_openid']) && !empty($_SESSION['user_openid'])){
                     $data['user_openid'] = $_SESSION['user_openid'];
                 }else  if(isset($_GET['openid'])  && $_GET['openid'] != ""){
@@ -79,7 +83,7 @@
                     $con['user_openid'] = $this->user_openid;
                     $realStatus = M("cj_member")->where($con)->getField("realStatus");
 
-                    if($status < 4 && $realStatus <1){
+                    if($status < 4 && $realStatus <1 || $status == 5){
                         $this->check_reg($status);
                         exit;
                     }
@@ -520,6 +524,8 @@
                 $message['username'] = $_POST['name'];
 
 //                sendVerifyMessage($message);
+            }else if($status == 5){
+                $data = $_POST;
             }
             $result = $m->saveMember($data,$user_openid);
             if($result != false){

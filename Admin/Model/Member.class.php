@@ -20,6 +20,8 @@
         var $city_id;
         var $realname;
         var $name;
+        var $brand;
+        var $recommender;
 
         function getMemberList($pageNum,$pageSize){
             $sql = "SELECT p1.*,p2.brand as brand FROM  ".$this->memberTable." as p1 left join wp_cj_brand as p2 ON p2.id = p1.brand_id WHERE 1=1 ";
@@ -40,7 +42,11 @@
                 $sql .= " AND p1.city_id = ".$this->city_id;
                 $totalSql .= " AND city_id = ".$this->city_id;
             }
+            if(isset($this->brand) && !empty($this->brand)){
+                $sql .= " AND p2.brand like '%".$this->brand."%'";
+                $totalSql .= " AND brand like '%".$this->brand."%'";
 
+            }
             $sql .= " order by p1.create_time desc limit ".($pageNum-1)*$pageSize.", ".$pageSize;
             $result['rows'] = DbHelper::getInstance()->get_all($sql);
             $rst = DbHelper::getInstance()->get_one($totalSql);
@@ -140,5 +146,24 @@
             return DbHelper::getInstance()->update($this->memberTable,$data,"user_openid = '".$this->user_openid."'");
         }
 
+        function getRecommend(){
+            $sql = "SELECT * FROM view_recommender";
+            return DbHelper::getInstance()->get_all($sql);
+        }
+
+        function getRecommendList(){
+
+            $sql = "SELECT nickname,realname,telephone,status FROM wp_cj_member WHERE  recommender = '".$this->recommender."'";
+//            if(isset($this->telephone)){
+//                $sql .= " AND telephone = ".$this->telephone;
+//            }
+//            echo $sql;exit;
+            return DbHelper::getInstance()->get_all($sql);
+        }
+        function getMemberByTel(){
+            $sql = "SELECT nickname,realname,telephone,status FROM wp_cj_member WHERE telephone = ".$this->telephone;
+//            echo $sql;exit;
+            return DbHelper::getInstance()->get_one($sql);
+        }
 
     }

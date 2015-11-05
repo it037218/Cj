@@ -31,6 +31,7 @@
             background: url("{:CUSTOM_TEMPLATE_PATH}/public/images/yes3.png") no-repeat;
         }
     </style>
+    <include file="./Addons/Chengjiaojia/View/public/baidu.html" />
 </head>
 <body style="overflow-y:scroll;">
     <div id="key_list_content">
@@ -69,8 +70,8 @@
                                 <div class="fr key_operation">
 
                                     <div class="operation">
-                                        <p style="font-size: 30px;color: #000" class="bold"><span>{$row.money}</span></p>
-                                        <p style="font-weight:600;font-size: 26px!important;height: 30px;line-height: 30px;color: #FFB600">橙蕉豆</p>
+                                        <p style="font-size: 30px;color: #000" class="bold"><span>{$row.money}</span><span style="">元</span></p>
+                                        <!--<p style="font-weight:600;font-size: 26px!important;height: 30px;line-height: 30px;color: #FFB600"></p>-->
                                         <p style="text-align: right;font-size: 26px">{$row.city}{$row.district}</p>
                                     </div>
 

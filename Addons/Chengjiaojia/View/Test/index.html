@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/common.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/animate.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/jquery.message.css">
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery.raty.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery.message.min.js"></script>
+
+    <title>个人中心</title>
+    <style>
+        .item{
+            width: 100%;
+            padding: 20px;
+            background-color: #FFFFFF;
+            border: none;
+            font-size: 36px;
+        }
+
+        .leftSide .avatar,.leftSide .message{
+            float: left;
+            margin-left: 30px;
+            max-width: 500px;
+            word-wrap:break-word
+        }
+
+        .leftSide .message .jt{
+            border-width: 0 0 15px 20px;
+            border-color: #EEEEEE #FFFFFF;
+            left: -20px;
+        }
+
+        .rightSide .avatar,.rightSide .message{
+            float: right;
+            margin-right: 30px;
+            max-width: 500px;
+            word-wrap:break-word
+        }
+
+        .rightSide .message .jt{
+            border-width: 15px 0 0 20px;
+            border-color: #FFFFFF #EEEEEE ;
+            right: -20px;
+        }
+
+        .item .avatar{
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            overflow: hidden;
+        }
+        .item .message{
+            background-color: #EEEEEE;
+            padding: 10px;
+            position: relative;
+            border-radius: 5px;
+        }
+        .item .message .jt{
+            border-style: solid;
+            width: 0;
+            height: 0;
+            font-size: 0;
+            position: absolute;
+
+            top: 10px;
+        }
+        textarea{
+            width: 80%;
+            height: 40px;
+            border: 1px solid #CCCCCC;
+            padding: 2px;
+            margin-top: 15px;
+            font-size: 36px;
+
+            float: left;
+        }
+        button{
+            display: block;
+            width: 15%;
+            height: 40px;
+            padding: 0;
+            border:none;
+            margin: 0;
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            line-height: 40px;
+        }
+        #messageList{
+            overflow-y: scroll;
+        }
+    </style>
+    <script>
+        $(function(){
+
+            $("button").bind("touchstart",function(){
+
+                var message = $("#messageContent").val()
+                $.post(
+                        "{:U('setRedis')}",
+                        {
+                            "message":message
+                        },
+                        function(data){
+                            if(data == 1){
+                                $("#messageList").append('' +
+                                        '<div class="item rightSide">'+
+                                '<div class="avatar">'+
+                                '       <img src="http://mp.chengjiao8.cn/Uploads/Avatar/3a614ad8-2132-c90a-3eb8-33342599cd18.jpg" width="50">'+
+                                '       </div>'+
+                                '        <div class="message">'+
+                                '        <div class="jt"></div>'+message+
+                                '        </div>'+
+                                '        </div>')
+                            }else{
+                                alert("失败")
+                            }
+                        }
+                )
+
+            })
+        })
+
+        function getNewMessage(){
+            $.post(
+                    "{:U('getMessage')}",
+                    function(data){
+                        if(data!=-1){
+                            for(var i=0;i<data.length;i++){
+                                $("#messageList").append('' +
+                                        '<div class="item rightSide">'+
+                                        '<div class="avatar">'+
+                                        '       <img src="http://mp.chengjiao8.cn/Uploads/Avatar/3a614ad8-2132-c90a-3eb8-33342599cd18.jpg" width="50">'+
+                                        '       </div>'+
+                                        '        <div class="message">'+
+                                        '        <div class="jt"></div>'+data[i].message+
+                                        '        </div>'+
+                                        '        </div>')
+                            }
+                        }
+                    }
+
+
+            )
+        }
+
+        setInterval("getNewMessage()",1000);
+
+    </script>
+</head>
+<body>
+<div id="main_content">
+    <div style="background-color: #CCCCCC;height: 100%;" id="messageList">
+        <volist name="result" id="vo">
+        <div class='item <if condition="($vo.readStatus eq 1)">rightSide<else/>leftSide</if>'>
+            <div class="avatar">
+                <img src="http://mp.chengjiao8.cn/Uploads/Avatar/3a614ad8-2132-c90a-3eb8-33342599cd18.jpg" width="50">
+            </div>
+            <div class="message">
+                <div class="jt"></div>{$vo.message}
+            </div>
+        </div>
+        </volist>
+
+    </div>
+    <div style="position: relative;overflow: hidden">
+        <textarea type="text" placeholder="请输入内容" id="messageContent"></textarea>
+        <button>发送</button>
+    </div>
+</div>
+</body>
+</html>

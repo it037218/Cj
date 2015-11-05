@@ -1,0 +1,361 @@
+<{include file="header.html"}>
+<!--<script src="js/mall.js?v=0.1"></script>-->
+<script src="./js/jquery.js"></script>
+<script src="./js/jquery.liteuploader.min.js"></script>
+<style>
+    #card_pic{
+        border: 5px solid #CCCCCC;
+    }
+</style>
+<script>
+    $(function(){
+        $("#Mall").attr("aria-expanded",true).addClass("in");
+        $("#Mall").siblings("a").css("backgroundColor","#000");
+
+        //上传图片
+        $(".uploadImage").click(function(){
+            $(this).siblings().click();
+        })
+
+        //调用上传图片接口
+        $('.fileUpload').liteUploader({
+            script: 'mall.php?action=uploadImage'
+        })
+        .on('lu:success', function (e, response) {
+            var res = eval("("+response+")");
+            if(res.message == "upload error"){
+                alert("上传失败")
+            }else if(res.message == "type error"){
+                alert("文件格式错误")
+            }else if(res.message == "OK"){
+                $(this).siblings("img").attr("src",res.url)
+                $(this).siblings("input:hidden").val(res.url)
+            }
+        });
+
+
+        //编辑商品
+        $(".commodity_edit .submit").bind("click",function(){
+            var id = $(".commodity_edit .commodity_id").val();
+            var commodity_name = $(".commodity_edit .commodity_name").val()
+            var price = $(".commodity_edit .price").val()
+            var credit = $(".commodity_edit .credit").val();
+            var total_number = $(".commodity_edit .total_number").val()
+            var realtime_numnber = $(".commodity_edit .realtime_number").val();
+            var total = $(".commodity_edit .total").val();
+            var logo_img = $(".commodity_edit input[name='logoImage']").val()
+            var commodity_img = $(".commodity_edit input[name='commodityImage']").val()
+            var description = $(".commodity_edit #description").val()
+            var status = $(".commodity_edit input[name='forSale']").val()
+            var list_order = $(".commodity_edit input[name='list_order']").val()
+            if(commodity_name.length == 0){
+                alert("请输入商品名称")
+                return
+            }else if(price.length == 0){
+                alert("请输入商品名称")
+                return
+            }else if(credit.length == 0){
+                alert("请输入商品名称")
+                return
+            }else if(total_number.length == 0){
+                alert("请输入商品名称")
+                return
+            }else if(realtime_numnber.length == 0){
+                alert("请输入商品名称")
+                return
+            }else if(total.length == 0){
+                alert("请输入商品名称")
+                return
+            }else if(logo_img.length == 0){
+                alert("请输入商品名称")
+                return
+            }else if(commodity_img.length == 0){
+                alert("请输入商品名称")
+                return
+            }else if(description.length == 0){
+                alert("请输入商品名称")
+                return
+            }else if(status.length == 0){
+                alert("请输入商品名称")
+                return
+            }else if(list_order.length == 0){
+                alert("请输入商品名称")
+                return
+            }else{
+
+                $.post(
+                        "mall.php?action=editCommodity",
+                        {
+                            id:id,
+                            commodity_name:commodity_name,
+
+
+
+                        }
+
+
+
+                )
+
+
+            }
+        })
+        //添加商品
+
+        //查看商品
+
+
+    })
+</script>
+<body>
+<div class="cover" style="width: 100%;height: 100%;opacity: 0.5;display: none;z-index: 100;position: absolute;background-color: #000"></div>
+
+<div id="wrapper">
+    <{include file="nav.html"}>
+    <div id="page-wrapper">
+        <div class="container-fluid" style="position: relative">
+            <!-- Page Heading -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <ol class="breadcrumb">
+                        <li>
+                            <i class="fa fa-dashboard"></i>  <a href="#">商城管理</a>
+                        </li>
+                        <li class="active">
+                            <i class="fa fa-table"></i> 商品管理
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            <div class="row" style="padding: 0px 15px 8px 15px">
+                    <div class="col-lg-4">
+
+                        <form class="form-inline" role="form">
+                            <label>选择列表</label>
+                            <select class="form-control" id="statusChoose">
+                                <option value="1" <{if $status == 0}>selected <{/if}>  >下架</option>
+                                <option value="0" <{if $status == 1}>selected <{/if}> >上架</option>
+                            </select>
+
+                        </form>
+                    </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th>商品编号</th>
+                                <th>商品名称</th>
+                                <th>商品价值</th>
+                                <th>兑换积分</th>
+                                <th>排序</th>
+                                <th>每天出售数量</th>
+                                <th>剩余数量</th>
+                                <th>创建时间</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="verify_content">
+                            <{foreach from=$result item=rows}>
+                            <tr data="<{$rows.id}>">
+                                <td><{$rows.id}></td>
+                                <td><{$rows.commodity_name}></td>
+                                <td><{$rows.price}></td>
+                                <td><{$rows.credit}></td>
+                                <td><{$rows.list_order}></td>
+                                <td><{$rows.total_number}></td>
+                                <td><{$rows.realtime_number}></td>
+                                <td><{$rows.create_time}></td>
+
+                                <td>
+                                    <{if $rows.status eq 0 }>
+                                    <a href="#" class="btn btn-primary" onclick="verify(<{$rows.id}>)">上架</a>
+                                    <{elseif $rows.status eq 1}>
+                                    <button class="btn btn-success">下架</button>
+                                    <{/if}>
+                                </td>
+                                <td>
+                                    <button class="btn btn-success">查看商品</button>
+                                    <button class="btn btn-info">编辑商品</button>
+                                </td>
+                            </tr>
+                            <{/foreach}>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- /.row -->
+            <!--<ul class="pagination">-->
+                <!--<li><a href="<{$firstUrl}>" <{if $firstUrl == "#"}> class="disabled" <{/if}> >首页</a></li>-->
+                <!--<li><a href="<{$preUrl}>" <{if $preUrl == "#"}> class="disabled" <{/if}>>&laquo;</a></li>-->
+                <!--<li><a href="#" class="active disabled"><{$currentPage}></a></li>-->
+                <!--<li><a href="<{$nextUrl}>" <{if $nexttUrl == "#"}> class="disabled" <{/if}>>&raquo;</a></li>-->
+                <!--<li><a href="<{$lastUrl}>" <{if $lastUrl == "#"}> class="disabled" <{/if}>>末页</a></li>-->
+            <!--</ul>-->
+        </div>
+        <!-- /.container-fluid -->
+
+        <!--编辑商品面板-->
+        <div class="col-lg-6" id="commodity_edit" style="position: absolute;z-index: 1000;top: 100px ;">
+            <div class="panel panel-default"  >
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        编辑商品信息
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">商品名称</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control commodity_name" placeholder="请输入商品名称" value="100充值卡" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">商品价值</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control price" placeholder="商品价值" value="1000" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">要求积分</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control credit" placeholder="积分" value="10000" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">每日可售数量</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control total_number" placeholder="请输入姓名">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">当前剩余数量</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control realtime_number" placeholder="请输入姓名">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">总库存</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control total" placeholder="请输入姓名">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">logo图片</label>
+                            <div class="col-sm-2" style="text-align: center">
+                                <input type="file" name="fileUpload" class="fileUpload" style="display: none">
+                                <input type="hidden" name="logoImage">
+                                <img class="logo_image uploadImage" src="images/upload.png" style="margin: 0 auto;width: 50px">
+
+                            </div>
+                            <label class="col-sm-2 control-label">商品图片</label>
+                            <div class="col-sm-3" style="text-align: center">
+                                <input type="file" name="fileUpload"  class="fileUpload" style="display: none;">
+                                <input type="hidden" name="commodityImage">
+                                <img class="commodity_image uploadImage" src="images/upload.png" style="margin: 0 auto;width: 50px">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">描述</label>
+                            <div class="col-sm-8">
+                                <textarea placeholder="商品描述" class="form-control" id="description" rows="3">100元充值卡</textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">上架</label>
+                            <div class="col-sm-8">
+                                <label class="checkbox-inline">
+                                    <input type="radio" name="forSale"  value="1" checked> 上架
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="radio" name="forSale"  value="0"> 下架
+                                </label>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">排序</label>
+                            <div class="col-sm-3" style="text-align: center">
+                                <input type="text" class="form-control" name="list_order" placeholder="" value="0">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button  class="submit btn btn-default">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <!--添加商品面板-->
+        <div class="col-lg-6" id="commodity_add" style="position: absolute;z-index: 1000;top: 100px ;display: none;">
+            <div class="panel panel-default"  >
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        编辑商品信息
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="firstname" class="col-sm-2 control-label">名字</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="firstname"
+                                       placeholder="请输入名字">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastname" class="col-sm-2 control-label">姓</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="lastname"
+                                       placeholder="请输入姓">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox"> 请记住我
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-default">登录</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+         </div>
+        
+        <!--查看商品面板-->
+        <div class="col-lg-6" id="commodity_view" style="position: absolute;z-index: 1000;top: 100px ;display: none;">
+            <div class="panel panel-default col-lg-8" >
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    商品信息
+                </h3>
+            </div>
+            <div class="panel-body">
+                这是一个基本的面板
+            </div>
+        </div>
+        </div>
+    </div>
+
+</div>
+</body>
+
+</html>

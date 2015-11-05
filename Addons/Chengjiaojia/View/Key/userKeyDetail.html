@@ -27,7 +27,7 @@
         .contact-publisher{
             width: 610px;
             height: 90px;
-            line-height: 90px;
+            /*line-height: 90px;*/
             text-align: center;
             border-radius: 5px;
             font-size: 35px;
@@ -74,7 +74,7 @@
         <div class="fr contact-publisher">
             <div class="connect-contain">
                 <a href="tel:{$userInfo.telephone}"></a>
-                联系卖家
+                联系买家
             </div>
         </div>
     </div>
@@ -92,7 +92,7 @@
             <p class="but_time">购车时间：{$result.time_limit}</p>
             <p class="but_time custom_name">客户名称：{$result.custom_name}</p>
             <p class="but_time">电话：{$result.custom_telephone}</p>
-            <p class="but_time">价格：{$result.money}&nbsp;橙蕉豆</p>
+            <p class="but_time">价格：{$result.money}&nbsp;元</p>
             <p class="sned_time">发布时间：{$result.create_time|substr=0,10}</p>
         </div>
         <div class="fr operate_label">

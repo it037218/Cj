@@ -1,0 +1,136 @@
+<{include file="header.html"}>
+<style>
+    body{
+        margin-top: 0!important; ;
+    }
+</style>
+<script>
+    $(function(){
+        $("#search").click(function(){
+            var telephone = $("#telephone").val();
+            if(telephone.length == 0){
+                alert("请输入手机号")
+                return
+            }else{
+                window.location.href = "./member.php?action=recommend&telephone="+telephone
+            }
+
+        })
+    })
+
+</script>
+<div id="page-wrapper">
+    <div class="container-fluid" style="position: relative">
+        <div id="card_container" style="position:absolute;background-color: #ffffff;z-index: 10000;display: none">
+            <div id="card_pic" >
+                <img src="" id="card_pic1" style="float: left">
+            </div>
+        </div>
+        <!-- Page Heading -->
+        <div class="row">
+            <div class="col-lg-12">
+                <ol class="breadcrumb">
+                    <li>
+                        <i class="fa fa-dashboard"></i>  <a href="#">用户管理</a>
+                    </li>
+                    <li class="active">
+                        <i class="fa fa-table"></i> 推荐管理
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 ">
+                <div  class="form-inline breadcrumb">
+                    <div class="form-group">
+                        <label class="sr-only" for="exampleInputPassword4">电话</label>
+                        <input type="text" class="form-control" id="telephone" placeholder="电话号码" value="<{$telephone}>">
+                    </div>
+
+                    <button id="search" class="btn btn-success">查询</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-striped">
+                        <thead>
+                        <tr>
+                            <th>昵称</th>
+                            <th>姓名</th>
+                            <th>手机号</th>
+                            <th>状态</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><{$member.nickname}></td>
+                            <td><{$member.realname}></td>
+                            <td><{$member.telephone}></td>
+
+                            <td>
+                                <{if $member.status eq 0}>
+                                未注册
+                                <{elseif $member.status eq 1}>
+                                手机注册
+                                <{elseif $member.status eq 2}>
+                                个人信息填写
+                                <{elseif $member.status eq 3}>
+                                等待审核
+                                <{elseif $member.status eq 4}>
+                                审核通过
+                                <{else}>
+                                审核不通过
+                                <{/if}>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-striped">
+                        <thead>
+                        <tr>
+                            <th>编号</th>
+                            <th>昵称</th>
+                            <th>姓名</th>
+                            <th>手机号</th>
+                            <th>状态</th>
+                        </tr>
+                        </thead>
+                        <tbody id="verify_content">
+                        <{foreach from=$result item=rows key=keys}>
+                        <tr data="<{$rows.id}>">
+                            <td><{$keys+1}> </td>
+                            <td><{$rows.nickname}></td>
+                            <td><{$rows.realname}></td>
+                            <td><{$rows.telephone}></td>
+
+                            <td>
+                                <{if $rows.status eq 0}>
+                                未注册
+                                <{elseif $rows.status eq 1}>
+                                手机注册
+                                <{elseif $rows.status eq 2}>
+                                个人信息填写
+                                <{elseif $rows.status eq 3}>
+                                等待审核
+                                <{elseif $rows.status eq 4}>
+                                审核通过
+                                <{else}>
+                                审核不通过
+                                <{/if}>
+                            </td>
+                        </tr>
+                        <{/foreach}>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+
+</div>

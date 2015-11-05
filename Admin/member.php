@@ -20,9 +20,10 @@ if(!isset($_SESSION['user']) || empty($_SESSION['user'])){
         //获取城市列表
         $common = new Common();
         $city_id="";
-        $status="";
+        $status="all";
         $telephone="";
         $name="";
+        $brand = "";
         $city = $common->getCityList();
         $tpl->assign("city",$city);
 
@@ -40,6 +41,17 @@ if(!isset($_SESSION['user']) || empty($_SESSION['user'])){
         //待审核页面
         $member = new Member();
 
+        //汽车品牌
+        if(isset($_GET['brand']) && !empty($_GET['brand'])){
+            $member->brand = $_GET['brand'];
+            $preUrl .="&brand=".$_GET['brand'];
+            $nextUrl .= "&brand=".$_GET['brand'];
+            $firstUrl .= "&brand=".$_GET['brand'];
+            $lastUrl .= "&brand=".$_GET['brand'];
+            $brand = $_GET['brand'];
+        }
+        $tpl->assign("brand",$brand);
+
         //城市名
         if(isset($_GET['city_id']) && !empty($_GET['city_id'])){
             $member->city_id = $_GET['city_id'];
@@ -47,8 +59,9 @@ if(!isset($_SESSION['user']) || empty($_SESSION['user'])){
             $nextUrl .= "&city_id=".$_GET['city_id'];
             $firstUrl .= "&city_id=".$_GET['city_id'];
             $lastUrl .= "&city_id=".$_GET['city_id'];
-            $tpl->assign("city_id",$_GET['city_id']);
+            $city_id = $_GET['city_id'];
         }
+        $tpl->assign("city_id",$city_id);
         //电话号码
         if(isset($_GET['telephone']) && !empty($_GET['telephone'])){
             $member->telephone = $_GET['telephone'];
@@ -57,9 +70,10 @@ if(!isset($_SESSION['user']) || empty($_SESSION['user'])){
             $nextUrl .= "&telephone=".$_GET['telephone'];
             $firstUrl .= "&telephone=".$_GET['telephone'];
             $lastUrl .= "&telephone=".$_GET['telephone'];
+            $telephone = $_GET['telephone'];
 
-            $tpl->assign("telephone",$_GET['telephone']);
         }
+        $tpl->assign("telephone",$telephone);
         //真实姓名
         if(isset($_GET['name']) && !empty($_GET['name'])){
             $member->name = $_GET['name'];
@@ -68,19 +82,19 @@ if(!isset($_SESSION['user']) || empty($_SESSION['user'])){
             $nextUrl .= "&name=".$_GET['name'];
             $firstUrl .= "&name=".$_GET['name'];
             $lastUrl .= "&name=".$_GET['name'];
-            $tpl->assign("name",$_GET['name']);
+            $name = $_GET['name'];
         }
+        $tpl->assign("name",$name);
         //状态
         if(isset($_GET['status'])){
             $member->status = $_GET['status'];
-
             $preUrl .="&status=".$_GET['status'];
             $nextUrl .= "&status=".$_GET['status'];
             $firstUrl .= "&status=".$_GET['status'];
             $lastUrl .= "&status=".$_GET['status'];
-            $tpl->assign("status",$_GET['status']);
+            $status = $_GET['status'];
         }
-
+        $tpl->assign("status",$status);
         $result = $member->getMemberList($pageNum,$pageSize);
 //        $numResult = $member->getMemberNum();
         //总人数为
@@ -319,6 +333,33 @@ if(!isset($_SESSION['user']) || empty($_SESSION['user'])){
             echo -1;exit;
         }
 
+    }else if($action == "recommend"){
+
+        $m = new Member();
+        $result = $m->getRecommend();
+        $arr = array();
+        if(isset($_GET['telephone'])){
+            foreach($result as $key=>$value){
+                if($value['telephone'] == $_GET['telephone']){
+                    $m->recommender = $value['user_openid'];
+                    $m->telephone = $value['telephone'];
+                    $arr = $m->getRecommendList();
+                }else{
+                    continue;
+                }
+            }
+            $m->telephone = $_GET['telephone'];
+            $memberInfo = $m->getMemberByTel();
+//            var_dump($memberInfo);exit;
+            $tpl->assign("member",$memberInfo);
+            $tpl->assign("member",$memberInfo);
+
+        }else{
+            $arr = array();
+        }
+        $tpl->assign("telephone",$_GET['telephone']);
+        $tpl->assign("result",$arr);
+        $tpl->display("recommend.html");
     }
 
 

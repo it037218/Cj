@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<p><strong  id = "count">5</strong>秒后返回</p>
+<script type="text/javascript">
+    var num=5;
+
+    function startCount() {
+        if (num >= 0){
+            document.getElementById("count").innerHTML = num;
+            setTimeout("startCount()",1000);
+            num = num-1;
+        }
+    }
+    startCount();
+</script>
+</body>
+</html>

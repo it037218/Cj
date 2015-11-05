@@ -10,9 +10,11 @@
 class Mall{
     var $orderTable = "wp_cj_mall_order";
     var $memberTable = "wp_cj_member";
+    var $commodityTable = "wp_cj_commodity";
     var $status;
     var $id;
     var $user_openid;
+    var $commodity_name;
     function orderList(){
 
         $sql = "SELECT p1.*,p2.name,p2.city,p2.avatar,p2.nickname,p2.telephone from ".$this->orderTable." as p1 left join ".$this->memberTable." as p2 ON p2.user_openid = p1.user_openid";
@@ -46,7 +48,35 @@ class Mall{
         return DbHelper::getInstance()->get_all($sql);
     }
 
+    /*
+     * 获取商品列表
+     * 2015-10-26
+     * */
+    function getCommodity(){
+        $sql = "SELECT * FROM ".$this->commodityTable." WHERE 1=1";
+        if(isset($this->status)){
+            $sql .= " AND status = ".$this->status;
+        }else if(isset($this->commodity_name)){
+            $sql .=" LIKE '%".$this->commodity_name."&'";
+        }
+        return DbHelper::getInstance()->get_all($sql);
 
+    }
+
+    /*
+     * 获取商品详情
+     * */
+    function getCommodityDetail(){
+        $sql = "SELECT * FROM ".$this->commodityTable." WHERE id = ".$this->id;
+        return DbHelper::getInstance()->get_one($sql);
+    }
+
+    /*
+     * 新增商品数据
+     * */
+    function insert($data){
+        return DbHelper::getInstance()->insert($this->commodityTable,$data);
+    }
 
 }
 

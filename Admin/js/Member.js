@@ -8,8 +8,8 @@ $(function(){
     })
 
     /*
-    * 审核通过
-    * */
+     * 审核通过
+     * */
 
     $(".verify-yes").on("click",function(){
         alert(11)
@@ -29,11 +29,13 @@ $(function(){
                     if(data == 1){
                         $(".bs-example-modal-sm").modal("hide")
                         alert("审核成功")
-                        $("tr[data='"+user_id+"']").remove();
+                        location.reload()
+                        //$("tr[data='"+user_id+"']").remove();
                     }else{
                         alert("审核出错")
-
                         $(".bs-example-modal-sm").modal("hide")
+
+                        location.reload()
                         return
                     }
                 }
@@ -41,8 +43,8 @@ $(function(){
         }
     })
     /*
-    * 审核不通过
-    * */
+     * 审核不通过
+     * */
     $(".verify-no").bind("click",function(){
         var user_id = $("input[name='user_id']").val();
         if(user_id.length == 0){
@@ -123,13 +125,16 @@ function verify_yes(){
             },
             function(data){
                 if(data == 1){
-                    $(".bs-example-modal-sm").modal("hide")
+                    //$(".bs-example-modal-sm").modal("hide")
                     alert("审核成功")
                     $("tr[data='"+user_id+"']").remove();
+                    $("#memberInfo").hide();
+                    $(".cover").hide();
                 }else{
                     alert("审核出错")
-
-                    $(".bs-example-modal-sm").modal("hide")
+                    $("#memberInfo").hide();
+                    $(".cover").hide();
+                    //$(".bs-example-modal-sm").modal("hide")
                     return
                 }
             }
@@ -152,13 +157,16 @@ function verify_no(){
             },
             function(data){
                 if(data == 1){
-                    $(".bs-example-modal-sm").modal("hide")
+                    //$(".bs-example-modal-sm").modal("hide")
+                    $("#memberInfo").hide();
+                    $(".cover").hide();
                     alert("审核成功")
                     $("tr[data='"+user_id+"']").remove();
                 }else{
                     alert("审核出错")
-
-                    $(".bs-example-modal-sm").modal("hide")
+                    $("#memberInfo").hide();
+                    $(".cover").hide();
+                    //$(".bs-example-modal-sm").modal("hide")
                     return
                 }
             }
@@ -182,19 +190,19 @@ function verify(e){
                 var dataObj = eval("("+data+")");
                 var content = '<tr><td>姓名：'+dataObj.realname+'</td><td>手机号：'+dataObj.telephone+'</td><td>身份证号：'+dataObj.card_number+'</td></tr>'+
                     '<tr><td>所在地：'+dataObj.city+dataObj.district+'</td><td>4S店：'+dataObj.shop+'</td><td>品牌：'+dataObj.brand+'</td></tr>'+
-                '<tr><td colspan="3">昵称：'+dataObj.nickname +'</td></tr>'+
-                '<tr>'+
-                '<td class="col-lg-3" ><a href="#" onclick="check_card(this)"><img class="col-lg-12" src="'+dataObj.business_card+'" style="max-height:300px"></a></td>'+
-                '<td class="col-lg-3" ><a href="#" onclick="check_card(this)"><img class="col-lg-12" src="'+dataObj.card_id1+'" style="max-height:300px"></a></td>'+
-                '<td class="col-lg-3" ><a href="#" onclick="check_card(this)"><img class="col-lg-12" src="'+dataObj.card_id2+'" style="max-height:300px"></a></td>'+
-                '</tr>'+
-                '<td colspan="2"></td>'+
-                '    <td>'+
+                    '<tr><td colspan="3">昵称：'+dataObj.nickname +'</td></tr>'+
+                    '<tr>'+
+                    '<td class="col-lg-3" ><a href="#" onclick="check_card(this)"><img class="col-lg-12" src="'+dataObj.business_card+'" style="max-height:300px"></a></td>'+
+                    '<td class="col-lg-3" ><a href="#" onclick="check_card(this)"><img class="col-lg-12" src="'+dataObj.card_id1+'" style="max-height:300px"></a></td>'+
+                    '<td class="col-lg-3" ><a href="#" onclick="check_card(this)"><img class="col-lg-12" src="'+dataObj.card_id2+'" style="max-height:300px"></a></td>'+
+                    '</tr>'+
+                    '<td colspan="2"></td>'+
+                    '    <td>'+
                     '<input type="hidden" name="user_id" value="'+dataObj.id+'">'+
-                '    <button type="button" class="btn btn-default verify-no" style="width: 48%" onclick="verify_no()">不通过</button>'+
-                '    <button type="button" class="btn btn-primary verify-yes" style="width: 48%" onclick="verify_yes()">通过</button>'+
-                '</td>'+
-                '</tr>'
+                    '    <button type="button" class="btn btn-default verify-no" style="width: 48%" onclick="verify_no()">不通过</button>'+
+                    '    <button type="button" class="btn btn-primary verify-yes" style="width: 48%" onclick="verify_yes()">通过</button>'+
+                    '</td>'+
+                    '</tr>'
 
                 $("#memberInfo table").empty();
                 $("#memberInfo table").append(content)

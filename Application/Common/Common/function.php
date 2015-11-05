@@ -2561,6 +2561,8 @@ function sendNoticeMessage($data){
         $msg['create_time'] = date("Y-m-d H:i:s",time());
         $msg['remark'] =$data['keyword1'];
         $msg['template_id'] = $param['template_id'];
+
+		return M("cj_template_message")->add($msg);
     }
 
     //用户发布线索时，提示相同品牌的用户，购买线索
@@ -2608,6 +2610,15 @@ function sendNoticeMessage($data){
         );
         $result = file_get_contents($url, false, stream_context_create($context));
         $result = json_decode($result,true);
+		$msg['user_openid'] = $data['user_openid'];
+		$msg['errmsg'] = $result['errmsg'];
+		$msg['msg_id'] = $result['msgid'];
+		$msg['url'] = $data['url'];
+		$msg['create_time'] = date("Y-m-d H:i:s",time());
+		$msg['remark'] =$data['keyword1'];
+		$msg['template_id'] = $param['template_id'];
+
+		return M("cj_template_message")->add($msg);
     }
 
 

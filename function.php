@@ -2370,6 +2370,7 @@ function add_message($data){
     $m = M("cj_message");
     return $m->add($data);
 }
+
 function add_log($data){
     return M("cj_log")->add($data);
 }
@@ -2458,6 +2459,7 @@ function sendKeyMessage($data)
     return M("cj_template_message")->add($msg);
 
 }
+
 //消息提示
 function sendNoticeMessage($data){
 //    $template_id_short = "OPENTM204650588";

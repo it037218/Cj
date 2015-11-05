@@ -49,7 +49,56 @@
     //获取用户兑换记录
     else if($action == "exchangeList"){
         $user_openid = $_POST['user_openid'];
-
+        $mall = new Mall();
         $result = $mall->getExchangeList();
+        echo json_encode($result);
+    }else if($action == "commodity"){
+        $mall = new Mall();
+        if(isset($_GET['status'])){
+            $mall->status = $_GET['status'];
+        }else if(isset($_GET['name'])){
+            $mall->commodity_name = $_GET['name'];
+        }
+        $result = $mall->getCommodity();
+        $tpl->assign("result",$result);
+        $tpl->display("mall_commodity.html");
+    }else if($action == "uploadImage"){
+        $url = "";
+        if(
+            isset($_FILES['fileUpload']['name'])
+            || $_FILES["fileUpload"]["type"] == "image/gif"
+            || $_FILES["fileUpload"]["type"] == "image/jpeg"
+            || $_FILES["fileUpload"]["type"] == "image/pjpeg"
+        )
+        {
+
+            $fileName = "/Uploads/Mall/commodity_".time().".jpg";
+            if(move_uploaded_file($_FILES["fileUpload"]["tmp_name"], $_SERVER['DOCUMENT_ROOT'].$fileName)){
+                $url = $fileName;
+                $message = "OK";
+            }else{
+                $message = "upload error";
+            }
+        }else{
+            $message = "type error";
+        }
+
+        $result = array(
+            "url"=> $url,
+            "message"=>$message
+        );
+        echo json_encode($result);
+    }else if($action == "saveCommodity"){
+        $id = (int)$_POST['commodity_id'];
+    }else if($action == "addCommodity"){
+        $data = $_POST;
+        $data['create_time'] = date("Y-m-d H:i:s",time());
+        $mall = new Mall();
+        $mall->insert($data);
+    }else if($action == "getCommodityDetail"){
+        $id = (int)$_POST['commodity_id'];
+        $mall = new Mall();
+        $mall->id = $id;
+        $result = $mall->getCommodityDetail();
         echo json_encode($result);
     }

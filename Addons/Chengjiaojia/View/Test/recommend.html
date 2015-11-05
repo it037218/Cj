@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/basics.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/common.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/animate.css">
+    <link rel="stylesheet" type="text/css" href="{:CUSTOM_TEMPLATE_PATH}/public/css/jquery.message.css">
+    <script type="text/javascript" src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery-1.8.3.min.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/default.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/jquery.message.min.js"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/css/bootstrap.min.css"></script>
+    <script src="{:CUSTOM_TEMPLATE_PATH}/public/js/bootstrap.min.js"></script>
+
+
+</head>
+<body>
+    <table class="table table-bordered">
+        <tr>
+            <th>编号</th>
+            <th>姓名</th>
+            <th>状态</th>
+            <th>手机号</th>
+        </tr>
+        <!--<volist name="result" id="rows" >-->
+        <!--<tr>-->
+            <!--<td>{$rows.id}</td>-->
+            <!--<td>{$rows.realname}</td>-->
+            <!--<td>{$rows.status}</td>-->
+            <!--<td>{$rows.telephone}</td>-->
+        <!--</tr>-->
+        <!--</volist>-->
+        {$result}
+    </table>
+</body>
+</html>

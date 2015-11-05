@@ -28,6 +28,9 @@
         public function  getIndexKeysList($data){
             $condition['wp_cj_key.status'] =$data['status'];
             $condition['wp_cj_key.is_wanted'] = 0;
+            if(isset($data['hide'])){
+                $condition['wp_cj_key.hide'] = $data['hide'];
+            }
 //            $condition['wp_cj_key.b1_openid'] = array("neq",$data['user_openid']);
 //            $condition['wp_cj_key.b2_openid'] = array("neq",$data['user_openid']);
             if(isset($data['city']) && !empty($data['city'])){

@@ -294,7 +294,33 @@
                 }
             }
         }
+        function buChongInfo(){
+            //获取所有信息不完善的用户（缺少昵称，或者微信头像的用户）
+            $result = M("follow")->field("openid,nickname,subscribe_time")->limit(201,300)->select();
+            foreach($result as $key=>$value){
+                if($value['nickname'] == ""){
 
+                    //调用微信接口，查询用户相关信息
+                    $accessToken = get_access_token();
+                    $url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$accessToken."&openid=".$value['openid']."&lang=zh_CN";
+                    $res1 = file_get_contents($url);
+                    $res1 = json_decode($res1,true);
+                    //更新用户信息
+                    $con['openid'] = $value['openid'];
+                    $data['nickname'] = $res1['nickname'];
+                    $data['create_time'] = date("Y-m-d H:i:s",$value['subscribe_time']);
+                    $res = M("follow")->where($con)->save($data);
+                    if($res){
+                        echo $res1['nickname']." success!"."<br>";
+                        continue;
+
+                    }else{
+                        echo $res1['nickname']." fail!!!"."<br>";
+                        continue;
+                    }
+                }
+            }
+        }
 
 
 

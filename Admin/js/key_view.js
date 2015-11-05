@@ -51,11 +51,6 @@ function view(e){
                         '     <div  class="content">'+dataObj.key.description+'</div>'+
                         '    </div>'+
                     '   </div>'+
-                    '    <div class="key-desc">'+
-                        '   <div class="title">评价详情</div>'+
-                        '   <div class="content">'+
-                        '       <div>CC超人于2015.10.01,12:00评价</div>fbjkngjengjklwnfkljEGFJKnefjkNWEG</div>'+
-                        '   </div>'+
                         '</div>'
                     );
                 }
@@ -140,25 +135,25 @@ function view(e){
                         '<div class="panel-choose" id="num1">'+
                         '    <table class="table" style="margin-top: 20px">'+
                         '    <tr>'+
-                        '       <td rowspan="6" style="text-align: center"><img src="./images/pic.jpg" width="100"/> <br>卖家 </td> ' +
-                        '       <td>姓名：朱云峰111</td>'+
+                        '       <td rowspan="6" style="text-align: center"><img src="'+dataObj.publisher.avatar+'" width="100"/> <br>卖家 </td> ' +
+                        '       <td>姓名：'+dataObj.publisher.realname+'</td>'+
                         '       <td rowspan="6" colspan="2" style="text-align: center"></td>'+
                         '   </tr>'+
-                        '<tr><td>联系方式：18652362600</td></tr>'+
-                        '<tr><td>品牌：18652362600</td></tr>'+
-                        '<tr><td>所在地：18652362600</td></tr>'+
-                        '<tr><td>4S店：18652362600</td></tr>'+
-                        '<tr><td>发布时间：18652362600</td></tr>'+
+                        '<tr><td>联系方式：'+dataObj.publisher.telephone+'</td></tr>'+
+                        '<tr><td>品牌：'+dataObj.publisher.brand+'</td></tr>'+
+                        '<tr><td>所在地：'+dataObj.publisher.city+dataObj.publisher.district+'</td></tr>'+
+                        '<tr><td>4S店：'+dataObj.publisher.shop+'</td></tr>'+
+                        '<tr><td>发布时间：'+dataObj.key.create_time+'</td></tr>'+
                         '</table>'+
                         '<table class="table">'+
-                        '   <tr> <td >客户名称：林若炜 </td> <td>线索品牌：奔驰C级 </td> <td>购车地址：上海,浦东 </td> </tr>'+
-                        '   <tr> <td >联系方式：13661673982 </td> <td>购车时间：一个月内 </td> <td>线索状态：跟进中 </td> </tr> ' +
-                        '   <tr> <td >价格：2000橙蕉豆 </td> <td>被购买次数：1 </td> <td></td> </tr>'+
+                        '   <tr> <td >客户名称：'+dataObj.key.custom_name+' </td> <td>线索品牌：'+dataObj.key.brand+dataObj.key.series+' </td> <td>购车地址：'+dataObj.key.city+dataObj.key.district+' </td> </tr>'+
+                        '   <tr> <td >联系方式：'+dataObj.key.custom_telephone+' </td> <td>购车时间：'+dataObj.key.time_limit+' </td> <td>线索状态：空闲中 </td> </tr> ' +
+                        '   <tr> <td >价格：'+dataObj.key.money+' </td> <td>被购买次数：0 </td> <td></td> </tr>'+
                         '</table>'+
 
                         '   <div class="key-desc" style="margin-top: 20px">'+
                         '    <div class="title">线索详情</div>'+
-                        '     <div  class="content">fbjkngjengjklwnfkljEGFJKnefjkNWEG</div>'+
+                        '     <div  class="content">'+dataObj.key.description+'</div>'+
                         '    </div>'+
                         '   </div>'+
                         '    <div class="key-desc">'+

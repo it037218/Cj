@@ -1,6 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <!--jQuery库引用-->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
 
-<div class="select" style="margin-top:0px;outline:none;border:1px solid #BBBBBB;border-radius:4px;position:relative;">
-    <select id="orderTimeDataSel" class="text" style="height:40px;-webkit-appearance:none;appearance:none;border:none;font-size:18px;padding:0px 10px;display:block;width:100%;-webkit-box-sizing:border-box;box-sizing:border-box;background-color: #FFFFFF;color:#333333;border-radius:4px;">
-        <option>--预约日期--</option>
-    </select>
-</div> 
+    <style type="text/css">
+        body
+        {
+            margin: 0 auto;
+            padding: 0;
+        }
+        a:focus
+        {
+            outline: none;
+        }
+        #pn
+        {
+            background: #e8e8e8;
+            width: 600px;
+            display: block;
+            margin: 0 auto;
+            padding: 5px;
+            font-size: 9pt;
+            height: auto;
+        }
+        .slide
+        {
+            margin: 0;
+            padding: 0;
+            width: 600px;
+            border-top: solid 4px gray;
+            margin: 0 auto;
+        }
+        .btn-slide
+        {
+            background: gray;
+            text-align: center;
+            width: 120px;
+            height: 30px;
+            padding: 10px 0 0 0;
+            margin: 0 auto;
+            display: block;
+            color: #fff;
+            text-decoration: none;
+        }
+    </style>
+    <script type="text/javascript">  //以下jQ代码实现展开与收起效果
+    $(document).ready(function(){
+        $("#strHref").toggle(function(){
+            $(this).text("收起-");
+            $("#hpn").show(1000);
+        },function(){
+            $(this).text("更多选项+");
+            $("#hpn").hide(1000);
+        });
+    });
+    </script>
+</head>
+<body>
+<div id="pn">
+    <p>
+        手机 - 商品筛选</p>
+    <p>
+        网络： 移动4G（TD-LTE ） 联通4G（TD-LTE） 联通3G（WCDMA）
+    </p>
+    <div id="hpn" style="display: none">
+        <p>
+            价格： 5000以上 4000-4999 3000-3999 2000-2999
+        </p>
+        <p>
+            特点： JDPhone计划 "0"元购机 防水 长待机 1080P全高清屏
+        </p>
+        <p>
+            价格： 5000以上 4000-4999 3000-3999 2000-2999
+        </p>
+        <p>
+            价格： 5000以上 4000-4999 3000-3999 2000-2999
+        </p>
+    </div>
+</div>
+<p class="slide">
+    <a href="#" id="strHref" class="btn-slide">更多选项+</a></p>
+</body>
+</html>

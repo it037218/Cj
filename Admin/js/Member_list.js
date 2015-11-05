@@ -28,8 +28,9 @@ $(function(){
                 function(data){
                     if(data == 1){
                         $(".bs-example-modal-sm").modal("hide")
-                        alert("审核成功")
-                        $("tr[data='"+user_id+"']").remove();
+                        alert("审核成功");
+                        location.reload
+                        //$("tr[data='"+user_id+"']").remove();
                     }else{
                         alert("审核出错")
 
@@ -180,24 +181,35 @@ function verify(e){
         function(data){
             if(data != null){
                 var dataObj = eval("("+data+")");
-                var content = '<tr><td>姓名：'+dataObj.realname+'</td><td>手机号：'+dataObj.telephone+'</td><td>身份证号：'+dataObj.card_number+'</td></tr>'+
-                    '<tr><td>所在地：'+dataObj.city+dataObj.district+'</td><td>4S店：'+dataObj.shop+'</td><td>品牌：'+dataObj.brand+'</td></tr>'+
-                '<tr><td colspan="3">昵称：'+dataObj.nickname +'</td></tr>'+
-                '<tr>'+
-                '<td class="col-lg-3" ><a href="#" onclick="check_card(this)"><img class="col-lg-12" src="'+dataObj.business_card+'" style="max-height:300px"></a></td>'+
-                '<td class="col-lg-3" ><a href="#" onclick="check_card(this)"><img class="col-lg-12" src="'+dataObj.card_id1+'" style="max-height:300px"></a></td>'+
-                '<td class="col-lg-3" ><a href="#" onclick="check_card(this)"><img class="col-lg-12" src="'+dataObj.card_id2+'" style="max-height:300px"></a></td>'+
-                '</tr>'+
-                '</tr>'
-
+                if(dataObj.status==4 || dataObj.status == 5){
+                    var content = '<tr><td>姓名：'+dataObj.realname+'</td><td>手机号：'+dataObj.telephone+'</td><td>身份证号：'+dataObj.card_number+'</td></tr>'+
+                        '<tr><td>所在地：'+dataObj.city+dataObj.district+'</td><td>4S店：'+dataObj.shop+'</td><td>品牌：'+dataObj.brand+'</td></tr>'+
+                    '<tr><td >昵称：'+dataObj.nickname +'</td><td colspan="2">审核时间：'+dataObj.verify_time+'</td></tr>'+
+                    '<tr>'+
+                    '<td class="col-lg-3" ><a href="#" onclick="check_card(this)"><img class="col-lg-12" src="'+dataObj.business_card+'" style="max-height:300px"></a></td>'+
+                    '<td class="col-lg-3" ><a href="#" onclick="check_card(this)"><img class="col-lg-12" src="'+dataObj.card_id1+'" style="max-height:300px"></a></td>'+
+                    '<td class="col-lg-3" ><a href="#" onclick="check_card(this)"><img class="col-lg-12" src="'+dataObj.card_id2+'" style="max-height:300px"></a></td>'+
+                    '</tr>'+
+                    '</tr>'
+                }else if(dataObj.status == 0 || dataObj.status == 1){
+                    alert("用户还未填写信息");
+                    return false
+                }else if(dataObj.status == 2){
+                    var content = '<tr><td>昵称：'+dataObj.nickname +'</td><td>手机号：'+dataObj.telephone+'</td><td>品牌：'+dataObj.brand+'</td></tr>'+
+                        '<tr><td>所在地：'+dataObj.city+dataObj.district+'</td><td colspan="2">4S店：'+dataObj.shop+'</td></tr>';
+                }else if(dataObj.status == 3){
+                    var content = '<tr><td>姓名：'+dataObj.realname+'</td><td>手机号：'+dataObj.telephone+'</td><td>身份证号：'+dataObj.card_number+'</td></tr>'+
+                        '<tr><td>所在地：'+dataObj.city+dataObj.district+'</td><td>4S店：'+dataObj.shop+'</td><td>品牌：'+dataObj.brand+'</td></tr>'+
+                        '<tr><td colspan="3">昵称：'+dataObj.nickname +'</td></tr>';
+                }
                 $("#memberInfo table").empty();
                 $("#memberInfo table").append(content)
-
+                $("#memberInfo").show();
+                $(".cover").show();
             }
         }
     )
-    $("#memberInfo").show();
-    $(".cover").show();
+
 
 }
 

@@ -20,9 +20,9 @@ if(!isset($_SESSION['user']) || empty($_SESSION['user'])){
         $pageSize = isset($_GET['pageSize'])?$_GET['pageSize']:10;
         $result = $key->getKeyList($pageNum,$pageSize);
         foreach($result as $key=>$value){
-            if(($value['b1_openid'] != null || !empty($value['b1_openid'])) ||($value['b2_openid'] == null || empty($value['b2_openid']))){
+            if(($value['b1_openid'] != null && !empty($value['b1_openid'])) &&($value['b2_openid'] == null && empty($value['b2_openid']))){
                 $result[$key]['buy_times'] = 1;
-            }else if(($value['b1_openid'] != null || !empty($value['b1_openid'])) ||($value['b2_openid'] != null || !empty($value['b2_openid']))){
+            }else if(($value['b1_openid'] != null && !empty($value['b1_openid'])) && ($value['b2_openid'] != null && !empty($value['b2_openid']))){
                 $result[$key]['buy_times'] = 2;
             }else{
                 $result[$key]['buy_times'] = 0;
@@ -55,12 +55,12 @@ if(!isset($_SESSION['user']) || empty($_SESSION['user'])){
         $result['publisher'] = $key->getMember();
 
         //判断购买次数
-        if($result['key']['b1_openid'] != null || !empty($result['key']['b1_openid'] ||$result['key']['b2_openid']== null || empty($result['key']['b2_openid']))){
+        if($result['key']['b1_openid'] != null && !empty($result['key']['b1_openid']) && $result['key']['b2_openid']== null && empty($result['key']['b2_openid'])){
             $result['buy_times'] = 1;
             $key->num = 1;
             $key->b1_openid = $result['key']['b1_openid'];
             $result['buyer'] = $key->getKeyDetail();
-        }else if($result['key']['b1_openid'] != null || !empty($result['key']['b1_openid']) ||$result['key']['b2_openid'] != null || !empty($result['key']['b2_openid'])){
+        }else if($result['key']['b1_openid'] != null && !empty($result['key']['b1_openid']) && $result['key']['b2_openid'] != null && !empty($result['key']['b2_openid'])){
             $result['buy_times'] = 2;
             $key->num = 2;
             $key->b1_openid = $result['key']['b1_openid'];
@@ -70,7 +70,7 @@ if(!isset($_SESSION['user']) || empty($_SESSION['user'])){
             $result['buy_times'] = 0;
             $result['buyer'] = array();
         }
-
+//        var_dump($result);exit;
         //判断线索状态
         $status = $result['key']['status'];
 

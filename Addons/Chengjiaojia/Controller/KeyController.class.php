@@ -116,6 +116,7 @@
              * 有效线索展示
              * */
             $data['status'] = array("between","0, 10");
+            $data['hide'] = 0;
             $result = $m->getIndexKeysList($data);
             foreach($result as $k=>$v){
                 $v['bought_keys'] = $v['bought_keys']==0?1:$v['bought_keys'];
@@ -284,135 +285,135 @@
          * 购买线索
          * id status
          * */
-        public function buyKey_bak(){
-            $id = $_POST['id'];
-            $status = $this->checkStatus($id);
-            $member = $this->checkMember($id);
-            $user_openid = $this->user_openid;
-            //获取购买者信息
-            $m = new MemberModel();
-            $user = $m->getOne($user_openid);
-
-            //获取线索详情
-            $keyInfo = $this->getKeyInfo($id);
-            //获取该条线索下的所有可能购买者
-            $buyer_openid = M("cj_key")->where("id = ".$id)->field("b1_openid,b2_openid,b3_openid")->find();
-            if($user_openid == $member){
-                //发布者和购买者为同一人
-                echo -1;
-                exit;
-            }else if($status >10){
-                //线索状态不对
-                echo -2;
-                exit;
-            }else if($user['use_credit'] < $keyInfo['credit']) {
-                echo -3;
-                exit;
-            }elseif(in_array($user,$buyer_openid)){
-                //同一用户不能重复购买同一线索
-                echo -4;
-                exit;
-            }{
-                //更新线索状态
-                $data = array();
-                if($status['status'] == 0){
-                    //刚发布的线索
-                    //购买者为b1
-                    $data['status'] = 11;
-                    $data['b1_openid'] = $user_openid;
-                    $data['b1_buy_time'] = date("Y-m-d H:i:s",time());
-                    $data['b1_telephone'] = $user['telephone'];
-                }else if($status['status'] == 1){
-                    //b1判为无效的线索
-                    //购买者为b2
-                    $data['status'] = 12;
-                    $data['b2_openid'] = $user_openid;
-                    $data['b2_buy_time'] = date("Y-m-d H:i:s",time());
-                    $data['b2_telephone'] = $user['telephone'];
-                }else if($status['status'] == 2){
-                    //b2判断为无效   b3购买
-                    $data['status'] = 13;
-                    $data['b3_openid'] = $user_openid;
-                    $data['b3_buy_time'] = date("Y-m-d H:i:s",time());
-                    $data['b3_telephone'] = $user['telephone'];
-                }
-                //获取该线索积分
-                $credit= $keyInfo['credit'];
-
-                //购买者积分冻结
-                $condition['user_openid'] = $user_openid;
-                $data['use_credit'] = -$credit;
-                $data['frozen_credit'] = -$credit;
-                changeCredit($condition,$data);
-
-                $key = new KeyModel();
-                if($key -> changeStatus($id,$data)){
-                    //添加购买记录
-                    $res ['user_openid'] = $user_openid;
-                    $res['key_id'] = $id;
-                    $res['status'] = 0;
-                    $res['create_time'] = date("Y-m-d H:i:s",time());
-                    $this->addKeyBought($res);
-
-                    //给购买者添加基本明细记录
-                    $description = "您购买了一条线索,冻结积分";
-                    $credit_data = array(
-                        "user_openid" => $user_openid,
-                        "credit" => "-10",
-                        "title" => $description,
-                        "description" => $description,
-                        "create_time" => date("Y-m-d H:i:s",time())
-                    );
-                    addCreditLog($credit_data);
-
-                    //给购买者发送系统消息
-                    $sysMsg1 = array(
-                        "user_openid" => $user_openid,
-                        "href"   => U("/addon/Chengjiaojia/Key/getUserBoughtKey/id/".$id),
-                        "title" => "您已购买一条线索",
-                        "status"=> 0,
-                        "create_time" => date("Y-m-d H:i:s",time())
-                    );
-                    //给线索发布者发送系统消息
-                    $sysMsg2 = array(
-                        "user_openid" => $member,
-                        "href"   => U("/addon/Chengjiaojia/Key/publishKeyDetail/id/".$id),
-                        "title" => "您有一条线索被购买",
-                        "status"=> 0,
-                        "create_time" => date("Y-m-d H:i:s",time())
-                    );
-
-                    addSysMsg($sysMsg1);
-                    addSysMsg($sysMsg2);
-
-                    //给购买者发送模板消息
-                    $message1=array(
-                        "user_openid" =>$user_openid,
-                        "url"   => U("/addon/Chengjiaojia/Key/getUserBoughtKey/id/".$id),
-                        "first" =>"购买线索消息提示",
-                        "keyword1" => "您已购买了一条线索",
-                        "keyword2" => date("Y-m-d H:i:s",time())
-                    );
-                    sendNoticeMessage($message1);
-
-                    //给发布者发送模板消息
-                    $message2=array(
-                        "user_openid" => $member,
-                        "url"   => U("/addon/Chengjiaojia/Key/publishKeyDetail/id/".$id),
-                        "first" =>"线索消息提示",
-                        "keyword1" => "您有一条线索被购买",
-                        "keyword2" => date("Y-m-d H:i:s",time())
-                    );
-                    sendNoticeMessage($message2);
-
-                    //线索发布者被购买数增加
-                    M("cj_member")->where("user_openid = '".$member."'")->setInc("bought_keys");
-                    echo 1;
-                }else{
-                    echo -3;
-                }
-            }
-        }
+//        public function buyKey_bak(){
+//            $id = $_POST['id'];
+//            $status = $this->checkStatus($id);
+//            $member = $this->checkMember($id);
+//            $user_openid = $this->user_openid;
+//            //获取购买者信息
+//            $m = new MemberModel();
+//            $user = $m->getOne($user_openid);
+//
+//            //获取线索详情
+//            $keyInfo = $this->getKeyInfo($id);
+//            //获取该条线索下的所有可能购买者
+//            $buyer_openid = M("cj_key")->where("id = ".$id)->field("b1_openid,b2_openid,b3_openid")->find();
+//            if($user_openid == $member){
+//                //发布者和购买者为同一人
+//                echo -1;
+//                exit;
+//            }else if($status >10){
+//                //线索状态不对
+//                echo -2;
+//                exit;
+//            }else if($user['use_credit'] < $keyInfo['credit']) {
+//                echo -3;
+//                exit;
+//            }elseif(in_array($user,$buyer_openid)){
+//                //同一用户不能重复购买同一线索
+//                echo -4;
+//                exit;
+//            }{
+//                //更新线索状态
+//                $data = array();
+//                if($status['status'] == 0){
+//                    //刚发布的线索
+//                    //购买者为b1
+//                    $data['status'] = 11;
+//                    $data['b1_openid'] = $user_openid;
+//                    $data['b1_buy_time'] = date("Y-m-d H:i:s",time());
+//                    $data['b1_telephone'] = $user['telephone'];
+//                }else if($status['status'] == 1){
+//                    //b1判为无效的线索
+//                    //购买者为b2
+//                    $data['status'] = 12;
+//                    $data['b2_openid'] = $user_openid;
+//                    $data['b2_buy_time'] = date("Y-m-d H:i:s",time());
+//                    $data['b2_telephone'] = $user['telephone'];
+//                }else if($status['status'] == 2){
+//                    //b2判断为无效   b3购买
+//                    $data['status'] = 13;
+//                    $data['b3_openid'] = $user_openid;
+//                    $data['b3_buy_time'] = date("Y-m-d H:i:s",time());
+//                    $data['b3_telephone'] = $user['telephone'];
+//                }
+//                //获取该线索积分
+//                $credit= $keyInfo['credit'];
+//
+//                //购买者积分冻结
+//                $condition['user_openid'] = $user_openid;
+//                $data['use_credit'] = -$credit;
+//                $data['frozen_credit'] = -$credit;
+//                changeCredit($condition,$data);
+//
+//                $key = new KeyModel();
+//                if($key -> changeStatus($id,$data)){
+//                    //添加购买记录
+//                    $res ['user_openid'] = $user_openid;
+//                    $res['key_id'] = $id;
+//                    $res['status'] = 0;
+//                    $res['create_time'] = date("Y-m-d H:i:s",time());
+//                    $this->addKeyBought($res);
+//
+//                    //给购买者添加基本明细记录
+//                    $description = "您购买了一条线索,冻结积分";
+//                    $credit_data = array(
+//                        "user_openid" => $user_openid,
+//                        "credit" => "-10",
+//                        "title" => $description,
+//                        "description" => $description,
+//                        "create_time" => date("Y-m-d H:i:s",time())
+//                    );
+//                    addCreditLog($credit_data);
+//
+//                    //给购买者发送系统消息
+//                    $sysMsg1 = array(
+//                        "user_openid" => $user_openid,
+//                        "href"   => U("/addon/Chengjiaojia/Key/getUserBoughtKey/id/".$id),
+//                        "title" => "您已购买一条线索",
+//                        "status"=> 0,
+//                        "create_time" => date("Y-m-d H:i:s",time())
+//                    );
+//                    //给线索发布者发送系统消息
+//                    $sysMsg2 = array(
+//                        "user_openid" => $member,
+//                        "href"   => U("/addon/Chengjiaojia/Key/publishKeyDetail/id/".$id),
+//                        "title" => "您有一条线索被购买",
+//                        "status"=> 0,
+//                        "create_time" => date("Y-m-d H:i:s",time())
+//                    );
+//
+//                    addSysMsg($sysMsg1);
+//                    addSysMsg($sysMsg2);
+//
+//                    //给购买者发送模板消息
+//                    $message1=array(
+//                        "user_openid" =>$user_openid,
+//                        "url"   => U("/addon/Chengjiaojia/Key/getUserBoughtKey/id/".$id),
+//                        "first" =>"购买线索消息提示",
+//                        "keyword1" => "您已购买了一条线索",
+//                        "keyword2" => date("Y-m-d H:i:s",time())
+//                    );
+//                    sendNoticeMessage($message1);
+//
+//                    //给发布者发送模板消息
+//                    $message2=array(
+//                        "user_openid" => $member,
+//                        "url"   => U("/addon/Chengjiaojia/Key/publishKeyDetail/id/".$id),
+//                        "first" =>"线索消息提示",
+//                        "keyword1" => "您有一条线索被购买",
+//                        "keyword2" => date("Y-m-d H:i:s",time())
+//                    );
+//                    sendNoticeMessage($message2);
+//
+//                    //线索发布者被购买数增加
+//                    M("cj_member")->where("user_openid = '".$member."'")->setInc("bought_keys");
+//                    echo 1;
+//                }else{
+//                    echo -3;
+//                }
+//            }
+//        }
 
         /*
          * 购买线索
@@ -541,7 +542,7 @@
                             "keyword1" => "您已购买了一条线索",
                             "keyword2" => date("Y-m-d H:i:s",time())
                         );
-//                        sendNoticeMessage($message1);
+                        sendNoticeMessage($message1);
 
                         //给发布者发送模板消息
                         $message2=array(
@@ -614,7 +615,7 @@
                 "create_time" => date("Y-m-d H:i:s",$_SERVER['REQUEST_TIME'])
             );
             $key_id= $key->publishKey($data);
-            if($key_id>0){
+            if($key_id){
                 //发布成功后
                 $message=array(
                     "user_openid"=>$user_openid,
@@ -623,7 +624,7 @@
                     "keyword1" => "发布线索提示",
                     "keyword2" => date("Y-m-d H:i:s",time())
                 );
-//                sendNoticeMessage($message);
+                sendNoticeMessage($message);
 
                 //判断该线索是否为当天第一条线索
                 $condition['user_openid'] = $user_openid;
@@ -685,7 +686,7 @@
                 $brand_id = $_POST['brand_id'];
                 $brand = $_POST['brand'];
                 $userCon['brand_id'] = $brand_id;
-                $userCon['status'] = 3;
+                $userCon['status'] = 4;
                 $userCon['city'] = trim($_POST['city']);
                 $userList = M("cj_member")->where($userCon)->select();
                 if(count($userList) > 0){
@@ -1757,8 +1758,7 @@
             //获取线索详情
             $key = new KeyModel();
             $result = $key->getKeyDetail($id);
-            echo "<pre>";
-            var_dump($result);exit;
+            $this->assign("id",$id);
             $this->assign("result",$result);
             $this->show(CUSTOM_TEMPLATE_PATH."/Key/edit.html");
         }
@@ -1768,7 +1768,8 @@
          * 更新线索
          * */
         public function update(){
-            $id = $_GET['id'];
+            $id = $_POST['id'];
+            unset($_POST['id']);
             $data = $_POST;
             $key = new KeyModel();
             if($key->update($id,$data)){
@@ -2286,7 +2287,7 @@
             $money = M("cj_member")->where($condition)->getField("use_account");
             $this->assign("money",$money);
 
-            if(($money+200) >= $value ){
+            if($money >= $value ){
                 //当账户余额大于线索价值时
                 $this->show(CUSTOM_TEMPLATE_PATH."/Key/buy_confirm.html");
             }else{
